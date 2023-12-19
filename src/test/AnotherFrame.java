@@ -11,7 +11,7 @@ public class AnotherFrame extends JFrame {
  public AnotherFrame() {
      setTitle("另一個頁面");
      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-     setSize(300, 200);
+     setSize(600, 300);
      setLocationRelativeTo(null);
 
      cardLayout = new CardLayout();

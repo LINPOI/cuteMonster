@@ -25,7 +25,8 @@ private CardLayout cardLayout;
  private JPanel createNextPanel() {
      JPanel panel = new JPanel();
      panel.setLayout(new FlowLayout());
-
+     panel.setPreferredSize(new Dimension(600, 300)); // 設置面板大小
+     panel.setBackground(Color.cyan);
      JLabel label = new JLabel("已登入成功！");
      JButton backButton = new JButton("返回登入");
      backButton.addActionListener(new ActionListener() {

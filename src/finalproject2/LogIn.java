@@ -4,11 +4,52 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.*;
 import java.awt.event.*;
-public class LogIn extends SetPanel {
+public class LogIn extends JPanel implements Commonly_GridBagConstraints{
+	protected CardLayout cardLayout;//切換面板
+	protected JPanel cardPanel;//面板
+	
 	private ActionListener register = null;
 	private ActionListener logIn = null;
+	
+	protected JTextField textField = null;//文字框
+	protected JPasswordField passwordField=null;//密碼框
+	protected JButton button = null;//按鈕框
+	protected JLabel jLabel = null;//標題框
+	
+	
+	// 監聽
+		protected ActionListener[] actionListeners = null;
+		
+
+		protected String[] textStrings;// 顯示文字陣列
+		protected ArrayList<JComponent> gUIComponents = new ArrayList<>();
+		
+		protected  String register_username="";
+		protected  String register_password="";
+
+		// 獲得資料庫
+		protected DatabaseOperations databaseOperations = new DatabaseOperations();
+		/*
+		 * 
+		 */
+		/*
+		 * 控制面板資訊切換
+		 */
+		/*
+		 * cardLayout.show(cardPanel, "...");
+		 */
+		List<Account> accountList = new ArrayList<>();	//全部帳號
+		Account account=new Account();	//帳號
+		Account currentAccount=new Account();//新帳號
+		protected int[][] grid;//元件布局
+		// 元件
+	JPanel jPanel = new JPanel();
+	protected int height=800;
+	protected int width=1000;
 
 	/**
 	 * 
@@ -17,21 +58,30 @@ public class LogIn extends SetPanel {
 	public LogIn(CardLayout cardLayout, JPanel cardPanel) {
 	     this.cardLayout = cardLayout;
 	     this.cardPanel = cardPanel;
+	     grid = new int[][] { 
+	    	 	{ 0, 1, 2, 1, 1, 0, BOTH, CENTER }, // TEXTFIELD
+				{ 0, 4, 2, 1, 1, 0, BOTH, CENTER },
 
+				{ 0, 0, 2, 1, 1, 0, BOTH, CENTER }, // TEXT
+				{ 0, 3, 2, 1, 1, 0, BOTH, CENTER },
+
+				{ 0, 6, 1, 1, 1, 0, BOTH, CENTER }, // BUTTON
+				{ 1, 6, 1, 1, 1, 0, BOTH, CENTER },
+
+				{ 0, 5, 2, 1, 1, 0, BOTH, CENTER }, // 空格
+				{ 0, 2, 2, 1, 1, 0, BOTH, CENTER },
+
+		};
 	     JPanel loginPanel = open();
 	     this.add(loginPanel);
 	}
 	public JPanel open() {
-		
 		jPanel.setLayout(new GridBagLayout());
-		jPanel.setSize(new Dimension(weigth, height));
-		
-		
-		gUIComponents = new ArrayList<JComponent>();
+		jPanel.setSize(new Dimension(width, height));
 
 		textStrings = new String[] { "帳號", "密碼", "註冊", "登入" };
 		textField=new JTextField();
-		getGrid();
+		
 		Action();
 		actionListeners = new ActionListener[] { register, logIn };
 			textFields();
@@ -47,7 +97,7 @@ public class LogIn extends SetPanel {
 		spacer(30);
 		spacer(20);
 		for (int i = 0; i < gUIComponents.size(); i++) {
-			addComponent(i);
+			addComponent(grid,gUIComponents,i);
 		}
 		
 		passwordField.addKeyListener(new MyKeyListener());
@@ -83,24 +133,12 @@ public class LogIn extends SetPanel {
 		gUIComponents.add(spacer);
 	}
 
-	@Override
-	public int[][] getGrid() {
-		// TODO Auto-generated method stub
-		this.grid = new int[][] { { 0, 1, 2, 1, 1, 0, BOTH, CENTER }, // TEXTFIELD
-				{ 0, 4, 2, 1, 1, 0, BOTH, CENTER },
-
-				{ 0, 0, 2, 1, 1, 0, BOTH, CENTER }, // TEXT
-				{ 0, 3, 2, 1, 1, 0, BOTH, CENTER },
-
-				{ 0, 6, 1, 1, 1, 0, BOTH, CENTER }, // BUTTON
-				{ 1, 6, 1, 1, 1, 0, BOTH, CENTER },
-
-				{ 0, 5, 2, 1, 1, 0, BOTH, CENTER }, // 空格
-				{ 0, 2, 2, 1, 1, 0, BOTH, CENTER },
-
-		};
-		return grid;
-	}
+//	@Override
+//	public int[][] getGrid() {
+//		// TODO Auto-generated method stub
+//		
+//		return grid;
+//	}
 
 	
 	public void Action() {
@@ -216,6 +254,18 @@ public class LogIn extends SetPanel {
 	        //System.out.println("帳號: " + username + ", 密碼: " + password + "，輸入帳號: " + account_input.getUsername() + ", 密碼: " + account_input.getPassword());
 	    }
 		return 0;
+	}
+	public void addComponent(int[][] grid,ArrayList<JComponent> gUIComponents,int i) {
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.gridx = grid[i][0];
+		constraints.gridy = grid[i][1];
+		constraints.gridwidth = grid[i][2];
+		constraints.gridheight = grid[i][3];
+		constraints.weightx = grid[i][4];
+		constraints.weighty = grid[i][5];
+		constraints.fill = grid[i][6];
+		constraints.anchor = grid[i][7];
+		jPanel.add(gUIComponents.get(i), constraints);
 	}
 	public Account getAccount() {
 		return currentAccount;

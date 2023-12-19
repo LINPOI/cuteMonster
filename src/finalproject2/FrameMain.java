@@ -24,7 +24,6 @@ public class FrameMain {
 
 	private int[][] grid = null;// 網格資料
 	private Timer timer;// 時間監聽
-	// private LogIn logIn = new LogIn();//登入
 	private Account account = new Account();// 帳號資料
 	private GridBagConstraints constraints = new GridBagConstraints();// 網格格式
 	private JFrame jFrame;// 框架
@@ -36,11 +35,12 @@ public class FrameMain {
 		 * 設置框架
 		 */
 		jFrame = new JFrame("可愛的怪物"); // 建立框架
-		jFrame.setSize(new Dimension(1000, 800)); // 框架尺寸
+		
 		jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	//按下關閉時的動作
 		Image slimebutton1x1_Image = slimebutton1x1.getImage();	//取得圖片
 		jFrame.setIconImage(slimebutton1x1_Image);			//應用圖示
 		jFrame.setLayout(new GridBagLayout());		//框架格式設定
+		jFrame.setSize(new Dimension(1000, 800)); // 框架尺寸
 		jFrame.setLocationRelativeTo(null);//置中顯示
 		
 		/*

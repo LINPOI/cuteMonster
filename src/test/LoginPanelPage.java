@@ -3,6 +3,7 @@ package test;
 //LoginPanelPage.java
 import javax.swing.*;
 import java.awt.*;
+import java.awt.color.ColorSpace;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -21,6 +22,7 @@ public class LoginPanelPage extends JPanel {
  private JPanel createLoginPanel() {
      JPanel panel = new JPanel();
      panel.setLayout(new GridLayout(3, 2));
+     panel.setBackground(Color.black);
 
      JLabel usernameLabel = new JLabel("帳號:");
      JTextField usernameField = new JTextField();
