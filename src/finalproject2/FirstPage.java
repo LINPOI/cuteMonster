@@ -42,6 +42,7 @@ public class FirstPage extends JPanel {
 		SwingUtilities.invokeLater(() -> {
 			JFrame jFrame = new JFrame("可愛的怪物");
 			jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			jFrame.setBackground(new Color(255,218,185));
 			jFrame.setSize(new Dimension(1000, 800));
 			jFrame.setLocationRelativeTo(null);
 
