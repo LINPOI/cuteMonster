@@ -86,7 +86,7 @@ public class MonsterPanel extends JPanel {
 
 			ImageIcon icon = new ImageIcon(resizedImage);
 			JLabel label = new JLabel(icon);
-			label.setBounds(150, 300, width, height);// x,y,width,height
+			label.setBounds(190, 300, width-90, height-82);// x,y,width,height
 			this.add(label);
 			this.setOpaque(false); // 透明背景
 			label.addMouseListener(new MouseAdapter() {
@@ -111,7 +111,7 @@ public class MonsterPanel extends JPanel {
 	                            }
 	                        }
 	                    });
-	                    timer.setRepeats(false); // 只运行一次
+	                    timer.setRepeats(false); 
 	                    timer.start();
 	                } catch (IOException ex) {
 	                    ex.printStackTrace();

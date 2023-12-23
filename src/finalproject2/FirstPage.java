@@ -68,6 +68,8 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints{
         getGrid();
         gUIComponents.add(new JLabel("                                                                "));
         gUIComponents.add(new JLabel("                                                                "));
+        JLabel jLabel=new JLabel("              ");
+        gUIComponents.add(jLabel);
         for (int i = 0; i < gUIComponents.size(); i++) {
 			addComponent(grid, gUIComponents, i);
 		}
@@ -108,6 +110,7 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints{
 				
 				{ 0, 1, 1, 1, 1, 1, NONE, CENTER },
 				{ 4, 1, 1, 1, 1, 1, NONE, CENTER },
+				{ 1, 0, 3, 1, 1, 1, NONE, CENTER }//text
 				
 		};
 		return grid;

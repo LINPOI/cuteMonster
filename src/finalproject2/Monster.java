@@ -118,4 +118,11 @@ public class Monster {
     public int getValue(int i){
     	return value[i];
     }
+    public String getInf(int i) {
+    	String[] strings=new String[] {
+    		"可透過練武提升","可透過練武提升","可透過學習提升",
+    		"探索火山提升","探索極地提升","探索沼澤提升","探索神殿提升"	
+    	};
+    	return strings[i];
+    }
 }
