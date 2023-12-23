@@ -76,7 +76,7 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints{
          */
 //        jPanel.add(new JLabel("eeee"),BorderLayout.EAST);
         jPanel.add(new MonsterPanel(false,new int[] {0,0}),BorderLayout.CENTER);
- //      jPanel.add(new JLabel("wwww"),BorderLayout.WEST);
+        jPanel.add(new ValueTable(),BorderLayout.WEST);
         jPanel.add(jPanel2,BorderLayout.SOUTH);
 		return jPanel;
 	}

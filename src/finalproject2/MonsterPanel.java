@@ -86,7 +86,7 @@ public class MonsterPanel extends JPanel {
 
 			ImageIcon icon = new ImageIcon(resizedImage);
 			JLabel label = new JLabel(icon);
-			label.setBounds(300, 300, width, height);// x,y,width,height
+			label.setBounds(150, 300, width, height);// x,y,width,height
 			this.add(label);
 			this.setOpaque(false); // 透明背景
 			label.addMouseListener(new MouseAdapter() {
