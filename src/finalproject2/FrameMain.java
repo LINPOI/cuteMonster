@@ -40,7 +40,7 @@ public class FrameMain {
 	     cardPanel = new JPanel(cardLayout);
 	     
 	     /*
-	      * 取得jpanel
+	      * 取得jpanel 
 	      */
 	     LogIn login=new LogIn(cardLayout, cardPanel);
 	     FirstPage firstPage=new FirstPage(cardLayout, cardPanel);
@@ -48,7 +48,7 @@ public class FrameMain {
 	     /*
 	      * 放入切換面板資料
 	      */
-	     cardPanel.add(login, "login");
+	     //cardPanel.add(login, "login");
 	     cardPanel.add(firstPage, "first");
 	     
 	     /*

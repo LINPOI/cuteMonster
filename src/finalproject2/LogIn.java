@@ -13,8 +13,7 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 	protected CardLayout cardLayout;// 切換面板
 	protected JPanel cardPanel;// 面板
 
-	private ActionListener register = null;
-	private ActionListener logIn = null;
+	
 
 	protected JTextField textField = null;// 文字框
 	protected JPasswordField passwordField = null;// 密碼框
@@ -23,7 +22,9 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 
 	// 監聽
 	protected ActionListener[] actionListeners = null;
-
+	private ActionListener register = null;
+	private ActionListener logIn = null;
+	
 	protected String[] textStrings;// 顯示文字陣列
 	protected ArrayList<JComponent> gUIComponents = new ArrayList<>();
 
