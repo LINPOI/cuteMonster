@@ -13,7 +13,7 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 	protected CardLayout cardLayout;// 切換面板
 	protected JPanel cardPanel;// 面板
 
-	
+	private RWFile rwFile=new RWFile();
 
 	protected JTextField textField = null;// 文字框
 	protected JPasswordField passwordField = null;// 密碼框
@@ -56,10 +56,9 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public LogIn(CardLayout cardLayout, JPanel cardPanel) {
+	public LogIn(CardLayout cardLayout, JPanel cardPanel,Account account) {
 		this.cardLayout = cardLayout;
 		this.cardPanel = cardPanel;
-
 		JPanel loginPanel = open();
 		this.setLayout(new BorderLayout());
 		this.add(new JLabel("              "
@@ -70,7 +69,6 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 				+ "                        "),BorderLayout.WEST);
 		this.add(loginPanel,BorderLayout.CENTER);
 	}
-
 	public JPanel open() {
 		jPanel.setLayout(new GridBagLayout());
 		jPanel.setSize(new Dimension(width, height));
@@ -175,11 +173,13 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 				} else if (read == 3) {
 					JOptionPane.showMessageDialog(jPanel, "帳密不可為空");
 				} else {
-					Boolean good = databaseOperations.insertData(account);
+					Boolean good = databaseOperations.insert_Account_Data(account);
 					if (good) {
 						JOptionPane.showMessageDialog(jPanel, "註冊成功");
 						register_username = Username;
 						register_password = password;
+						databaseOperations.createTable(Username);
+						
 					} else {
 						JOptionPane.showMessageDialog(jPanel, "錯誤");
 					}
@@ -233,7 +233,16 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 		if (read == 1) {
 			System.out.println("登入成功");
 			currentAccount = account;
-			cardLayout.show(cardPanel, "first");
+			if(account.readUser().size()==0) {
+				cardLayout.show(cardPanel, "first");
+				String userInput= JOptionPane.showInputDialog(null, "請輸入怪物名字:");
+				account.monster.setName(userInput); 
+				account.saveUser();
+			}else {
+				cardLayout.show(cardPanel, "first");
+			}
+			
+			
 		} else if (read == 2) {
 			JOptionPane.showMessageDialog(jPanel, "密碼錯誤");
 			currentAccount = new Account();

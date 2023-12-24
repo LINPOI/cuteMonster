@@ -21,23 +21,23 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-public class ValueTable extends JPanel{
+public class Valuetable extends JPanel{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private Monster monster=new Monster();
+	
 	private String[] listValue;
 	private String outputString="";
 	private int width=130;
 	private int height=130;
-	public ValueTable() {
+	public Valuetable(Account account) {
 		this.setLayout(new BorderLayout());
 		// TODO Auto-generated constructor stub
-		listValue = new String[monster.getValueName().length];
-		for(int i=0;i<monster.getValueName().length;i++) {
-			listValue[i]=monster.getValueName(i)+"："+monster.getValue(i);
+		listValue = new String[account.monster.getValueName().length];
+		for(int i=0;i<account.monster.getValueName().length;i++) {
+			listValue[i]=account.monster.getValueName(i)+"："+account.monster.getValue(i);
 		}
 		JList<String>list=new JList<String>(listValue);
 		JScrollPane scrollPane = new JScrollPane(list);
@@ -65,7 +65,7 @@ public class ValueTable extends JPanel{
                     int index = list.getSelectedIndex(); // 獲取所選項目的索引
                     if (index != -1) { // 確認是否有選取項目
                         System.out.println("所選擇的是: " + listValue[index]); // 輸出所選項目的內容
-                        label.setText(monster.getValueName(index)+":"+monster.getInf(index));
+                        label.setText(account.monster.getValueName(index)+":"+account.monster.getInf(index));
                         
                     }
                 }
@@ -75,18 +75,5 @@ public class ValueTable extends JPanel{
 	}
 	public String getOutput() {
 		return outputString;
-	}
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(() -> {
-			JFrame jFrame = new JFrame("列表");
-			jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			jFrame.setSize(new Dimension(1000, 800));
-			jFrame.setLocationRelativeTo(null);
-			jFrame.setBackground(Color.BLUE);
-			ValueTable firstPage = new ValueTable();
-			jFrame.add(firstPage);
-
-			jFrame.setVisible(true);
-		});
 	}
 }

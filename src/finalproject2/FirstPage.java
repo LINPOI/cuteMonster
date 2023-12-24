@@ -25,23 +25,22 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints{
 	private ActionListener gamer = null;
 	private ActionListener slime = null;
 	private ActionListener interactive = null;
+	
+	private Account account=new Account();
 	//
 	JPanel jPanel2;
-	
-	public FirstPage() {
-		JPanel loginPanel =open();
-		this.setLayout(new BorderLayout()); 
-		this.add(loginPanel);
-	}
 
-	public FirstPage(CardLayout cardLayout, JPanel cardPanel) {
+	
+	public FirstPage(CardLayout cardLayout, JPanel cardPanel,Account account) {
 		this.cardLayout = cardLayout;
 		this.cardPanel = cardPanel;
 		
 		JPanel loginPanel = open();
+		this.setLayout(new BorderLayout()); 
 		this.add(loginPanel);
 	}
 	public JPanel open() {
+		
 		imageSrc=new String[]{"src/PICTURE/gamerbutton.png",
 				"src/PICTURE/slimebutton.png",
 				"src/PICTURE/interactive.png"};
@@ -78,7 +77,7 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints{
          */
 //        jPanel.add(new JLabel("eeee"),BorderLayout.EAST);
         jPanel.add(new MonsterPanel(false,new int[] {0,0}),BorderLayout.CENTER);
-        jPanel.add(new ValueTable(),BorderLayout.WEST);
+        jPanel.add(new Valuetable(account),BorderLayout.WEST);
         jPanel.add(jPanel2,BorderLayout.SOUTH);
 		return jPanel;
 	}
@@ -158,18 +157,5 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints{
 		constraints.fill = grid[i][6];
 		constraints.anchor = grid[i][7];
 		jPanel2.add(gUIComponents.get(i), constraints);
-	}
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(() -> {
-			JFrame jFrame = new JFrame("可愛的怪物");
-			jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			jFrame.setSize(new Dimension(1000, 800));
-			jFrame.setLocationRelativeTo(null);
-
-			FirstPage firstPage = new FirstPage();
-			jFrame.add(firstPage);
-
-			jFrame.setVisible(true);
-		});
 	}
 }
