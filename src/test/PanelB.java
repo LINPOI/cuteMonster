@@ -14,7 +14,7 @@ class PanelB extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JButton button = new JButton("增加數值");
 
-	public PanelB(test.Subject subject) {
+	public PanelB(finalproject2.Subject subject) {
 		setLayout(new FlowLayout());
 		add(button);
 		button.addActionListener(new ActionListener() {

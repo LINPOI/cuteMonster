@@ -10,8 +10,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-public class FrameMain {
 
+public class FrameMain {
+	//創建觀察者
+	Subject subject = new Subject(); // 創建 Subject
 	/*
 	 * 控制面板資訊切換
 	 */
@@ -19,8 +21,6 @@ public class FrameMain {
 	private CardLayout cardLayout;
 	private JFrame jFrame;// 框架
 	private ImageIcon slimebutton1x1 = new ImageIcon("src/PICTURE/slimebutton1x1.png");// 圖片設置
-	private Account account = new Account();
-
 	public FrameMain() {
 		// TODO Auto-generated constructor stub
 		/*
@@ -33,7 +33,6 @@ public class FrameMain {
 		jFrame.setIconImage(slimebutton1x1_Image); // 應用圖示
 		jFrame.setSize(new Dimension(1000, 800)); // 框架尺寸
 		jFrame.setLocationRelativeTo(null);// 置中顯示
-
 		/*
 		 * 初始化面板切換資料
 		 */
@@ -43,8 +42,8 @@ public class FrameMain {
 		/*
 		 * 取得jpanel
 		 */
-		LogIn login = new LogIn(cardLayout, cardPanel,account);
-		FirstPage firstPage = new FirstPage(cardLayout, cardPanel,account);
+		LogIn login = new LogIn(cardLayout, cardPanel,subject);
+		FirstPage firstPage = new FirstPage(cardLayout, cardPanel,subject);
 
 		/*
 		 * 放入切換面板資料

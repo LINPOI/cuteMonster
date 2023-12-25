@@ -5,11 +5,16 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 
 import javax.imageio.*;
 import javax.swing.*;
 
-public class FirstPage extends JPanel implements Commonly_GridBagConstraints{
+
+
+public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Observer{
+	
 	/**
 	 * 
 	 */
@@ -18,6 +23,9 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints{
 	private String[] imageSrc;
 	protected CardLayout cardLayout;// 切換面板
 	protected JPanel cardPanel;// 面板
+	private Subject subject;
+	
+	private JLabel monstername;
 	protected int[][] grid;// 元件布局
 	protected ArrayList<JComponent> gUIComponents = new ArrayList<>();
 	// 建構子
@@ -29,12 +37,12 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints{
 	private Account account=new Account();
 	//
 	JPanel jPanel2;
-
 	
-	public FirstPage(CardLayout cardLayout, JPanel cardPanel,Account account) {
+	public FirstPage(CardLayout cardLayout, JPanel cardPanel ,Subject subject) {
 		this.cardLayout = cardLayout;
 		this.cardPanel = cardPanel;
-		
+		this.subject=subject;
+		subject.addObserver(this); 
 		JPanel loginPanel = open();
 		this.setLayout(new BorderLayout()); 
 		this.add(loginPanel);
@@ -51,7 +59,7 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints{
 		jPanel2=new JPanel();
 		jPanel2.setLayout(new GridBagLayout());
 		jPanel2.setOpaque(false); // 透明背景
-	
+		System.out.println("使用者姓名"+account.getUsername());
 		// 加載背景圖片
         try {
             backgroundImage = ImageIO.read(new File("src/PICTURE/houseBackground.png")); 
@@ -67,8 +75,9 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints{
         getGrid();
         gUIComponents.add(new JLabel("                                                                "));
         gUIComponents.add(new JLabel("                                                                "));
-        JLabel jLabel=new JLabel("              ");
-        gUIComponents.add(jLabel);
+         monstername=new JLabel(account.monster.getName());
+         monstername.setFont(new Font("Arial", Font.BOLD, 20));
+        gUIComponents.add(monstername);
         for (int i = 0; i < gUIComponents.size(); i++) {
 			addComponent(grid, gUIComponents, i);
 		}
@@ -158,4 +167,13 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints{
 		constraints.anchor = grid[i][7];
 		jPanel2.add(gUIComponents.get(i), constraints);
 	}
+	@Override
+	public void update(String[] strings) {
+		// TODO Auto-generated method stub
+		account.monster.setName(strings[0]);
+		monstername.setText(account.monster.getName());
+		
+	}
+	
+	
 }

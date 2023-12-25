@@ -4,6 +4,8 @@ import java.awt.GridLayout;
 
 import javax.swing.JFrame;
 
+import finalproject2.Subject;
+
 //主類，用於建立和顯示面板
 public class Main {
 	public static void main(String[] args) {

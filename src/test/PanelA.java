@@ -4,21 +4,22 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 //第一個面板，用於顯示數值
-class PanelA extends JPanel implements test.Observer {
+class PanelA extends JPanel implements Observer {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private JLabel label = new JLabel("PanelB 的數值： ");
-
-	public PanelA(test.Subject subject) {
+		private int value=0;
+	public PanelA(finalproject2.Subject subject) {
 		subject.addObserver(this); // 註冊為觀察者
+		label.setText("PanelB 的數值： " + value);
 		add(label);
 	}
 
 	@Override
 	public void update(int value) {
-		label.setText("PanelB 的數值： " + value); // 更新數值
+		 this.value=value;// 更新數值
 	}
 
 }
