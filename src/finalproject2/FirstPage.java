@@ -23,7 +23,10 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 	private String[] imageSrc;
 	protected CardLayout cardLayout;// 切換面板
 	protected JPanel cardPanel;// 面板
+	private JPanel centerJPanel;
 	private Subject subject;
+	
+	private JPanel jPanel;
 	
 	private JLabel monstername;
 	protected int[][] grid;// 元件布局
@@ -48,17 +51,21 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 		this.add(loginPanel);
 	}
 	public JPanel open() {
-		
+		jPanel=new JPanel();
 		imageSrc=new String[]{"src/PICTURE/gamerbutton.png",
 				"src/PICTURE/slimebutton.png",
 				"src/PICTURE/interactive.png"};
-		actionListeners = new ActionListener[] { gamer, slime,interactive };
-		JPanel jPanel=new JPanel();
+		
+		
 		jPanel.setLayout(new BorderLayout()); 
 		jPanel.setOpaque(false); // 透明背景
 		jPanel2=new JPanel();
 		jPanel2.setLayout(new GridBagLayout());
 		jPanel2.setOpaque(false); // 透明背景
+		
+		Action();
+        actionListeners = new ActionListener[] { gamer, slime,interactive };
+        
 		System.out.println("使用者姓名"+account.getUsername());
 		// 加載背景圖片
         try {
@@ -71,7 +78,8 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
         	setButtonIcons(i);
         }
         
-        Action();
+        
+        
         getGrid();
         gUIComponents.add(new JLabel("                                                                "));
         gUIComponents.add(new JLabel("                                                                "));
@@ -85,7 +93,8 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
          * 遊戲大廳的各個panel
          */
 //        jPanel.add(new JLabel("eeee"),BorderLayout.EAST);
-        jPanel.add(new MonsterPanel(false,new int[] {0,0}),BorderLayout.CENTER);
+        centerJPanel=new MonsterPanel(false,new int[] {0,0});
+        jPanel.add(centerJPanel,BorderLayout.CENTER);
         jPanel.add(new Valuetable(account),BorderLayout.WEST);
         jPanel.add(jPanel2,BorderLayout.SOUTH);
 		return jPanel;
@@ -95,10 +104,7 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 	public void setButtonIcons(int i) {
 		JButton button = new JButton();//新增按鈕
 		button.setBackground(new Color(188,150,120));
-		button.addActionListener(actionListeners[i]);//新增監聽
-		//button.setFocusable(false); //不要出現框框
-		//button.setBorderPainted(false); // 移除按鈕的邊框繪製
-		//button.setContentAreaFilled(false); // 移除按鈕的填充效果
+	
 		/*
 		 * 新增按鈕圖片
 		 */
@@ -107,6 +113,9 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 		button.setPreferredSize(new Dimension(200, 100));//設定按鈕大小
         Image newbutton_Image=button_Image1.getScaledInstance(200, 100, Image.SCALE_DEFAULT); // 圖片格式
         button.setIcon(new ImageIcon(newbutton_Image));//新增圖片至按鈕
+        
+        button.addActionListener(actionListeners[i]);//新增監聽
+        
         gUIComponents.add(button);
 	}
 	public int[][] getGrid() {
@@ -138,12 +147,17 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 		gamer = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("點擊玩家");
+				JLabel jLabel=new JLabel("sad");
+				jPanel.remove(centerJPanel);
+				jPanel.add(jLabel,BorderLayout.CENTER);
 			};
 		};
 		slime = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				System.out.println("點擊史萊姆");
 			
 			};
 		};
@@ -151,6 +165,7 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				System.out.println("點擊互動");
 			
 			};
 		};

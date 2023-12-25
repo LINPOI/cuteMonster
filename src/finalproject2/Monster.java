@@ -173,7 +173,13 @@ public class Monster {
 
 	public String getValueName(int i) {
 		readMonster();
-		return valuename[i];
+		if(i<valuename.length) {
+			return valuename[i];
+		}else {
+			return "翅膀";
+		}
+		
+		
 		
 	}
 
@@ -207,7 +213,7 @@ public class Monster {
 	 */
 	public String getInf(int i) {
 		String[] strings = new String[] { "隨時間成長", "可透過練武提升", "可透過練武提升", "可透過學習提升", "探索火山提升", "探索極地提升", "探索沼澤提升",
-				"探索神殿提升" };
+				"探索神殿提升","透過飛行訓練" };
 		return strings[i];
 	}
 	

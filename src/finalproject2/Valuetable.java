@@ -35,10 +35,17 @@ public class Valuetable extends JPanel{
 	public Valuetable(Account account) {
 		this.setLayout(new BorderLayout());
 		// TODO Auto-generated constructor stub
-		listValue = new String[account.monster.getValueName().length];
-		for(int i=0;i<account.monster.getValueName().length;i++) {
+		listValue = new String[account.monster.getValueName().length+1];
+		for(int i=1;i<account.monster.getValueName().length;i++) {
 			listValue[i]=account.monster.getValueName(i)+"："+account.monster.getValue(i);
 		}
+		String wing="無";
+		if(account.monster.getWing()) {
+			wing="有";
+		}
+		
+		listValue[listValue.length-1]="翅膀："+wing;
+		
 		JList<String>list=new JList<String>(listValue);
 		JScrollPane scrollPane = new JScrollPane(list);
 		scrollPane.setPreferredSize(new Dimension(width, height));
