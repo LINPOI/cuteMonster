@@ -5,17 +5,19 @@ import java.util.LinkedList;
 public class Account {
 	private String username="";
     private String password="";
+    private int year=0;
     private int monster_id=1;
     private RWFile rwFile=new RWFile();
     public Monster monster=new Monster(username);
     public String[] key() {
     	return new String[] {
-    			"帳號","密碼"
+    			"帳號","密碼","養育年份"
     	};
     }
     public void inf(String[] inf) {
         this.username = inf[0];
         this.password = inf[1];
+        this.year=Integer.valueOf(inf[2]) ;
     }
   
     public void setUsername(String username) {
@@ -36,7 +38,15 @@ public class Account {
     	readAccount();
         return password;
     }
+    public void setYear( int year) {
+    	this.year = year;
+    	saveUser();
+    }
     
+    public int getYear() {
+    	readAccount();
+        return year;
+    }
     public void setmonster_id(int monster_id) {
     	this.monster_id = monster_id;
     	saveUser();
@@ -54,6 +64,8 @@ public class Account {
     public Monster getMonster() {
         return monster;
     }
+    
+    
     /*
      * 儲存
      */
@@ -61,6 +73,7 @@ public class Account {
     	LinkedList<String> linkedList_user=new LinkedList<String>();
     	linkedList_user.add(username);
     	linkedList_user.add(password);
+    	linkedList_user.add(String.valueOf(year));
     	linkedList_user.add(String.valueOf(monster_id));
     	//
     	rwFile.saveToFile_Account(linkedList_user, username);
@@ -69,6 +82,7 @@ public class Account {
     	LinkedList<String> linkedList_user=new LinkedList<String>();
     	linkedList_user.add(username);
     	linkedList_user.add(password);
+    	linkedList_user.add(String.valueOf(year));
     	linkedList_user.add(String.valueOf(monster_id));
     	//
     	rwFile.saveToFile_Account(linkedList_user, username);
@@ -82,7 +96,8 @@ public class Account {
     	if(user.size()!=0) {
     		username=user.get(0);
         	password=user.get(1);
-        	monster_id=Integer.valueOf(user.get(2));
+        	year=Integer.valueOf(user.get(2));
+        	monster_id=Integer.valueOf(user.get(3));
     	}
     }
 }

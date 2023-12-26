@@ -22,7 +22,7 @@ public class DatabaseOperations {
    */
     public boolean insert_Account_Data(Account account) {
         try {
-            String query = "INSERT INTO account (`帳號`, `密碼`) VALUES (?, ?)";
+            String query = "INSERT INTO account (`帳號`, `密碼`,`養育年份`) VALUES (?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(query);
             pstmt.setString(1, account.getUsername());
             pstmt.setString(2, account.getPassword());
