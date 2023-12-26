@@ -28,7 +28,7 @@ public class FrameMain {
 		 */
 		jFrame = new JFrame("可愛的怪物"); // 建立框架
 
-		jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // 按下關閉時的動作
+		jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // 按下關閉時的動作(關閉全部)
 		Image slimebutton1x1_Image = slimebutton1x1.getImage(); // 取得圖片
 		jFrame.setIconImage(slimebutton1x1_Image); // 應用圖示
 		jFrame.setSize(new Dimension(1000, 800)); // 框架尺寸
@@ -43,12 +43,12 @@ public class FrameMain {
 		 * 取得jpanel
 		 */
 		LogIn login = new LogIn(cardLayout, cardPanel,subject);
-		FirstPage firstPage = new FirstPage(cardLayout, cardPanel,subject);
+		FirstPage firstPage = new FirstPage(cardLayout, cardPanel,subject,jFrame);//切換panel用，觀察者同步資料用，gimer jdialog用
 
 		/*
 		 * 放入切換面板資料
 		 */
-		//cardPanel.add(login, "login");
+		cardPanel.add(login, "login");
 		cardPanel.add(firstPage, "first");
 
 		/*

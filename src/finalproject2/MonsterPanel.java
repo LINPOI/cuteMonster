@@ -49,7 +49,7 @@ public class MonsterPanel extends JPanel {
 				};
 		slime = new String[][] { blueSlimesStrings, redSlimesStrings, greenSlimesStrings, purpleSlimesStrings };
 
-		this.setLayout(null);
+		this.setLayout(new BorderLayout());
 		/*
 		 * 寬高
 		 */
@@ -86,8 +86,13 @@ public class MonsterPanel extends JPanel {
 
 			ImageIcon icon = new ImageIcon(resizedImage);
 			JLabel label = new JLabel(icon);
-			label.setBounds(190, 300, width-90, height-82);// x,y,width,height
-			this.add(label);
+			JPanel northJPanel= new JPanel();
+			northJPanel.setSize(new Dimension(800,400));
+			JLabel jLabelNORTH=new JLabel(" ");
+			jLabelNORTH.setPreferredSize(new Dimension(100, 200)); // 擠壓空間
+			this.add(jLabelNORTH,BorderLayout.NORTH);
+			this.add(new JLabel("                                                                "),BorderLayout.EAST);// 擠壓空間
+			this.add(label,BorderLayout.CENTER);
 			this.setOpaque(false); // 透明背景
 			label.addMouseListener(new MouseAdapter() {
 	            @Override
@@ -124,7 +129,6 @@ public class MonsterPanel extends JPanel {
 		}
 
 	}
-
 	private BufferedImage resizeImage(BufferedImage originalImage, int width, int height) {
 		BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = resizedImage.createGraphics();

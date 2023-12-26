@@ -8,7 +8,6 @@ public class Account {
     private int monster_id=1;
     private RWFile rwFile=new RWFile();
     public Monster monster=new Monster(username);
-    
     public String[] key() {
     	return new String[] {
     			"帳號","密碼"
@@ -21,7 +20,6 @@ public class Account {
   
     public void setUsername(String username) {
     	this.username = username;
-    	saveUser();
     }
     
     public String getUsername() {

@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.*;
@@ -236,6 +237,7 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 		if (read == 1) {
 			System.out.println("登入成功");
 			currentAccount = account;
+			rwFile.saveToFile(username);
 			if(!databaseOperations.monsterData(username)) {
 				cardLayout.show(cardPanel, "first");
 				String userInput= JOptionPane.showInputDialog(null, "請輸入怪物名字:");
