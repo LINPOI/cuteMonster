@@ -23,8 +23,7 @@ public class Gimer {
 	public Gimer(JFrame frame,Account account) {
 		String fileContent = rwFile.readFromFile();
         account.setUsername(fileContent);
-        account.readAccount();
-        databaseOperations.queryData(account);
+        account=databaseOperations.queryData(account);
        String yearString=String.valueOf(account.getYear()) ;
 		message = new String[] { "名稱", "養育年份", "養育寵物相冊", "獎狀",account.getUsername(),yearString  };//??username呢
 		JDialog jDialog = new JDialog(frame, "玩家資料", true);

@@ -173,7 +173,7 @@ public class RWFile {
 
 	        String line;
 	        while ((line = bufferedReader.readLine()) != null) {
-	            content.append(line).append("\n"); // 逐行讀取並串接內容
+	            content.append(line); // 逐行讀取並串接內容
 	        }
 
 	        bufferedReader.close();
@@ -181,7 +181,7 @@ public class RWFile {
 	        return content.toString();
 	    } catch (IOException e) {
 	        e.printStackTrace();
-	        return "";
+	        return "";  
 	    }
 	   
 	}
