@@ -14,10 +14,11 @@ public class Account {
     			"帳號","密碼","養育年份"
     	};
     }
-    public void inf(String[] inf) {
+    public void setInf(String[] inf) {
         this.username = inf[0];
         this.password = inf[1];
         this.year=Integer.valueOf(inf[2]) ;
+        //System.out.println(username+password+year);
     }
   
     public void setUsername(String username) {

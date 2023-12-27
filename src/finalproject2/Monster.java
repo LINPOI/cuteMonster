@@ -37,7 +37,7 @@ public class Monster {
 	 */
 	public String getName() {
 		readMonster();
-		System.out.println("getname getmonstername:"+name);
+		//System.out.println("getname getmonstername:"+name);
 		return name;
 	}
 
@@ -191,7 +191,7 @@ public class Monster {
 			name=linkedList.get(1);
 			for(int i=2;i<linkedList.size()-1;i++) {
 				value[i-2]=  Integer.parseInt(linkedList.get(i));
-				System.out.println(value[i-2]);
+				//System.out.println(value[i-2]);
 			}
 			wing=Boolean.parseBoolean(linkedList.get(10)) ;
 		}

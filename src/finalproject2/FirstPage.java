@@ -66,7 +66,7 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 		Action();
 		actionListeners = new ActionListener[] { gamer, slime, interactive };
 
-		System.out.println("使用者姓名" + account.getUsername());
+		//System.out.println("使用者姓名" + account.getUsername());
 		// 加載背景圖片
 		try {
 			backgroundImage = ImageIO.read(new File("src/PICTURE/houseBackground.png"));

@@ -9,6 +9,28 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 public class RWFile {
+	public void saveToFile(String filename,String string) {
+		try {
+			File file = new File("C:\\Users\\user\\eclipse-workspace\\finalproject2\\"+filename+".txt");
+			// 檢查檔案是否存在，如果不存在，則創建新檔案
+			if (!file.exists()) {
+				file.createNewFile();
+				System.out.println("檔案不存在，已創建新檔案");
+			}
+
+			FileWriter writer = new FileWriter(file);
+			BufferedWriter bufferedWriter = new BufferedWriter(writer);
+
+			bufferedWriter.write(string);
+			bufferedWriter.close();
+			writer.close();
+
+			//System.out.println("字串已成功寫入檔案。");
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	public void saveToFile(String string) {
 		try {
 			File file = new File("C:\\Users\\user\\eclipse-workspace\\finalproject2\\file.txt");
@@ -25,7 +47,7 @@ public class RWFile {
 			bufferedWriter.close();
 			writer.close();
 
-			System.out.println("字串已成功寫入檔案。");
+			//System.out.println("字串已成功寫入檔案。");
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -53,7 +75,7 @@ public class RWFile {
 			bufferedWriter.close();
 			writer.close();
 
-			System.out.println("鏈結串列已成功寫入檔案。");
+			//System.out.println("鏈結串列已成功寫入檔案。");
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -163,5 +185,29 @@ public class RWFile {
 	    }
 	   
 	}
-	
+	public String readFromFile(String filename) {
+	    StringBuilder content = new StringBuilder();
+	    try {
+	        File file = new File("C:\\Users\\user\\eclipse-workspace\\finalproject2\\" + filename + ".txt");
+	        if (!file.exists()) {
+	            System.out.println("檔案不存在");
+	            return "";
+	        }
+
+	        FileReader fileReader = new FileReader(file);
+	        BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+	        String contents = bufferedReader.readLine(); // 讀取單行字串
+
+	        bufferedReader.close();
+	        fileReader.close();
+
+	        return content != null ? contents : ""; // 如果內容為空則返回空字串
+	      
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return "";
+	    }
+	   
+	}
 }

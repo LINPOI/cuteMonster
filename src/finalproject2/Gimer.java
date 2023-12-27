@@ -16,18 +16,17 @@ public class Gimer {
 	 */
 	private String[] message;
 	private RWFile rwFile=new RWFile();
+	private DatabaseOperations databaseOperations=new DatabaseOperations();
 	private static final long serialVersionUID = 1L;
 	JPanel jPanel;
 
 	public Gimer(JFrame frame,Account account) {
 		String fileContent = rwFile.readFromFile();
-        if (fileContent != null) {
-            System.out.println("檔案內容：\n" + fileContent);
-            account.setUsername(fileContent);
-        } else {
-            System.out.println("讀取檔案失敗");
-        }
-		message = new String[] { "名稱", "養育年份", "養育寵物相冊", "獎狀",account.getUsername() };
+        account.setUsername(fileContent);
+        account.readAccount();
+        databaseOperations.queryData(account);
+       String yearString=String.valueOf(account.getYear()) ;
+		message = new String[] { "名稱", "養育年份", "養育寵物相冊", "獎狀",account.getUsername(),yearString  };//??username呢
 		JDialog jDialog = new JDialog(frame, "玩家資料", true);
 		jDialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		jPanel = new JPanel();

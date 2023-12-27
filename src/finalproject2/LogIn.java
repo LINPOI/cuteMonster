@@ -238,17 +238,19 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 			System.out.println("登入成功");
 			currentAccount = account;
 			rwFile.saveToFile(username);
-			if(!databaseOperations.monsterData(username)) {
+			if(!databaseOperations.monsterData(username)) {//第一次登入
 				cardLayout.show(cardPanel, "first");
 				String userInput= JOptionPane.showInputDialog(null, "請輸入怪物名字:");
 				account.monster.setName(userInput); 
 				account.saveUser(account);
 				subject.setStrings(new String[] {userInput}); // 設置新數值
 				databaseOperations.insert_Monster_Data(account);//?這裡成功了?
-			}else {
+				
+			}else {//第n次登入
 				cardLayout.show(cardPanel, "first");
 				databaseOperations.queryMonsterInfo(account);
 				subject.setStrings(new String[] {account.monster.getName()}); // 設置新數值
+				account= databaseOperations.queryData(account);
 			}
 			
 			

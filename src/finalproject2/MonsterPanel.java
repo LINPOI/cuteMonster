@@ -82,7 +82,7 @@ public class MonsterPanel extends JPanel {
 
 			File output = new File("src/newpicture/output.png");
 			ImageIO.write(resizedImage, "PNG", output);
-			System.out.println("" + output.getAbsolutePath());
+			//System.out.println("" + output.getAbsolutePath());
 
 			ImageIcon icon = new ImageIcon(resizedImage);
 			JLabel label = new JLabel(icon);
