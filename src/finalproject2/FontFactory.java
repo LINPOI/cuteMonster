@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 
 public class FontFactory {
+	
 	public static Font getFont(String style, int size) {
 		switch (style) {
 		case "Arial":

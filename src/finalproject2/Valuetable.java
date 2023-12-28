@@ -51,9 +51,9 @@ public class Valuetable extends JPanel{
 		scrollPane.setPreferredSize(new Dimension(width, height));
 		list.setBackground(new Color(255,255,135));
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		this.setOpaque(false); // 透明背景
+		this.setOpaque(false);						 
 		JLabel label=new JLabel(outputString);
-		 label.setOpaque(true);
+		 label.setOpaque(true);	// 透明背景
 		label.setBackground(new Color(255,217,230));
         this.add(scrollPane,BorderLayout.NORTH);
         this.add(label,BorderLayout.PAGE_END);

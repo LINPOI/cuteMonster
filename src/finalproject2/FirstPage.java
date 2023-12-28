@@ -190,4 +190,10 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 		monstername.setName(rwFile.readFromFile());
 	}
 
+	@Override
+	public void updataInt(int[] ints) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

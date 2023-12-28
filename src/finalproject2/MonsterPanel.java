@@ -152,4 +152,9 @@ public class MonsterPanel extends JPanel implements  Observer{
 		}
 		
 	}
+	@Override
+	public void updataInt(int[] ints) {
+		// TODO Auto-generated method stub
+		
+	}
 }

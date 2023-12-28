@@ -11,7 +11,7 @@ import javax.swing.*;
 import java.awt.event.*;
 
 public class LogIn extends JPanel implements Commonly_GridBagConstraints {
-	private Subject subject;
+	private Subject subject;//新增觀察者
 	
 	protected CardLayout cardLayout;// 切換面板
 	protected JPanel cardPanel;// 面板
