@@ -29,7 +29,18 @@ public class FontFactory {
 			return new Font("微軟正黑體", Font.PLAIN, 20);
 		}
 	}
-
+	public static Font commonFont(int i,int size) {
+		switch (i) {
+		case 1:
+			return new Font("標楷體", Font.PLAIN, size);
+		case 2:
+			return new Font("Arial", Font.PLAIN, size);
+		case 3:
+			return new Font("新細明體", Font.PLAIN, size);
+		default:
+			return new Font("微軟正黑體", Font.PLAIN, size);
+		}
+	}
 	public static void main(String[] args) {
 		String[] fontNames = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 
