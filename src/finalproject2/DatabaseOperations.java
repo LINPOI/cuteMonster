@@ -36,7 +36,9 @@ public class DatabaseOperations {
 			return false;
 		}
 	}
-
+/*
+ * 新增怪獸資料
+ */
 	public boolean insert_Monster_Data(Account account) {
 		try {
 			String query = "INSERT INTO `" + account.getUsername()
@@ -58,11 +60,56 @@ public class DatabaseOperations {
 			return false;
 		}
 	}
+	/*
+	 * 新增怪獸相冊資料
+	 */
+	public void insertInto_photoAlbum_Data(Account account, String monsterImage) {
+	    try {
+	        // 創建 PreparedStatement 物件
+	        PreparedStatement pstmt = conn.prepareStatement(
+	                "INSERT INTO `" + account.getUsername() + "的photo_album` (玩家, monster_name, monster_image) VALUES (?, ?, ?)");
 
+	        // 設定參數值
+	        pstmt.setString(1, account.getUsername());
+	        pstmt.setString(2, account.monster.getName());
+	        pstmt.setString(3, monsterImage);
+
+	        // 執行 SQL 命令以新增資料
+	        pstmt.executeUpdate();
+	        System.out.println("成功新增資料到相冊資料表");
+	        pstmt.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+	/*
+	 * 新增使用者資料表
+	 */
+	public void create_Account_Table() {
+		try {
+			// 創建 Statement 物件
+			Statement stmt = conn.createStatement();
+
+			// SQL 命令 - 建立寵物資料表
+			String createTableSQL = "CREATE TABLE  IF NOT EXISTS `Account` ("
+					+ "`帳號` CHAR(50) NOT NULL DEFAULT '0' COLLATE 'latin1_swedish_ci', "
+					+ "`密碼` CHAR(50) NULL DEFAULT NULL COLLATE 'latin1_swedish_ci', "
+					+ "`養育年份` INT(11) NULL DEFAULT '0',"
+					+ "PRIMARY KEY (`帳號`) USING BTREE"
+					+ ") ENGINE=InnoDB;";
+
+			// 執行 SQL 命令以建立資料表
+			stmt.executeUpdate(createTableSQL);
+			System.out.println("成功新增資料表");
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	/*
 	 * 新增怪獸資料表
 	 */
-	public void createTable(String username) {
+	public void create_Monster_Table(String username) {
 		account.setUsername(username);
 		try {
 			// 創建 Statement 物件
@@ -88,7 +135,35 @@ public class DatabaseOperations {
 			e.printStackTrace();
 		}
 	}
+	/*
+	 * 新增相冊資料表
+	 * 玩家名稱
+	 * 相冊ID
+	 * 怪獸名稱
+	 * 怪獸圖片
+	 */
+	public void create_photoAlbum_Table(Account account) {
+		try {
+			// 創建 Statement 物件
+			Statement stmt = conn.createStatement();
 
+			// SQL 命令 - 建立寵物資料表
+			String createTableSQL = "CREATE TABLE IF NOT EXISTS `"+account.getUsername()+"的photo_album` ("
+					+ "玩家 VARCHAR(100),"
+		            + "album_id INT AUTO_INCREMENT PRIMARY KEY,"
+		            + "monster_name VARCHAR(100),"
+		            + "monster_image VARCHAR(255),"
+					+ "FOREIGN KEY (`玩家`) REFERENCES `account`(`帳號`) ON DELETE CASCADE ON UPDATE CASCADE"
+					+ ") ENGINE=InnoDB COLLATE 'latin1_swedish_ci';";
+
+			// 執行 SQL 命令以建立資料表
+			stmt.executeUpdate(createTableSQL);
+			System.out.println("成功新增資料表");
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	/*
 	 * 刪除
 	 */
@@ -160,7 +235,7 @@ public class DatabaseOperations {
 	 */
 	public Account queryData(Account account) {
 	    Account account2 = new Account();
-	    System.out.println("進來的user:"+account.getUsername()+"的資料");
+	    //System.out.println("進來的user:"+account.getUsername()+"的資料");
 	    try {
 	        String query = "SELECT * FROM account WHERE `帳號`=?";
 	        PreparedStatement pstmt = conn.prepareStatement(query);
@@ -176,7 +251,7 @@ public class DatabaseOperations {
 	            // 假設有設置 Account 的方法來設置資訊
 	            account2.setInf(inf);
 
-	            System.out.println("已讀取user:"+account.getUsername()+"的資料");
+	            //System.out.println("已讀取user:"+account.getUsername()+"的資料");
 	           
 	        }
 	        rs.close();
@@ -283,7 +358,39 @@ public class DatabaseOperations {
 			return false;
 		}
 	}
+	/*
+	 * 怪獸相冊
+	 */
+	public void queryFrom_photoAlbum(Account account) {
+	    try {
+	    	// 創建 Statement 物件
+	    				Statement stmt = conn.createStatement();
 
+	        // 創建 PreparedStatement 物件
+	    				String queryMonsterSQL ="SELECT * FROM `" + account.getUsername() + "的photo_album`";
+
+	        // 執行 SQL 查詢
+	        ResultSet rs = stmt.executeQuery(queryMonsterSQL);
+
+	        // 處理查詢結果
+	        while (rs.next()) {
+	            // 取得每列資料
+	            String playerName = rs.getString("玩家");
+	            int albumId = rs.getInt("album_id");
+	            String monsterName = rs.getString("monster_name");
+	            String monsterImage = rs.getString("monster_image");
+
+	            // 在這裡處理取得的資料，例如印出或進行其他操作
+	            System.out.println("玩家: " + playerName + ", 相冊ID: " + albumId + ", 怪獸名稱: " + monsterName + ", 怪獸圖片: " + monsterImage);
+	        }
+
+	        // 關閉資源
+	        rs.close();
+	        stmt.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
 	/*
 	 * 關閉連線
 	 */

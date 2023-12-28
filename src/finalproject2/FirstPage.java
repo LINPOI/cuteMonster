@@ -26,7 +26,7 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 	private JFrame jframe;
 	private int switchJPanel;
 
-	private RWFile rwFile=new RWFile();
+	private RWFile rwFile = new RWFile();
 	private JLabel monstername;
 	protected int[][] grid;// 元件布局
 	protected ArrayList<JComponent> gUIComponents = new ArrayList<>();
@@ -35,17 +35,17 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 	private ActionListener gamer = null;
 	private ActionListener slime = null;
 	private ActionListener interactive = null;
-
+	private DatabaseOperations databaseOperations = new DatabaseOperations();
 	private Account account = new Account();
 	//
 	JPanel jPanel2;
 
-	public FirstPage(CardLayout cardLayout, JPanel cardPanel, Subject subject,JFrame jFrame) {
+	public FirstPage(CardLayout cardLayout, JPanel cardPanel, Subject subject, JFrame jFrame) {
 		this.cardLayout = cardLayout;
 		this.cardPanel = cardPanel;
 		this.subject = subject;
-		this.jframe=jFrame;
-		
+		this.jframe = jFrame;
+
 		subject.addObserver(this);
 		JPanel loginPanel = open();
 		this.setLayout(new BorderLayout());
@@ -54,6 +54,9 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 
 	public JPanel open() {
 		JPanel jPanel = new JPanel();
+		String fileContent = rwFile.readFromFile();
+		account.setUsername(fileContent);
+		account = databaseOperations.queryData(account);
 		imageSrc = new String[] { "src/PICTURE/gamerbutton.png", "src/PICTURE/slimebutton.png",
 				"src/PICTURE/interactive.png" };
 
@@ -66,7 +69,7 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 		Action();
 		actionListeners = new ActionListener[] { gamer, slime, interactive };
 
-		//System.out.println("使用者姓名" + account.getUsername());
+		// System.out.println("使用者姓名" + account.getUsername());
 		// 加載背景圖片
 		try {
 			backgroundImage = ImageIO.read(new File("src/PICTURE/houseBackground.png"));
@@ -91,7 +94,7 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 		 * 遊戲大廳的各個panel
 		 */
 //        jPanel.add(new JLabel("eeee"),BorderLayout.EAST);
-		jPanel.add(new MonsterPanel(false, new int[] { 0, 0 }), BorderLayout.CENTER);
+		jPanel.add(new MonsterPanel(false, new int[] { 0, 0 }, account, subject), BorderLayout.CENTER);
 
 		jPanel.add(new Valuetable(account), BorderLayout.WEST);
 		jPanel.add(jPanel2, BorderLayout.SOUTH);
@@ -144,7 +147,7 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("點擊玩家");
-				Gimer gimer=new Gimer(jframe,account);
+				Gimer gimer = new Gimer(jframe, account);
 			};
 		};
 		slime = new ActionListener() {
@@ -152,7 +155,7 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				System.out.println("點擊史萊姆");
-
+//餵食沐浴
 			};
 		};
 		interactive = new ActionListener() {
@@ -160,7 +163,8 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				System.out.println("點擊互動");
-
+//出去
+				InteractiveJFrame interactiveJFrame = new InteractiveJFrame(account);
 			};
 		};
 	}

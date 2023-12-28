@@ -59,9 +59,10 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 	private static final long serialVersionUID = 1L;
 
 	public LogIn(CardLayout cardLayout, JPanel cardPanel,Subject subject ) {
+		databaseOperations.create_Account_Table();//新增使用者資料
 		this.cardLayout = cardLayout;
-		this.cardPanel = cardPanel;
-		this.subject=subject;
+		this.cardPanel = cardPanel;//切換panel
+		this.subject=subject;//觀察者
 		JPanel loginPanel = open();
 		this.setLayout(new BorderLayout());
 		this.add(new JLabel("              "
@@ -182,7 +183,7 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 						
 						register_username = Username;
 						register_password = password;
-						databaseOperations.createTable(Username);
+						databaseOperations.create_Monster_Table(Username);
 						
 					} else {
 						JOptionPane.showMessageDialog(jPanel, "錯誤");
@@ -249,7 +250,7 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 			}else {//第n次登入
 				cardLayout.show(cardPanel, "first");
 				databaseOperations.queryMonsterInfo(account);
-				subject.setStrings(new String[] {account.monster.getName()}); // 設置新數值
+				subject.setStrings(new String[] {account.monster.getName(),account.getUsername()}); // 設置新數值
 				account= databaseOperations.queryData(account);
 			}
 			
@@ -267,7 +268,7 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 				String userInput= JOptionPane.showInputDialog(null, "請輸入怪物名字:");   
 				account.monster.setName(userInput); 
 				account.saveUser(account);
-				subject.setStrings(new String[] {userInput}); // 設置新數值
+				subject.setStrings(new String[] {userInput,account.getUsername()}); // 設置新數值
 				databaseOperations.insert_Monster_Data(account);//?這裡成功了?
 			} else {
 				JOptionPane.showMessageDialog(jPanel, "帳號不存在");

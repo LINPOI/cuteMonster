@@ -25,17 +25,15 @@ public class Gimer {
         account.setUsername(fileContent);
         account=databaseOperations.queryData(account);
        String yearString=String.valueOf(account.getYear()) ;
-		message = new String[] { "名稱", "養育年份", "養育寵物相冊", "獎狀",account.getUsername(),yearString  };//??username呢
+		message = new String[] { "名稱",account.getUsername(), "養育年份",yearString, "養育寵物相冊", "獎狀"  };//??username呢
 		JDialog jDialog = new JDialog(frame, "玩家資料", true);
 		jDialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		jPanel = new JPanel();
 		jDialog.setSize(new Dimension(400, 200)); // 框架尺寸
 		jPanel.setLayout(new GridLayout(4, 4));
-		for(int i=0;i<4;i++) {
+		for(int i=0;i<6;i+=2) {
 			jlabels(i);
-		}
-		for(int i=4;i<message.length;i++) {
-			jlabelInfs(i);
+			jlabelInfs(i+1);
 		}
 		JScrollPane scrollPane = new JScrollPane(jPanel);
 		// 設置 JScrollPane 的滾動條自動出現方式

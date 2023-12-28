@@ -1,8 +1,9 @@
 package finalproject2;
 
+import java.io.File;
 import java.util.LinkedList;
 
-public class Account {
+public class Account {//帳號 密碼 年份 怪獸id 怪獸
 	private String username="";
     private String password="";
     private int year=0;
@@ -101,4 +102,7 @@ public class Account {
         	monster_id=Integer.valueOf(user.get(3));
     	}
     }
+    public File imegeurl() {
+		return new File("src/newpicture/"+ getUsername()+monster.getName()+"output.png");
+	}
 }

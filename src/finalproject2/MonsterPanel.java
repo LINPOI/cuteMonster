@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class MonsterPanel extends JPanel {
+public class MonsterPanel extends JPanel implements  Observer{
 	/**
 	 * 
 	 */
@@ -24,9 +24,12 @@ public class MonsterPanel extends JPanel {
 	private String[] purpleSlimesStrings;
 	private int width=350;
 	private int height=350;
-	
-	public MonsterPanel(boolean havewing, int select[]) {// 翅膀，史萊姆總類
-		
+	private Account account=new Account();
+	private Subject subject;
+	private BufferedImage resizedImage;
+	public MonsterPanel(boolean havewing, int select[],Account account,Subject subject) {// 翅膀，史萊姆總類
+		this.subject= subject;
+		subject.addObserver(this);
 		/*
 		 * \ 0 藍史萊姆01水冰23 1 紅史萊姆0123 2 綠史萊姆0123 3 紫史萊姆012345
 		 */
@@ -78,11 +81,9 @@ public class MonsterPanel extends JPanel {
 			g.dispose();
 			
 			// 創建縮小後的圖像
-			BufferedImage resizedImage = resizeImage(combined, width, height);
+			resizedImage = resizeImage(combined, width, height);
 
-			File output = new File("src/newpicture/output.png");
-			ImageIO.write(resizedImage, "PNG", output);
-			//System.out.println("" + output.getAbsolutePath());
+			
 
 			ImageIcon icon = new ImageIcon(resizedImage);
 			JLabel label = new JLabel(icon);
@@ -135,5 +136,20 @@ public class MonsterPanel extends JPanel {
 		g.drawImage(originalImage, 0, 0, width, height, null);
 		g.dispose();
 		return resizedImage;
+	}
+	@Override
+	public void update(String[] strings) {
+		// TODO Auto-generated method stub
+		account.monster.setName(strings[0]);
+		account.setUsername(strings[1]);
+		File output =account.imegeurl();
+		try {
+			ImageIO.write(resizedImage, "PNG", output);
+			System.out.println("輸出圖片" + output.getAbsolutePath());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }
