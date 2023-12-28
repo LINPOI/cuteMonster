@@ -7,9 +7,10 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class Monster {
-	private String username="";
-	private String[] valuename = new String[] { // 字串數值
+	private String username = "";
+	private String[] value_name = new String[] { // 字串數值
 			"年齡", "攻擊力", "生命力", "智力", "火系", "冰系", "毒系", "幻影系" };
+	private String[] slimestates_Name = new String[] { "飢餓度", "飢渴度", "心情指數", "健康度" };
 	private String name = "";
 	private int age = 0;
 	private int attack = 10;
@@ -20,17 +21,18 @@ public class Monster {
 	private int poison = 0;
 	private int illusion = 0;
 	private int[] value = new int[] { age, attack, health, intelligence, fire, ice, poison, illusion };// 數值
-	 private RWFile rwFile=new RWFile();
+
+	private int hungerValue = 50;
+	private int thirstValue = 50;
+	private int moodValue = 50;
+	private int healthValue = 50;
+	private int[] slimestates = new int[] { hungerValue, thirstValue, moodValue, healthValue };// 數值
+	private RWFile rwFile = new RWFile();
 	private boolean wing = false;// 有無翅膀
 
-	private Map<String, Integer> treeMap = new TreeMap<>();
-
 	public Monster(String username) {
-		this.username=username;
+		this.username = username;
 		// TODO Auto-generated constructor stub
-		for (int i = 0; i < valuename.length; i++) {
-			treeMap.put(valuename[i], value[i]);
-		}
 	}
 
 	/*
@@ -38,7 +40,7 @@ public class Monster {
 	 */
 	public String getName() {
 		readMonster();
-		//System.out.println("getname getmonstername:"+name);
+		// System.out.println("getname getmonstername:"+name);
 		return name;
 	}
 
@@ -169,32 +171,30 @@ public class Monster {
 	 */
 	public String[] getValueName() {
 		readMonster();
-		return valuename;
+		return value_name;
 	}
 
 	public String getValueName(int i) {
 		readMonster();
-		if(i<valuename.length) {
-			return valuename[i];
-		}else {
+		if (i < value_name.length) {
+			return value_name[i];
+		} else {
 			return "翅膀";
 		}
-		
-		
-		
+
 	}
 
 	/*
 	 * 數值
 	 */
 	public void setValue(LinkedList<String> linkedList) {
-		if(linkedList.size()!=0) {
-			name=linkedList.get(1);
-			for(int i=2;i<linkedList.size()-1;i++) {
-				value[i-2]=  Integer.parseInt(linkedList.get(i));
-				//System.out.println(value[i-2]);
+		if (linkedList.size() != 0) {
+			name = linkedList.get(1);
+			for (int i = 2; i < linkedList.size() - 1; i++) {
+				value[i - 2] = Integer.parseInt(linkedList.get(i));
+				// System.out.println(value[i-2]);
 			}
-			wing=Boolean.parseBoolean(linkedList.get(10)) ;
+			wing = Boolean.parseBoolean(linkedList.get(10));
 		}
 		save();
 	}
@@ -214,32 +214,79 @@ public class Monster {
 	 */
 	public String getInf(int i) {
 		String[] strings = new String[] { "隨時間成長", "可透過練武提升", "可透過練武提升", "可透過學習提升", "探索火山提升", "探索極地提升", "探索沼澤提升",
-				"探索神殿提升","透過飛行訓練" };
+				"探索神殿提升", "透過飛行訓練" };
 		return strings[i];
 	}
-	
+
 	public void save() {
-		LinkedList<String> linkedList=new LinkedList<String>();
+		LinkedList<String> linkedList = new LinkedList<String>();
 		linkedList.add(username);
 		linkedList.add(name);
-		for(int i=0;i<getValue().length;i++) {
+		for (int i = 0; i < getValue().length; i++) {
 			linkedList.add(String.valueOf(getValue(i)));
 		}
 		linkedList.add(String.valueOf(wing));
-		rwFile.saveToFile_monster(linkedList,name);
-    	
-    }
-	public void readMonster(){
-	 LinkedList<String> linkedList=rwFile.read_Monster(name);
-		if(linkedList.size()!=0) {
-			name=linkedList.get(1);
-			for(int i=2;i<linkedList.size()-1;i++) {
-				value[i-2]=  Integer.parseInt(linkedList.get(i));
-			}
-			wing=Boolean.parseBoolean(linkedList.get(linkedList.size()-1)) ;
-		}
-    	
-    }
-	
+		rwFile.saveToFile_monster(linkedList, name);
 
+	}
+
+	public void readMonster() {
+		LinkedList<String> linkedList = rwFile.read_Monster(name);
+		if (linkedList.size() != 0) {
+			name = linkedList.get(1);
+			for (int i = 2; i < linkedList.size() - 1; i++) {
+				value[i - 2] = Integer.parseInt(linkedList.get(i));
+			}
+			wing = Boolean.parseBoolean(linkedList.get(linkedList.size() - 1));
+		}
+
+	}
+
+	// 飢餓度
+	public int getHungerValue() {
+		return hungerValue;
+	}
+
+	public void setHungerValue(int hungerValue) {
+		this.hungerValue = hungerValue;
+	}
+
+	// 飢渴度
+	public int getThirstValue() {
+		return thirstValue;
+	}
+
+	public void setThirstValue(int thirstValue) {
+		this.thirstValue = thirstValue;
+	}
+
+	// 心情指數
+	public int getMoodValue() {
+		return moodValue;
+	}
+
+	public void setMoodValue(int moodValue) {
+		this.moodValue = moodValue;
+	}
+
+	// 健康值
+	public int getHealthValue() {
+		return healthValue;
+	}
+
+	public void setHealthValue(int healthValue) {
+		this.healthValue = healthValue;
+	}
+	public String[] getStates_name() {
+		return slimestates_Name;
+	}
+	public String getStates_name(int i) {
+		return slimestates_Name[i];
+	}
+	public void setSlimeState(int[] value) {
+		slimestates=value;
+	}
+	public int[] getStates(){
+		return slimestates;
+	}
 }

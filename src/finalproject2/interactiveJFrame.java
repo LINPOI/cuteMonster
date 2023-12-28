@@ -207,4 +207,4 @@ public class InteractiveJFrame extends JPanel {
 		}
 	}
 }
-//計畫三個panel切換
+//計畫三個panel切換，panel.setOpaque(false); // 透明背景

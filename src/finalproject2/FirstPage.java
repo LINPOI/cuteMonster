@@ -11,6 +11,8 @@ import java.util.LinkedList;
 import javax.imageio.*;
 import javax.swing.*;
 
+import org.mariadb.jdbc.internal.util.constant.StateChange;
+
 public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Observer {
 
 	/**
@@ -85,7 +87,7 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 		gUIComponents.add(new JLabel("                                                                "));
 		gUIComponents.add(new JLabel("                                                                "));
 		monstername = new JLabel(account.monster.getName());
-		monstername.setFont(new Font("Arial", Font.BOLD, 20));
+		monstername.setFont(FontFactory.commonFont(2));
 		gUIComponents.add(monstername);
 		for (int i = 0; i < gUIComponents.size(); i++) {
 			addComponent(grid, gUIComponents, i);
@@ -95,7 +97,7 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 		 */
 //        jPanel.add(new JLabel("eeee"),BorderLayout.EAST);
 		jPanel.add(new MonsterPanel(false, new int[] { 0, 0 }, account, subject), BorderLayout.CENTER);
-
+		jPanel.add(new SlimeStatePanel(account),BorderLayout.EAST);
 		jPanel.add(new Valuetable(account), BorderLayout.WEST);
 		jPanel.add(jPanel2, BorderLayout.SOUTH);
 		return jPanel;
