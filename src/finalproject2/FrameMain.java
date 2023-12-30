@@ -48,7 +48,7 @@ public class FrameMain {
 		/*
 		 * 放入切換面板資料
 		 */
-		//cardPanel.add(login, "login");
+	//	cardPanel.add(login, "login");
 		cardPanel.add(firstPage, "first");
 
 		/*

@@ -244,7 +244,7 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 				String userInput= JOptionPane.showInputDialog(null, "請輸入怪物名字:");
 				account.monster.setName(userInput); 
 				account.saveUser(account);
-				subject.setStrings(new String[] {userInput}); // 設置新數值
+				subject.setStrings(new String[] {account.monster.getName(),account.getUsername()}); // 設置新數值
 				databaseOperations.insert_Monster_Data(account);//?這裡成功了?
 				
 			}else {//第n次登入

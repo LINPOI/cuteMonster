@@ -42,15 +42,19 @@ public class DatabaseOperations {
 	public boolean insert_Monster_Data(Account account) {
 		try {
 			String query = "INSERT INTO `" + account.getUsername()
-					+ "的怪獸` (`玩家`, `怪獸名稱`, `怪獸年齡`, `攻擊力`, `生命力`, `智力`, `火系`, `冰系`, `毒系`, `幻影系` ,`翅膀`) "
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+					+ "的怪獸` (`玩家`, `怪獸名稱`, `怪獸年齡`, `攻擊力`, `生命力`, `智力`, `火系`, `冰系`, `毒系`, `幻影系` ,`翅膀`"
+					+ ",`飢餓度`,`飢渴度`,`心情指數`,`健康度`) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?)";
 			PreparedStatement pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, account.getUsername());
 			pstmt.setString(2, account.monster.getName());
-			for (int i = 3; i < account.monster.getValueName().length + 3; i++) {
-				pstmt.setInt(i, account.monster.getValue(i - 3));
+			for (int i = 0; i < account.monster.getValueName().length ; i++) {
+				pstmt.setInt(i+3, account.monster.getValue(i));
 			}
 			pstmt.setBoolean(11, account.monster.getWing());
+			for (int i = 0; i < account.monster.getStates_name().length; i++) {
+				pstmt.setInt(i+12, account.monster.getStates(i));
+			}
 			pstmt.executeUpdate();
 			System.out.println("成功新增怪獸資料");
 			return true;
@@ -124,6 +128,8 @@ public class DatabaseOperations {
 					+ "	`智力` INT(11) NULL DEFAULT NULL," + "	`火系` INT(11) NULL DEFAULT NULL,"
 					+ "	`冰系` INT(11) NULL DEFAULT NULL," + "	`毒系` INT(11) NULL DEFAULT NULL,"
 					+ "	`幻影系` INT(11) NULL DEFAULT NULL," + "`翅膀` TINYINT(1) NOT NULL DEFAULT 0, "
+					+ "	`飢餓度` INT(11) NULL DEFAULT NULL," + "	`飢渴度` INT(11) NULL DEFAULT NULL,"
+					+ "	`心情指數` INT(11) NULL DEFAULT NULL," + "	`健康度` INT(11) NULL DEFAULT NULL,"
 					+ "FOREIGN KEY (`玩家`) REFERENCES `account`(`帳號`) ON DELETE CASCADE ON UPDATE CASCADE"
 					+ ") ENGINE=InnoDB COLLATE 'latin1_swedish_ci';";
 
@@ -295,11 +301,16 @@ public class DatabaseOperations {
 				int poison = resultSet.getInt("毒系");
 				int phantom = resultSet.getInt("幻影系");
 				Boolean wing = resultSet.getBoolean("翅膀");
+				account.monster.setHungerValue(resultSet.getInt("飢餓度")); 
+				account.monster.setThirstValue(resultSet.getInt("飢渴度")); 
+				account.monster.setMoodValue(resultSet.getInt("心情指數")); 
+				account.monster.setHealthValue(resultSet.getInt("健康度")); 
+				
 				System.out.println("資料庫讀單一怪獸:怪獸名稱: " + name);
 				account.monster.setName(name);
 				account.monster.setAge(age);
 				account.monster.setAttack(attack);
-				account.monster.setHealth(hp);
+				account.monster.setHP(hp);
 				account.monster.setIntelligence(intelligence);
 				account.monster.setFire(fire);
 				account.monster.setIce(ice);
@@ -341,13 +352,17 @@ public class DatabaseOperations {
 				account.monster.setName(resultSet.getString("怪獸名稱"));
 				account.monster.setAge(resultSet.getInt("怪獸年齡"));
 				account.monster.setAttack(resultSet.getInt("攻擊力"));
-				account.monster.setHealth( resultSet.getInt("生命力"));
+				account.monster.setHP( resultSet.getInt("生命力"));
 				account.monster.setIntelligence(resultSet.getInt("智力"));
 				account.monster.setFire(resultSet.getInt("火系"));
 				account.monster.setIce(resultSet.getInt("冰系"));
 				account.monster.setPoison(resultSet.getInt("毒系"));
 				account.monster.setIllusion(resultSet.getInt("幻影系"));
 				account.monster.setWing(resultSet.getBoolean("翅膀"));
+				account.monster.setHungerValue(resultSet.getInt("飢餓度")); 
+				account.monster.setThirstValue(resultSet.getInt("飢渴度")); 
+				account.monster.setMoodValue(resultSet.getInt("心情指數")); 
+				account.monster.setHealthValue(resultSet.getInt("健康度")); 
 			} while (resultSet.next());
 
 			// 關閉 Statement 物件

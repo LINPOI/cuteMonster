@@ -27,6 +27,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class InteractiveJFrame extends JPanel {
 	/**
@@ -125,6 +127,19 @@ public class InteractiveJFrame extends JPanel {
 		jList.setCellRenderer(new MyListCellRenderer());
 		jList.setBackground(new Color(255, 248, 220));
 		jList.setPreferredSize(new Dimension(500, 200));
+		jList.addListSelectionListener(new ListSelectionListener() {
+	            @Override
+	            public void valueChanged(ListSelectionEvent e) {
+	                if (!e.getValueIsAdjusting()) { // 確保不是選擇中的變更
+	                    int index = jList.getSelectedIndex(); // 獲取所選項目的索引
+	                    if (index != -1) { // 確認是否有選取項目
+	                        System.out.println("所選擇的是: " + strings[index]); // 輸出所選項目的內容
+	                        
+	                        
+	                    }
+	                }
+	            }
+	        });
 		panel.setOpaque(false); // 透明背景
 		panel.add(jList);
 

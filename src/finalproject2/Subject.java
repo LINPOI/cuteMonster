@@ -21,7 +21,7 @@ class Subject {
 		return strings;
 	}
 	
-	public void setInts( int[]  ints) {
+	public void setStates( int[]  ints) {
 		this.ints = ints;
 		notifyObservers(); // 設定新值後通知所有觀察者
 	}

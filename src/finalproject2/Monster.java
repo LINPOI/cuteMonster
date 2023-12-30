@@ -14,13 +14,13 @@ public class Monster {
 	private String name = "";
 	private int age = 0;
 	private int attack = 10;
-	private int health = 100;
+	private int hp = 100;
 	private int intelligence = 5;
 	private int fire = 0;
 	private int ice = 0;
 	private int poison = 0;
 	private int illusion = 0;
-	private int[] value = new int[] { age, attack, health, intelligence, fire, ice, poison, illusion };// 數值
+	private int[] value = new int[] { age, attack, hp, intelligence, fire, ice, poison, illusion };// 數值
 
 	private int hungerValue = 50;
 	private int thirstValue = 50;
@@ -91,13 +91,13 @@ public class Monster {
 	/*
 	 * 生命力
 	 */
-	public int getHealth() {
+	public int getHP() {
 		readMonster();
-		return health;
+		return hp;
 	}
 
-	public void setHealth(int health) {
-		this.health += health;
+	public void setHP(int health) {
+		this.hp += health;
 		save();
 	}
 
@@ -288,5 +288,8 @@ public class Monster {
 	}
 	public int[] getStates(){
 		return slimestates;
+	}
+	public int getStates(int i){
+		return slimestates[i];
 	}
 }
