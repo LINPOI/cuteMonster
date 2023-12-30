@@ -301,21 +301,21 @@ public class DatabaseOperations {
 				int poison = resultSet.getInt("毒系");
 				int phantom = resultSet.getInt("幻影系");
 				Boolean wing = resultSet.getBoolean("翅膀");
-				account.monster.setHungerValue(resultSet.getInt("飢餓度")); 
-				account.monster.setThirstValue(resultSet.getInt("飢渴度")); 
-				account.monster.setMoodValue(resultSet.getInt("心情指數")); 
-				account.monster.setHealthValue(resultSet.getInt("健康度")); 
+				account.monster.addHungerValue(resultSet.getInt("飢餓度")); 
+				account.monster.addThirstValue(resultSet.getInt("飢渴度")); 
+				account.monster.addMoodValue(resultSet.getInt("心情指數")); 
+				account.monster.addHealthValue(resultSet.getInt("健康度")); 
 				
 				System.out.println("資料庫讀單一怪獸:怪獸名稱: " + name);
 				account.monster.setName(name);
-				account.monster.setAge(age);
-				account.monster.setAttack(attack);
-				account.monster.setHP(hp);
-				account.monster.setIntelligence(intelligence);
-				account.monster.setFire(fire);
-				account.monster.setIce(ice);
-				account.monster.setPoison(poison);
-				account.monster.setIllusion(phantom);
+				account.monster.addAge(age);
+				account.monster.addAttack(attack);
+				account.monster.addHP(hp);
+				account.monster.addIntelligence(intelligence);
+				account.monster.addFire(fire);
+				account.monster.addIce(ice);
+				account.monster.addPoison(poison);
+				account.monster.addIllusion(phantom);
 				account.monster.setWing(wing);
 			}
 
@@ -350,19 +350,19 @@ public class DatabaseOperations {
 			do {
 				int id = resultSet.getInt("怪獸ID");
 				account.monster.setName(resultSet.getString("怪獸名稱"));
-				account.monster.setAge(resultSet.getInt("怪獸年齡"));
-				account.monster.setAttack(resultSet.getInt("攻擊力"));
-				account.monster.setHP( resultSet.getInt("生命力"));
-				account.monster.setIntelligence(resultSet.getInt("智力"));
-				account.monster.setFire(resultSet.getInt("火系"));
-				account.monster.setIce(resultSet.getInt("冰系"));
-				account.monster.setPoison(resultSet.getInt("毒系"));
-				account.monster.setIllusion(resultSet.getInt("幻影系"));
+				account.monster.addAge(resultSet.getInt("怪獸年齡"));
+				account.monster.addAttack(resultSet.getInt("攻擊力"));
+				account.monster.addHP( resultSet.getInt("生命力"));
+				account.monster.addIntelligence(resultSet.getInt("智力"));
+				account.monster.addFire(resultSet.getInt("火系"));
+				account.monster.addIce(resultSet.getInt("冰系"));
+				account.monster.addPoison(resultSet.getInt("毒系"));
+				account.monster.addIllusion(resultSet.getInt("幻影系"));
 				account.monster.setWing(resultSet.getBoolean("翅膀"));
-				account.monster.setHungerValue(resultSet.getInt("飢餓度")); 
-				account.monster.setThirstValue(resultSet.getInt("飢渴度")); 
-				account.monster.setMoodValue(resultSet.getInt("心情指數")); 
-				account.monster.setHealthValue(resultSet.getInt("健康度")); 
+				account.monster.addHungerValue(resultSet.getInt("飢餓度")); 
+				account.monster.addThirstValue(resultSet.getInt("飢渴度")); 
+				account.monster.addMoodValue(resultSet.getInt("心情指數")); 
+				account.monster.addHealthValue(resultSet.getInt("健康度")); 
 			} while (resultSet.next());
 
 			// 關閉 Statement 物件

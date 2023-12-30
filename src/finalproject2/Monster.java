@@ -57,7 +57,7 @@ public class Monster {
 		return age;
 	}
 
-	public void setAge(int age) {
+	public void addAge(int age) {
 		this.age += age;
 		save();
 	}
@@ -83,7 +83,7 @@ public class Monster {
 		return attack;
 	}
 
-	public void setAttack(int attack) {
+	public void addAttack(int attack) {
 		this.attack += attack;
 		save();
 	}
@@ -96,7 +96,7 @@ public class Monster {
 		return hp;
 	}
 
-	public void setHP(int health) {
+	public void addHP(int health) {
 		this.hp += health;
 		save();
 	}
@@ -109,7 +109,7 @@ public class Monster {
 		return intelligence;
 	}
 
-	public void setIntelligence(int intelligence) {
+	public void addIntelligence(int intelligence) {
 		this.intelligence += intelligence;
 		save();
 	}
@@ -122,7 +122,7 @@ public class Monster {
 		return fire;
 	}
 
-	public void setFire(int fire) {
+	public void addFire(int fire) {
 		this.fire += fire;
 		save();
 	}
@@ -135,7 +135,7 @@ public class Monster {
 		return ice;
 	}
 
-	public void setIce(int ice) {
+	public void addIce(int ice) {
 		this.ice += ice;
 		save();
 	}
@@ -148,7 +148,7 @@ public class Monster {
 		return poison;
 	}
 
-	public void setPoison(int poison) {
+	public void addPoison(int poison) {
 		this.poison += poison;
 		save();
 	}
@@ -161,7 +161,7 @@ public class Monster {
 		return illusion;
 	}
 
-	public void setIllusion(int illusion) {
+	public void addIllusion(int illusion) {
 		this.illusion += illusion;
 		save();
 	}
@@ -199,6 +199,26 @@ public class Monster {
 		save();
 	}
 
+	public void addValue(int[] ints) {
+		attack += ints[0];
+		hp += ints[1];
+		intelligence += ints[2];
+		fire += ints[3];
+		ice += ints[4];
+		poison += ints[5];
+		illusion += ints[6];
+		save();
+	}
+	public void addValue(int intt) {
+		attack += intt;
+		hp += intt;
+		intelligence += intt;
+		fire += intt;
+		ice += intt;
+		poison += intt;
+		illusion += intt;
+		save();
+	}
 	public int[] getValue() {
 		readMonster();
 		return value;
@@ -222,8 +242,11 @@ public class Monster {
 		LinkedList<String> linkedList = new LinkedList<String>();
 		linkedList.add(username);
 		linkedList.add(name);
-		for (int i = 0; i < getValue().length; i++) {
+		for (int i = 0; i < getValue().length; i++) {//8
 			linkedList.add(String.valueOf(getValue(i)));
+		}
+		for(int i=0; i <getStates().length;i++) {//4
+			linkedList.add(String.valueOf(getStates(i)));
 		}
 		linkedList.add(String.valueOf(wing));
 		rwFile.saveToFile_monster(linkedList, name);
@@ -233,9 +256,14 @@ public class Monster {
 	public void readMonster() {
 		LinkedList<String> linkedList = rwFile.read_Monster(name);
 		if (linkedList.size() != 0) {
-			name = linkedList.get(1);
-			for (int i = 2; i < linkedList.size() - 1; i++) {
-				value[i - 2] = Integer.parseInt(linkedList.get(i));
+			System.out.println(linkedList.size());
+			int i=1;
+			name = linkedList.get(i++);
+			for (int j = 0; j < getValue().length; j++) {
+				value[j] = Integer.parseInt(linkedList.get(i++));
+			}
+			for(int j = 0; j <getStates().length;j++) {
+				slimestates[j] = Integer.parseInt(linkedList.get(i++));
 			}
 			wing = Boolean.parseBoolean(linkedList.get(linkedList.size() - 1));
 		}
@@ -247,8 +275,8 @@ public class Monster {
 		return hungerValue;
 	}
 
-	public void setHungerValue(int hungerValue) {
-		this.hungerValue = hungerValue;
+	public void addHungerValue(int hungerValue) {
+		this.hungerValue += hungerValue;
 	}
 
 	// 飢渴度
@@ -256,8 +284,8 @@ public class Monster {
 		return thirstValue;
 	}
 
-	public void setThirstValue(int thirstValue) {
-		this.thirstValue = thirstValue;
+	public void addThirstValue(int thirstValue) {
+		this.thirstValue += thirstValue;
 	}
 
 	// 心情指數
@@ -265,8 +293,8 @@ public class Monster {
 		return moodValue;
 	}
 
-	public void setMoodValue(int moodValue) {
-		this.moodValue = moodValue;
+	public void addMoodValue(int moodValue) {
+		this.moodValue += moodValue;
 	}
 
 	// 健康值
@@ -274,22 +302,27 @@ public class Monster {
 		return healthValue;
 	}
 
-	public void setHealthValue(int healthValue) {
-		this.healthValue = healthValue;
+	public void addHealthValue(int healthValue) {
+		this.healthValue += healthValue;
 	}
+
 	public String[] getStates_name() {
 		return slimestates_Name;
 	}
+
 	public String getStates_name(int i) {
 		return slimestates_Name[i];
 	}
+
 	public void setSlimeState(int[] value) {
-		slimestates=value;
+		slimestates = value;
 	}
-	public int[] getStates(){
+
+	public int[] getStates() {
 		return slimestates;
 	}
-	public int getStates(int i){
+
+	public int getStates(int i) {
 		return slimestates[i];
 	}
 }
