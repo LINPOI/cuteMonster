@@ -18,16 +18,22 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 import javax.imageio.ImageIO;
-
+import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import GenetticAlgorithm.GenetticAlgorithm;
+import Props.Props;
 
 public class InteractiveJFrame extends JPanel {
 	/**
@@ -267,6 +273,7 @@ public class InteractiveJFrame extends JPanel {
 					// TODO Auto-generated method stub
 					difficulty = i - 1;
 					System.out.println("難度:" + difficulty);
+					start();
 				}
 			});
 		} else {
@@ -347,6 +354,24 @@ public class InteractiveJFrame extends JPanel {
 			return renderer;
 		}
 	}
+	public void start() {
+		GenetticAlgorithm<Props> getPropsAlgorithm=new GenetticAlgorithm<Props>(account, location, difficulty);
+		JDialog dialog = new JDialog(jFrame, "訊息視窗", true); // 建立模態的 JDialog
+        JLabel label = new JLabel("這是一個訊息", SwingConstants.CENTER);
+        JButton closeButton = new JButton("關閉");
 
+        closeButton.addActionListener(e -> {
+            dialog.setVisible(false); // 關閉訊息框
+            dialog.dispose(); // 釋放資源
+        });
+        dialog.setLayout(new BorderLayout());
+        dialog.add(label,BorderLayout.CENTER);
+        dialog.add(closeButton,BorderLayout.SOUTH);
+       
+        dialog.setSize(200, 150);
+        dialog.setLocationRelativeTo(jFrame); // 讓訊息框置中於 parent frame
+        dialog.setVisible(true); // 顯示訊息框
+ 
+	}
 }
 //計畫三個panel切換，panel.setOpaque(false); // 透明背景
