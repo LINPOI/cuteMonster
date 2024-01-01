@@ -8,16 +8,17 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.GridLayout;
+
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
+
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -25,8 +26,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -42,6 +41,7 @@ public class InteractiveJFrame extends JPanel {
 	private CardLayout cardLayout;
 	// private JPanel jPanel;
 	private String[] buttonName = new String[] { "訓練", "探索" };
+	private String[] difficulty=new String[] {"簡單","普通","困難"};
 	private Color[] colors = new Color[] { new Color(135, 206, 250), new Color(0, 255, 128) };
 	private BufferedImage backgroundImage; // 背景
 	private Account account;
@@ -52,6 +52,9 @@ public class InteractiveJFrame extends JPanel {
 	private ActionListener explore = null;
 	protected ActionListener[] actionListeners = null;
 
+	//取得關卡選擇
+	private int location;
+	
 	public InteractiveJFrame(Account account) {
 		this.setLayout(new BorderLayout());
 		JFrame jFrame = new JFrame();
@@ -106,7 +109,6 @@ public class InteractiveJFrame extends JPanel {
 
 		Action();
 		actionListeners = new ActionListener[] { train, explore };
-
 		for (int i = 0; i < buttonName.length; i++) {
 			jpanel.add(buttons(i));
 		}
@@ -122,24 +124,24 @@ public class InteractiveJFrame extends JPanel {
 	private JPanel trainpaJPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout());
-		String[] strings = new String[] { "操場", "學校","-未解鎖-","-未解鎖-","-未解鎖-" };
+		String[] strings = new String[] { "操場", "學校", "-未解鎖-", "-未解鎖-", "-未解鎖-" };
 		JList<String> jList = new JList<String>(strings);
 		jList.setCellRenderer(new MyListCellRenderer());
 		jList.setBackground(new Color(255, 248, 220));
 		jList.setPreferredSize(new Dimension(500, 200));
 		jList.addListSelectionListener(new ListSelectionListener() {
-	            @Override
-	            public void valueChanged(ListSelectionEvent e) {
-	                if (!e.getValueIsAdjusting()) { // 確保不是選擇中的變更
-	                    int index = jList.getSelectedIndex(); // 獲取所選項目的索引
-	                    if (index != -1) { // 確認是否有選取項目
-	                        System.out.println("所選擇的是: " + strings[index]); // 輸出所選項目的內容
-	                        
-	                        
-	                    }
-	                }
-	            }
-	        });
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) { // 確保不是選擇中的變更
+                    int index = jList.getSelectedIndex(); // 獲取所選項目的索引
+                    if (index != -1) { // 確認是否有選取項目
+                        System.out.println("所選擇的是: " + strings[index]); // 輸出所選項目的內容
+                        //label.setText(account.monster.getValueName(index)+":"+account.monster.getInf(index));
+                        location=6;
+                    }
+                }
+            }
+        });
 		panel.setOpaque(false); // 透明背景
 		panel.add(jList);
 
@@ -157,6 +159,21 @@ public class InteractiveJFrame extends JPanel {
 		jList.setCellRenderer(new MyListCellRenderer());
 		jList.setBackground(new Color(255, 248, 220));
 		jList.setPreferredSize(new Dimension(500, 200));
+		jList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) { // 確保不是選擇中的變更
+                    int index = jList.getSelectedIndex(); // 獲取所選項目的索引
+                    if (index != -1) { // 確認是否有選取項目
+                        System.out.println("所選擇的是: " + strings[index]); // 輸出所選項目的內容
+                        location=index+1;
+                        //label.setText(account.monster.getValueName(index)+":"+account.monster.getInf(index));
+                        
+                    }
+                }
+            }
+        });
+
 		panel.add(jList);
 		panel.setOpaque(false); // 透明背景
 		return panel;
@@ -208,7 +225,13 @@ public class InteractiveJFrame extends JPanel {
 		};
 	}
 
+
 	static class MyListCellRenderer extends DefaultListCellRenderer {
+		/**
+		 * 列表字體
+		 */
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {

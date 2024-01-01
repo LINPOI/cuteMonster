@@ -14,7 +14,7 @@ public class Monster {
 	private String name = "";
 	private int age = 0;
 	private int attack = 10;
-	private int hp = 100;
+	private int hp = 20;
 	private int intelligence = 5;
 	private int fire = 0;
 	private int ice = 0;
@@ -46,136 +46,120 @@ public class Monster {
 
 	public void setName(String name) {
 		this.name = name;
-		save();
 	}
 
 	/*
 	 * 年齡
 	 */
 	public int getAge() {
-		readMonster();
 		return age;
 	}
 
 	public void addAge(int age) {
-		this.age += age;
-		save();
 	}
 
 	/*
 	 * 翅膀
 	 */
 	public boolean getWing() {
-		readMonster();
 		return wing;
 	}
 
 	public void setWing(boolean wing) {
 		this.wing = wing;
-		save();
 	}
 
 	/*
 	 * 攻擊力
 	 */
 	public int getAttack() {
-		readMonster();
 		return attack;
 	}
 
 	public void addAttack(int attack) {
 		this.attack += attack;
-		save();
 	}
 
 	/*
 	 * 生命力
 	 */
 	public int getHP() {
-		readMonster();
 		return hp;
 	}
-
+	public void setHP(int hp) {
+		this.hp += hp;
+	}
 	public void addHP(int health) {
 		this.hp += health;
-		save();
 	}
 
 	/*
 	 * 智力
 	 */
 	public int getIntelligence() {
-		readMonster();
 		return intelligence;
 	}
 
 	public void addIntelligence(int intelligence) {
 		this.intelligence += intelligence;
-		save();
 	}
 
 	/*
 	 * 火屬性
 	 */
 	public int getFire() {
-		readMonster();
 		return fire;
 	}
 
 	public void addFire(int fire) {
 		this.fire += fire;
-		save();
 	}
 
 	/*
 	 * 冰屬性
 	 */
 	public int getIce() {
-		readMonster();
 		return ice;
 	}
 
 	public void addIce(int ice) {
 		this.ice += ice;
-		save();
 	}
 
 	/*
 	 * 毒屬性
 	 */
 	public int getPoison() {
-		readMonster();
+
 		return poison;
 	}
 
 	public void addPoison(int poison) {
 		this.poison += poison;
-		save();
 	}
 
 	/*
 	 * 幻影系
 	 */
 	public int getIllusion() {
-		readMonster();
+	
 		return illusion;
 	}
 
 	public void addIllusion(int illusion) {
 		this.illusion += illusion;
-		save();
 	}
 
 	/*
 	 * 數值名稱
 	 */
 	public String[] getValueName() {
-		readMonster();
+
 		return value_name;
 	}
 
 	public String getValueName(int i) {
-		readMonster();
+	
 		if (i < value_name.length) {
 			return value_name[i];
 		} else {
@@ -196,7 +180,6 @@ public class Monster {
 			}
 			wing = Boolean.parseBoolean(linkedList.get(10));
 		}
-		save();
 	}
 
 	public void addValue(int[] ints) {
@@ -207,7 +190,6 @@ public class Monster {
 		ice += ints[4];
 		poison += ints[5];
 		illusion += ints[6];
-		save();
 	}
 	public void addValue(int intt) {
 		attack += intt;
@@ -217,15 +199,12 @@ public class Monster {
 		ice += intt;
 		poison += intt;
 		illusion += intt;
-		save();
 	}
 	public int[] getValue() {
-		readMonster();
 		return value;
 	}
 
 	public int getValue(int i) {
-		readMonster();
 		return value[i];
 	}
 
@@ -238,37 +217,7 @@ public class Monster {
 		return strings[i];
 	}
 
-	public void save() {
-		LinkedList<String> linkedList = new LinkedList<String>();
-		linkedList.add(username);
-		linkedList.add(name);
-		for (int i = 0; i < getValue().length; i++) {//8
-			linkedList.add(String.valueOf(getValue(i)));
-		}
-		for(int i=0; i <getStates().length;i++) {//4
-			linkedList.add(String.valueOf(getStates(i)));
-		}
-		linkedList.add(String.valueOf(wing));
-		rwFile.saveToFile_monster(linkedList, name);
-
-	}
-
-	public void readMonster() {
-		LinkedList<String> linkedList = rwFile.read_Monster(name);
-		if (linkedList.size() != 0) {
-			System.out.println(linkedList.size());
-			int i=1;
-			name = linkedList.get(i++);
-			for (int j = 0; j < getValue().length; j++) {
-				value[j] = Integer.parseInt(linkedList.get(i++));
-			}
-			for(int j = 0; j <getStates().length;j++) {
-				slimestates[j] = Integer.parseInt(linkedList.get(i++));
-			}
-			wing = Boolean.parseBoolean(linkedList.get(linkedList.size() - 1));
-		}
-
-	}
+	
 
 	// 飢餓度
 	public int getHungerValue() {
@@ -324,5 +273,36 @@ public class Monster {
 
 	public int getStates(int i) {
 		return slimestates[i];
+	}
+	public void save() {
+		LinkedList<String> linkedList = new LinkedList<String>();
+		linkedList.add(username);
+		linkedList.add(name);
+		for (int i = 0; i < getValue().length; i++) {//8
+			linkedList.add(String.valueOf(getValue(i)));
+		}
+		for(int i=0; i <getStates().length;i++) {//4
+			linkedList.add(String.valueOf(getStates(i)));
+		}
+		linkedList.add(String.valueOf(wing));
+		rwFile.saveToFile_monster(linkedList, name);
+
+	}
+
+	public void readMonster() {
+		LinkedList<String> linkedList = rwFile.read_Monster(name);
+		if (linkedList.size() != 0) {
+		//	System.out.println(linkedList.size());
+			int i=1;
+			name = linkedList.get(i++);
+			for (int j = 0; j < getValue().length; j++) {
+				value[j] = Integer.parseInt(linkedList.get(i++));
+			}
+			for(int j = 0; j <getStates().length;j++) {
+				slimestates[j] = Integer.parseInt(linkedList.get(i++));
+			}
+			wing = Boolean.parseBoolean(linkedList.get(linkedList.size() - 1));
+		}
+
 	}
 }

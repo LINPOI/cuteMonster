@@ -9,9 +9,11 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 public class RWFile {
+	final String urlString="D:\\cuteMonster\\files\\";
 	public void saveToFile(String filename,String string) {
+		
 		try {
-			File file = new File("C:\\Users\\user\\eclipse-workspace\\finalproject2\\"+filename+".txt");
+			File file = new File(urlString+filename+".txt");
 			// 檢查檔案是否存在，如果不存在，則創建新檔案
 			if (!file.exists()) {
 				file.createNewFile();
@@ -33,7 +35,7 @@ public class RWFile {
 	}
 	public void saveToFile(String string) {
 		try {
-			File file = new File("C:\\Users\\user\\eclipse-workspace\\finalproject2\\file.txt");
+			File file = new File( urlString+"file.txt");
 			// 檢查檔案是否存在，如果不存在，則創建新檔案
 			if (!file.exists()) {
 				file.createNewFile();
@@ -56,7 +58,7 @@ public class RWFile {
 
 	public void saveToFile_Account(LinkedList<String> linkedList, String username) {
 		try {
-			File file = new File("C:\\Users\\user\\eclipse-workspace\\finalproject2\\user" + username + ".txt");
+			File file = new File(urlString+"user" + username + ".txt");
 			// 檢查檔案是否存在，如果不存在，則創建新檔案
 			if (!file.exists()) {
 				file.createNewFile();
@@ -84,7 +86,7 @@ public class RWFile {
 
 	public void saveToFile_monster(LinkedList<String> linkedList, String monster) {
 		try {
-			File file = new File("C:\\Users\\user\\eclipse-workspace\\finalproject2\\monster" + monster + ".txt");
+			File file = new File(urlString+"monster" + monster + ".txt");
 			// 檢查檔案是否存在，如果不存在，則創建新檔案
 			if (!file.exists()) {
 				file.createNewFile();
@@ -115,7 +117,7 @@ public class RWFile {
 
 		LinkedList<String> linkedList = new LinkedList<>();
 		try {
-			File file = new File("C:\\Users\\user\\eclipse-workspace\\finalproject2\\user" + Account + ".txt");
+			File file = new File(urlString+"user" + Account + ".txt");
 			FileReader reader = new FileReader(file);
 			BufferedReader bufferedReader = new BufferedReader(reader);
 
@@ -139,7 +141,7 @@ public class RWFile {
 
 		LinkedList<String> linkedList = new LinkedList<>();
 		try {
-			File file = new File("C:\\Users\\user\\eclipse-workspace\\finalproject2\\monster" + monster + ".txt");
+			File file = new File(urlString+"monster" + monster + ".txt");
 			FileReader reader = new FileReader(file);
 			BufferedReader bufferedReader = new BufferedReader(reader);
 			// System.out.println("file:"+file);
@@ -154,7 +156,7 @@ public class RWFile {
 
 		} catch (IOException e) {
 			// e.printStackTrace();
-			System.out.println("尚未新建");
+			//System.out.println("尚未新建");
 		}
 		return linkedList;
 	}
@@ -162,9 +164,9 @@ public class RWFile {
 	public String readFromFile() {
 	    StringBuilder content = new StringBuilder();
 	    try {
-	        File file = new File("C:\\Users\\user\\eclipse-workspace\\finalproject2\\file.txt");
+	        File file = new File(urlString+"file.txt");
 	        if (!file.exists()) {
-	            System.out.println("檔案不存在");
+	            System.out.println("檔案不存在readFromFile()");
 	            return "";
 	        }
 
@@ -188,9 +190,9 @@ public class RWFile {
 	public String readFromFile(String filename) {
 	    StringBuilder content = new StringBuilder();
 	    try {
-	        File file = new File("C:\\Users\\user\\eclipse-workspace\\finalproject2\\" + filename + ".txt");
+	        File file = new File(urlString + filename + ".txt");
 	        if (!file.exists()) {
-	            System.out.println("檔案不存在");
+	            System.out.println("檔案不存在readFromFile(String filename)");
 	            return "";
 	        }
 
