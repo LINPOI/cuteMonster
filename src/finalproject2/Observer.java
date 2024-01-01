@@ -4,4 +4,5 @@ package finalproject2;
 interface Observer {
 	void update(String[] strings); // 定義更新方法
 	void updataInt(int[] ints);
+	void updataAccount(Account account);
 }

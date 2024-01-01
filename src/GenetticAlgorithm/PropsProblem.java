@@ -68,8 +68,8 @@ public class PropsProblem implements Problem<Props> {
 			}
 			chromosome[i] = new Chromosome<Props>();
 			chromosome[i].setGenes(genes);// 設定染色體基因
-			System.out.println("染色體" + i + ":[" + genes[0].getName() + "," + genes[1].getName() + ","
-					+ genes[2].getName() + "," + genes[3].getName() + "]");
+//			System.out.println("染色體" + i + ":[" + genes[0].getName() + "," + genes[1].getName() + ","
+//					+ genes[2].getName() + "," + genes[3].getName() + "]");
 		}
 		return chromosome;
 	}
@@ -106,9 +106,13 @@ public class PropsProblem implements Problem<Props> {
 					break;
 				}
 			}
-			//System.out.println("setFitnessValue:" + totalValue + "\ttotalScore:" + totalScore);
+		//	System.out.println("setFitnessValue:" + totalValue + "\ttotalScore:" + totalScore);
 			double output= Math.floor(totalValue * 10) / 10;//取到小數點後一位
-			if (totalValue != 0 && totalScore != 0) output=totalValue/ totalScore;
+			if (totalValue != 0 && totalScore != 0) {
+				output=totalValue/ totalScore;
+			}else if(totalScore<0) {
+				output=-1.0;
+			}
 			 //System.out.println("新setFitnessValue:"+totalValue);
 			chrs[i].setFitnessValue(output);// 最後輸出差距，為1是最優解 
 		}
@@ -140,7 +144,12 @@ public class PropsProblem implements Problem<Props> {
 				} else {
 					enemies[i] = Enemy.enemyLevel_1;
 				}
-				totalScore += CalculateFractions(enemies[i]);
+				double add=CalculateFractions(enemies[i]);
+				if(add!=-1.0) {
+					totalScore += add;
+				}else {
+					return totalScore=-1.0;
+				}
 			}
 
 		} else if (difficulty == 2) {
@@ -153,7 +162,12 @@ public class PropsProblem implements Problem<Props> {
 				} else {
 					enemies[i] = Enemy.enemyLevel_2;
 				}
-				totalScore += CalculateFractions(enemies[i]);
+				double add=CalculateFractions(enemies[i]);
+				if(add!=-1.0) {
+					totalScore += add;
+				}else {
+					return totalScore=-1.0;
+				}
 			}
 		} else if (difficulty == 3) {
 
@@ -166,10 +180,16 @@ public class PropsProblem implements Problem<Props> {
 				} else {
 					enemies[i] = Enemy.enemyLevel_4;
 				}
-				totalScore += CalculateFractions(enemies[i]);
+				double add=CalculateFractions(enemies[i]);
+				if(add!=-1.0) {
+					totalScore += add;
+				}else {
+					return totalScore=-1.0;
+					
+				}
 			}
 		} else {
-			System.out.println("difficulty:" + difficulty);
+			System.out.println("錯誤的difficulty:" + difficulty);
 		}
 		//System.out.println("\t\t\t進入" + totalScore);
 		double roundedNumber = Math.floor(totalScore * 10) / 10;
@@ -192,13 +212,13 @@ public class PropsProblem implements Problem<Props> {
 				account.monster.setHP(oldaccount.monster.getHP());
 			if (account.monster.getHP() <= 0) {
 				// 沒命出局
-				totalScore = 0;
+				totalScore = -1.0;
 				System.out.println("你死了");
 				return totalScore;
 			}
 		} else {
 			// 數值比對方差，戰敗
-			totalScore = 0;
+			totalScore = -1.0;
 			System.out.println("你死了");
 			return totalScore;
 		}
@@ -207,12 +227,17 @@ public class PropsProblem implements Problem<Props> {
 	}
 
 	@Override
-	public void output(int number, Chromosome<Props>[] chromosomes) {
+	public String output( Chromosome<Props>[] chromosomes) {
 		// TODO Auto-generated method stub
-		String string = "第" + number + "次迭代，最佳解為:[";
+		String string = "";
 		for (int i = 0; i < chromosomes[0].getChromosome().length; i++) {
 			if(chromosomes[0].getFitnessValue()==0.0) {
 				string+="無獎勵";
+				break;
+			}
+			if(chromosomes[0].getFitnessValue()<0.0) {
+				string+="你死了";
+				account.monster.setSlimeState(new int[] {0,0,0,0});
 				break;
 			}
 			if (i != 0) {
@@ -220,12 +245,16 @@ public class PropsProblem implements Problem<Props> {
 			}
 			string += chromosomes[0].getChromosome()[i].getName();
 		}
-		string += "]\t" + chromosomes[0].getFitnessValue();
 		
-		System.out.print(string);
+		return string;
+		//System.out.print(string);
 		//System.out.print("\t玩家積分:"+totalScore+"\t道具積分:"+totalValue);
-		System.out.println();
+		//System.out.println();
 	}
+	
+	/*
+	 * 檢查
+	 */
 	public String check(Chromosome<Props> chr) {
 		String string="[";
 		for(int i=0;i<chr.getChromosome().length;i++) {
@@ -237,5 +266,23 @@ public class PropsProblem implements Problem<Props> {
 		string +="]\t" + chr.getFitnessValue();
 		
 		return string;
+	}
+
+	@Override
+	public double alive() {
+		// TODO Auto-generated method stub
+		return totalScore;
+	}
+	public Account getAccount() {
+		for(int i=0;i< account.monster.getStates().length;i++) {
+			if(account.monster.getStates(i)>0) {
+				account.monster.addHungerValue(-5);
+				account.monster.addThirstValue(-5);
+				account.monster.addMoodValue(+5);
+				account.monster.addThirstValue(-5);
+			}
+		}
+		
+		return account;
 	}
 }

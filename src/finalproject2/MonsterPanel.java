@@ -157,4 +157,9 @@ public class MonsterPanel extends JPanel implements  Observer{
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public void updataAccount(Account account) {
+		// TODO Auto-generated method stub
+		
+	}
 }

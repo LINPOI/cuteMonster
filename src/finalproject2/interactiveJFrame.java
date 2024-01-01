@@ -32,6 +32,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import GenetticAlgorithm.Chromosome;
 import GenetticAlgorithm.GenetticAlgorithm;
 import Props.Props;
 
@@ -68,13 +69,16 @@ public class InteractiveJFrame extends JPanel {
 	private int location;
 	private int difficulty;
 
+	//觀察者
+	private Subject subject;
 	/*
 	 * 
 	 * 
 	 */
 
-	public InteractiveJFrame(Account account) {
+	public InteractiveJFrame(Account account,Subject subject) {
 		this.setLayout(new BorderLayout());
+		this.subject=subject;//觀察者
 		
 		this.account = account;
 		jFrame.setLayout(new BorderLayout());
@@ -356,15 +360,25 @@ public class InteractiveJFrame extends JPanel {
 	}
 	public void start() {
 		GenetticAlgorithm<Props> getPropsAlgorithm=new GenetticAlgorithm<Props>(account, location, difficulty);
-		JDialog dialog = new JDialog(jFrame, "訊息視窗", true); // 建立模態的 JDialog
-        JLabel label = new JLabel("這是一個訊息", SwingConstants.CENTER);
+		JDialog dialog = new JDialog(jFrame, "獲得道具", true); // 建立模態的 JDialog
+		Chromosome<Props> allProps= getPropsAlgorithm.getlastChromosome();
+		if(allProps.getFitnessValue()<0) {
+			System.err.println("已死亡");
+		}else {
+			System.err.println(allProps.getChromosome()[0].getName());
+		}
+		//allProps.getChromosome()[x]
+		
+        JLabel label = new JLabel(getPropsAlgorithm.getString(), SwingConstants.CENTER);
         JButton closeButton = new JButton("關閉");
 
         closeButton.addActionListener(e -> {
             dialog.setVisible(false); // 關閉訊息框
             dialog.dispose(); // 釋放資源
+            jFrame.dispose();
         });
         dialog.setLayout(new BorderLayout());
+  
         dialog.add(label,BorderLayout.CENTER);
         dialog.add(closeButton,BorderLayout.SOUTH);
        

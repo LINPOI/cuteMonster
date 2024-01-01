@@ -7,6 +7,7 @@ import java.util.List;
 class Subject {
 	private String[] strings;
 	private int[] ints;
+	private Account account;
 	private List<Observer> observers = new ArrayList<>();
 
 	public void addObserver(Observer observer) {//登入觀察者
@@ -25,13 +26,21 @@ class Subject {
 		this.ints = ints;
 		notifyObservers(); // 設定新值後通知所有觀察者
 	}
-	public int[] getInts() {
+	public int[] getStates() {
 		return ints;
+	}
+	public void setAccount( Account account) {
+		this.account = account;
+		notifyObservers(); // 設定新值後通知所有觀察者
+	}
+	public Account getAccount() {
+		return account;
 	}
 	private void notifyObservers() {
 		for (Observer observer : observers) {
 			observer.update(strings); // 更新所有觀察者
 			observer.updataInt(ints);
+			observer.updataAccount(account);
 		}
 	}
 	/*

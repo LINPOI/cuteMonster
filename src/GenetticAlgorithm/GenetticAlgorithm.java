@@ -33,11 +33,14 @@ public class GenetticAlgorithm<T> {
 
 		// repeat
 		int numberOfGeneration = 1;
-		int i=1;
+		int i = 1;
 		while (numberOfGeneration <= generationSize) {
-			
+			if (problem.alive() < 0) {
+				chromosomes[0].setFitnessValue(-1.0);
+				break;
+			}
 			calFitnessValue();// 2評估適應值
-			//System.out.println("2站正常");
+			// System.out.println("2站正常");
 			selection();// 3選擇
 //			System.out.println("----------------------selection--------------------------");
 //			i=1;
@@ -46,7 +49,7 @@ public class GenetticAlgorithm<T> {
 //					problem.check(chr));
 //			i++;
 //			}
-			crossover();//4交配
+			crossover();// 4交配
 //			System.out.println("----------------------crossover--------------------------");
 //			i=1;
 //			for(Chromosome<T> chr:springs) {
@@ -54,7 +57,7 @@ public class GenetticAlgorithm<T> {
 //					problem.check(chr));
 //			i++;
 //			}
-			mutation();//5突變
+			mutation();// 5突變
 //			System.out.println("----------------------mutation--------------------------");
 //			i=1;
 //			for(Chromosome<T> chr:springs) {
@@ -67,9 +70,12 @@ public class GenetticAlgorithm<T> {
 
 			updatingPopulation();// 6篩選最好
 //			System.out.println("----------------------結果--------------------------");
-			problem.output(numberOfGeneration, chromosomes);
+//			System.out.println("第" + numberOfGeneration + "次迭代，最佳解為:[" + problem.output(chromosomes) + "]\t"
+//					+chromosomes[0].getFitnessValue());
 			numberOfGeneration++;
 		}
+		System.out.println("第" + generationSize + "次迭代，最佳解為:[" + problem.output(chromosomes) + "]\t"
+				+chromosomes[0].getFitnessValue());
 	}
 
 	// 編碼
@@ -187,6 +193,13 @@ public class GenetticAlgorithm<T> {
 		}
 	}
 
+	public String getString() {
+		return problem.output(chromosomes);
+	}
+	public  Chromosome<T> getlastChromosome(){
+		
+		return chromosomes[0];
+	}
 	public static void main(String[] args) {
 		GenetticAlgorithm<Props> gAlgorithm = new GenetticAlgorithm<Props>(new Account(), 1, 1);
 	}

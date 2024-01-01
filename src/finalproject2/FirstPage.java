@@ -166,7 +166,7 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 				// TODO Auto-generated method stub
 				System.out.println("點擊互動");
 //出去
-				InteractiveJFrame interactiveJFrame = new InteractiveJFrame(account);
+				InteractiveJFrame interactiveJFrame = new InteractiveJFrame(account,subject);
 			};
 		};
 	}
@@ -194,6 +194,12 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 
 	@Override
 	public void updataInt(int[] ints) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updataAccount(Account account) {
 		// TODO Auto-generated method stub
 		
 	}
