@@ -39,9 +39,15 @@ public class InteractiveJFrame extends JPanel {
 	 */
 	private JPanel cardPanel;
 	private CardLayout cardLayout;
+	private String nowPanel;
+	private String pastPanel;
+	private JFrame jFrame = new JFrame();
+	public static final String InteractiveJPanel = "InteractiveJPanel";
+	public static final String trainpaJPanel = "trainpaJPanel";
+	public static final String exploreJPanel = "exploreJPanel";
+	public static final String selectDifficultyJPanel = "selectDifficultyJPanel";
 	// private JPanel jPanel;
-	private String[] buttonName = new String[] { "訓練", "探索" };
-	private String[] difficulty=new String[] {"簡單","普通","困難"};
+	private String[] buttonName = new String[] { "訓練", "探索", "簡單", "普通", "困難" };
 	private Color[] colors = new Color[] { new Color(135, 206, 250), new Color(0, 255, 128) };
 	private BufferedImage backgroundImage; // 背景
 	private Account account;
@@ -52,12 +58,18 @@ public class InteractiveJFrame extends JPanel {
 	private ActionListener explore = null;
 	protected ActionListener[] actionListeners = null;
 
-	//取得關卡選擇
+	// 取得關卡選擇
 	private int location;
-	
+	private int difficulty;
+
+	/*
+	 * 
+	 * 
+	 */
+
 	public InteractiveJFrame(Account account) {
 		this.setLayout(new BorderLayout());
-		JFrame jFrame = new JFrame();
+		
 		this.account = account;
 		jFrame.setLayout(new BorderLayout());
 		jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 按下關閉時的動作(關閉全部)
@@ -81,12 +93,14 @@ public class InteractiveJFrame extends JPanel {
 		JPanel open = open();
 		JPanel trainpaJPanel = trainpaJPanel();
 		JPanel exploreJPanel = exploreJPanel();
+		JPanel selectDifficultyJPanel = selectDifficultyJPanel();
 		cardPanel.setOpaque(false); // 透明背景
-		cardPanel.add(open, "open");
-		cardPanel.add(trainpaJPanel, "trainpaJPanel");
-		cardPanel.add(exploreJPanel, "exploreJPanel");
-
+		cardPanel.add(open, InteractiveJPanel);
+		cardPanel.add(trainpaJPanel, InteractiveJFrame.trainpaJPanel);
+		cardPanel.add(exploreJPanel, InteractiveJFrame.exploreJPanel);
+		cardPanel.add(selectDifficultyJPanel, InteractiveJFrame.selectDifficultyJPanel);
 		this.add(cardPanel, BorderLayout.CENTER);
+		this.add(jButton_return(), BorderLayout.SOUTH);
 		jFrame.add(this);
 		jFrame.setLocationRelativeTo(null);// 置中顯示
 		jFrame.setVisible(true); // 顯示
@@ -105,14 +119,16 @@ public class InteractiveJFrame extends JPanel {
 	 * 開啟panel
 	 */
 	private JPanel open() {
+		nowPanel = InteractiveJPanel;
 		JPanel jpanel = new JPanel();
 
 		Action();
 		actionListeners = new ActionListener[] { train, explore };
-		for (int i = 0; i < buttonName.length; i++) {
+		for (int i = 0; i < 2; i++) {
 			jpanel.add(buttons(i));
 		}
 		//
+
 		jpanel.setBackground(Color.black);
 		jpanel.setOpaque(false); // 透明背景
 		return jpanel;
@@ -122,6 +138,7 @@ public class InteractiveJFrame extends JPanel {
 	 * 訓練panel
 	 */
 	private JPanel trainpaJPanel() {
+
 		JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout());
 		String[] strings = new String[] { "操場", "學校", "-未解鎖-", "-未解鎖-", "-未解鎖-" };
@@ -130,18 +147,24 @@ public class InteractiveJFrame extends JPanel {
 		jList.setBackground(new Color(255, 248, 220));
 		jList.setPreferredSize(new Dimension(500, 200));
 		jList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) { // 確保不是選擇中的變更
-                    int index = jList.getSelectedIndex(); // 獲取所選項目的索引
-                    if (index != -1) { // 確認是否有選取項目
-                        System.out.println("所選擇的是: " + strings[index]); // 輸出所選項目的內容
-                        //label.setText(account.monster.getValueName(index)+":"+account.monster.getInf(index));
-                        location=6;
-                    }
-                }
-            }
-        });
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if (!e.getValueIsAdjusting()) { // 確保不是選擇中的變更
+					int index = jList.getSelectedIndex(); // 獲取所選項目的索引
+					if (index != -1) { // 確認是否有選取項目
+						System.out.println("所選擇的是: " + strings[index]); // 輸出所選項目的內容
+						// label.setText(account.monster.getValueName(index)+":"+account.monster.getInf(index));
+						location = 6;
+						if (index < 2) {
+							cardLayout.show(cardPanel, selectDifficultyJPanel);
+							pastPanel = nowPanel;
+							nowPanel = selectDifficultyJPanel;
+						}
+
+					}
+				}
+			}
+		});
 		panel.setOpaque(false); // 透明背景
 		panel.add(jList);
 
@@ -152,6 +175,7 @@ public class InteractiveJFrame extends JPanel {
 	 * 探索panel
 	 */
 	private JPanel exploreJPanel() {
+
 		JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout());
 		String[] strings = new String[] { "極地", "火山", "沼澤", "神殿", "風場" };
@@ -160,25 +184,74 @@ public class InteractiveJFrame extends JPanel {
 		jList.setBackground(new Color(255, 248, 220));
 		jList.setPreferredSize(new Dimension(500, 200));
 		jList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) { // 確保不是選擇中的變更
-                    int index = jList.getSelectedIndex(); // 獲取所選項目的索引
-                    if (index != -1) { // 確認是否有選取項目
-                        System.out.println("所選擇的是: " + strings[index]); // 輸出所選項目的內容
-                        location=index+1;
-                        //label.setText(account.monster.getValueName(index)+":"+account.monster.getInf(index));
-                        
-                    }
-                }
-            }
-        });
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if (!e.getValueIsAdjusting()) { // 確保不是選擇中的變更
+					int index = jList.getSelectedIndex(); // 獲取所選項目的索引
+					if (index != -1) { // 確認是否有選取項目
+						System.out.println("所選擇的是: " + strings[index]); // 輸出所選項目的內容
+						location = index + 1;
+						// label.setText(account.monster.getValueName(index)+":"+account.monster.getInf(index));
+						cardLayout.show(cardPanel, selectDifficultyJPanel);
+						pastPanel = nowPanel;
+						nowPanel = selectDifficultyJPanel;
+					}
+				}
+			}
+		});
 
 		panel.add(jList);
 		panel.setOpaque(false); // 透明背景
 		return panel;
 	}
 
+	/*
+	 * 難易度jpanel
+	 * 
+	 */
+	public JPanel selectDifficultyJPanel() {
+
+		JPanel panel = new JPanel();
+		for (int i = 2; i < 5; i++) {
+			panel.add(buttons(i));
+		}
+		//
+		panel.setBackground(Color.black);
+		panel.setOpaque(false); // 透明背景
+		return panel;
+	}
+
+	/*
+	 * 
+	 * 動作
+	 */
+	public void Action() {
+		train = new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				cardLayout.show(cardPanel, trainpaJPanel);
+				pastPanel = InteractiveJPanel;
+				nowPanel = trainpaJPanel;
+			}
+		};
+		explore = new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				cardLayout.show(cardPanel, exploreJPanel);
+				pastPanel = InteractiveJPanel;
+				nowPanel = exploreJPanel;
+			}
+		};
+	}
+
+	/*
+	 * 按鈕
+	 * 
+	 */
 	public JButton buttons(int i) {
 		JButton jButton = new JButton(buttonName[i]);
 		/*
@@ -186,13 +259,25 @@ public class InteractiveJFrame extends JPanel {
 		 */
 
 		// 動作
-		jButton.addActionListener(actionListeners[i]);
+		if (i > 1) {
+			jButton.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					difficulty = i - 1;
+					System.out.println("難度:" + difficulty);
+				}
+			});
+		} else {
+			jButton.addActionListener(actionListeners[i]);
+		}
 
 		// 字型格式
 		jButton.setFont(FontFactory.commonFont(1, 60));
 
 		// 顏色
-		jButton.setBackground(colors[i]);
+		jButton.setBackground(colors[i % 2]);
 		// 按鈕大小
 		jButton.setPreferredSize(new Dimension(200, 200));
 
@@ -206,25 +291,43 @@ public class InteractiveJFrame extends JPanel {
 		return jButton;
 	}
 
-	public void Action() {
-		train = new ActionListener() {
+	public JPanel jButton_return() {
+		JPanel jPanel = new JPanel();
+		JButton jButton = new JButton("返回");
+		// 字型格式
+		jButton.setFont(FontFactory.commonFont(1, 60));
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				cardLayout.show(cardPanel, "trainpaJPanel");
-			}
-		};
-		explore = new ActionListener() {
+		// 顏色
+		jButton.setBackground(new Color(77, 57, 0));
+		jButton.setForeground(Color.white);
+		// 按鈕大小
+		jButton.setPreferredSize(new Dimension(200, 100));
+		jButton.addActionListener(e -> {
+			
+			// TODO Auto-generated method stub
+			if (nowPanel == selectDifficultyJPanel) {
+				//System.out.println("點擊返回"+selectDifficultyJPanel);
+				nowPanel=pastPanel;
+				cardLayout.show(cardPanel, pastPanel);
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				cardLayout.show(cardPanel, "exploreJPanel");
+			} else if (nowPanel == InteractiveJPanel) {
+				//System.out.println("點擊返回"+InteractiveJPanel);
+				nowPanel=pastPanel;
+				jFrame.dispose();
+			} else {
+				//System.out.println("點擊返回"+nowPanel);
+				nowPanel=InteractiveJPanel;
+				cardLayout.show(cardPanel, InteractiveJPanel);
+				
 			}
-		};
+			
+		});
+		// 去除聚焦
+		jButton.setFocusPainted(false);
+		jPanel.add(jButton);
+		jPanel.setOpaque(false); // 透明背景
+		return jPanel;
 	}
-
 
 	static class MyListCellRenderer extends DefaultListCellRenderer {
 		/**
@@ -244,5 +347,6 @@ public class InteractiveJFrame extends JPanel {
 			return renderer;
 		}
 	}
+
 }
 //計畫三個panel切換，panel.setOpaque(false); // 透明背景
