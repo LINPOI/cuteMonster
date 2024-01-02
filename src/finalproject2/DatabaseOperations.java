@@ -6,7 +6,6 @@ import java.util.*;
 public class DatabaseOperations {
 	List<Account> accountList = new ArrayList<>();
 	String userName = "";
-	private Account account = new Account();
 	private Connection conn;
 
 	public DatabaseOperations() {
@@ -36,9 +35,9 @@ public class DatabaseOperations {
 			return false;
 		}
 	}
-/*
- * 新增怪獸資料
- */
+	/*
+	 * 新增怪獸資料
+	 */
 	public boolean insert_Monster_Data(Account account) {
 		try {
 			String query = "INSERT INTO `" + account.getUsername()
@@ -113,15 +112,14 @@ public class DatabaseOperations {
 	/*
 	 * 新增怪獸資料表
 	 */
-	public void create_Monster_Table(String username) {
-		account.setUsername(username);
+	public void create_Monster_Table(Account account) {
 		try {
 			// 創建 Statement 物件
 			Statement stmt = conn.createStatement();
 
 			// SQL 命令 - 建立寵物資料表
-			String createTableSQL = "CREATE TABLE  IF NOT EXISTS `" + username + "的怪獸` ("
-					+ "`玩家` CHAR(50) NOT NULL DEFAULT '" + username + "' COLLATE 'latin1_swedish_ci', "
+			String createTableSQL = "CREATE TABLE  IF NOT EXISTS `" + account.getUsername() + "的怪獸` ("
+					+ "`玩家` CHAR(50) NOT NULL DEFAULT '" + account.getUsername() + "' COLLATE 'latin1_swedish_ci', "
 					+ "`怪獸ID` INT AUTO_INCREMENT PRIMARY KEY, "
 					+ "`怪獸名稱` CHAR(50) NOT NULL COLLATE 'latin1_swedish_ci', " + "`怪獸年齡` INT(11) NULL DEFAULT NULL,"
 					+ "	`攻擊力` INT(11) NULL DEFAULT NULL," + "	`生命力` INT(11) NULL DEFAULT NULL,"
@@ -202,6 +200,58 @@ public class DatabaseOperations {
 	}
 
 	/*
+	 *更新怪物資料
+	 */
+	public boolean updateMonsterData(Account account) {
+		 try {
+		        String query = "UPDATE `lin的怪獸` SET " +
+		        		"`怪獸名稱` = ? "+
+		                "`怪獸年齡` = ?, " +
+		                "`攻擊力` = ?, " +
+		                "`生命力` = ?, " +
+		                "`智力` = ?, " +
+		                "`火系` = ?, " +
+		                "`冰系` = ?, " +
+		                "`毒系` = ?, " +
+		                "`幻影系` = ?, " +
+		                "`翅膀` = ?, " +
+		                "`飢餓度` = ?, " +
+		                "`飢渴度` = ?, " +
+		                "`心情指數` = ?, " +
+		                "`健康度` = ? ," +
+		                "WHERE `怪獸ID` = ? AND `玩家` = ? ";
+
+		        PreparedStatement pstmt = conn.prepareStatement(query);
+		        int i=1;
+		        pstmt.setString(i++, account.monster.getName());
+		        for(int j=0;j<account.monster.getValue().length;j++) {
+		        	 pstmt.setInt(i++, account.monster.getValue(j));
+		        }
+		        pstmt.setBoolean(i++, account.monster.getWing());
+		        for(int j=0;j<account.monster.getStates().length;j++) {
+		        	 pstmt.setInt(i++, account.monster.getStates(j));
+		        }
+		       
+		        pstmt.setInt(15, account.monster.getID());
+		        pstmt.setString(16, account.getUsername());
+
+		        int updatedRows = pstmt.executeUpdate();
+
+		        if (updatedRows > 0) {
+		            System.out.println("成功更新怪獸資料");
+		            return true;
+		        } else {
+		            System.out.println("未找到匹配的怪獸資料");
+		            return false;
+		        }
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        System.out.println("更新怪獸資料失敗");
+		        return false;
+		    }
+		}
+
+	/*
 	 * 查詢
 	 */
 	@SuppressWarnings("null")
@@ -275,15 +325,15 @@ public class DatabaseOperations {
 	/*
 	 * 從怪獸資料表中查詢特定怪獸的資訊
 	 */
-	public String queryMonsterInfo(Account account) {
-		String name = "";
+	public Monster queryMonsterInfo(Account accountinput) {
+		Monster monster=new Monster(accountinput.getUsername());
 		try {
 			// 創建 Statement 物件
 			Statement stmt = conn.createStatement();
 
 			// 構建查詢怪獸資訊的 SQL 命令
-			String queryMonsterSQL = "SELECT * FROM `" + account.getUsername() + "的怪獸` WHERE 怪獸ID = "
-					+ account.getmonster_id();
+			String queryMonsterSQL = "SELECT * FROM `" + accountinput.getUsername() + "的怪獸` WHERE 怪獸ID = "
+					+ accountinput.monster.getID();
 
 			// 執行 SQL 命令以查詢怪獸資訊
 			ResultSet resultSet = stmt.executeQuery(queryMonsterSQL);
@@ -291,7 +341,7 @@ public class DatabaseOperations {
 			// 如果查詢結果不為空，則列印怪獸資訊
 			while (resultSet.next()) {
 				int id = resultSet.getInt("怪獸ID");
-				name = resultSet.getString("怪獸名稱");
+				String name = resultSet.getString("怪獸名稱");
 				int age = resultSet.getInt("怪獸年齡");
 				int attack = resultSet.getInt("攻擊力");
 				int hp = resultSet.getInt("生命力");
@@ -301,42 +351,44 @@ public class DatabaseOperations {
 				int poison = resultSet.getInt("毒系");
 				int phantom = resultSet.getInt("幻影系");
 				Boolean wing = resultSet.getBoolean("翅膀");
-				account.monster.addHungerValue(resultSet.getInt("飢餓度")); 
-				account.monster.addThirstValue(resultSet.getInt("飢渴度")); 
-				account.monster.addMoodValue(resultSet.getInt("心情指數")); 
-				account.monster.addHealthValue(resultSet.getInt("健康度")); 
+				monster.setHungerValue(resultSet.getInt("飢餓度")); 
+				monster.setThirstValue(resultSet.getInt("飢渴度")); 
+				monster.setMoodValue(resultSet.getInt("心情指數")); 
+				monster.setHealthValue(resultSet.getInt("健康度")); 
 				
 				System.out.println("資料庫讀單一怪獸:怪獸名稱: " + name);
-				account.monster.setName(name);
-				account.monster.addAge(age);
-				account.monster.addAttack(attack);
-				account.monster.addHP(hp);
-				account.monster.addIntelligence(intelligence);
-				account.monster.addFire(fire);
-				account.monster.addIce(ice);
-				account.monster.addPoison(poison);
-				account.monster.addIllusion(phantom);
-				account.monster.setWing(wing);
+				monster.setID(id);
+				monster.setName(name);
+				monster.addAge(age);
+				monster.addAttack(attack);
+				monster.addHP(hp);
+				monster.addIntelligence(intelligence);
+				monster.addFire(fire);
+				monster.addIce(ice);
+				monster.addPoison(poison);
+				monster.addIllusion(phantom);
+				monster.setWing(wing);
 			}
 
 			stmt.close();
-			return name;
+			return monster;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return "";
+			return null;
 		}
 	}
 
 	/*
 	 * 查詢怪獸資料表中的所有數據
 	 */
-	public boolean monsterData(String username) {
+	public Monster monsterData(Account accountinput) {
+		Monster monster=new Monster(accountinput.getUsername());
 		try {
 			// 創建 Statement 物件
 			Statement stmt = conn.createStatement();
 
 			// 構建查詢所有數據的 SQL 命令
-			String selectAllDataSQL = "SELECT * FROM `" + username + "的怪獸`";
+			String selectAllDataSQL = "SELECT * FROM `" + accountinput.getUsername() + "的怪獸`";
 
 			// 執行 SQL 命令以查詢所有數據
 			ResultSet resultSet = stmt.executeQuery(selectAllDataSQL);
@@ -344,33 +396,33 @@ public class DatabaseOperations {
 			if (!resultSet.next()) {
 				System.out.println("資料庫中沒有任何怪獸資料");
 				stmt.close();
-				return false;
+				return null;
 			}
 			// 處理查詢結果
 			do {
-				int id = resultSet.getInt("怪獸ID");
-				account.monster.setName(resultSet.getString("怪獸名稱"));
-				account.monster.addAge(resultSet.getInt("怪獸年齡"));
-				account.monster.addAttack(resultSet.getInt("攻擊力"));
-				account.monster.addHP( resultSet.getInt("生命力"));
-				account.monster.addIntelligence(resultSet.getInt("智力"));
-				account.monster.addFire(resultSet.getInt("火系"));
-				account.monster.addIce(resultSet.getInt("冰系"));
-				account.monster.addPoison(resultSet.getInt("毒系"));
-				account.monster.addIllusion(resultSet.getInt("幻影系"));
-				account.monster.setWing(resultSet.getBoolean("翅膀"));
-				account.monster.addHungerValue(resultSet.getInt("飢餓度")); 
-				account.monster.addThirstValue(resultSet.getInt("飢渴度")); 
-				account.monster.addMoodValue(resultSet.getInt("心情指數")); 
-				account.monster.addHealthValue(resultSet.getInt("健康度")); 
+				monster.setID(resultSet.getInt("怪獸ID"));
+				monster.setName(resultSet.getString("怪獸名稱"));
+				monster.addAge(resultSet.getInt("怪獸年齡"));
+				monster.addAttack(resultSet.getInt("攻擊力"));
+				monster.addHP( resultSet.getInt("生命力"));
+				monster.addIntelligence(resultSet.getInt("智力"));
+				monster.addFire(resultSet.getInt("火系"));
+				monster.addIce(resultSet.getInt("冰系"));
+				monster.addPoison(resultSet.getInt("毒系"));
+				monster.addIllusion(resultSet.getInt("幻影系"));
+				monster.setWing(resultSet.getBoolean("翅膀"));
+				monster.addHungerValue(resultSet.getInt("飢餓度")); 
+				monster.addThirstValue(resultSet.getInt("飢渴度")); 
+				monster.addMoodValue(resultSet.getInt("心情指數")); 
+				monster.addHealthValue(resultSet.getInt("健康度")); 
 			} while (resultSet.next());
 
 			// 關閉 Statement 物件
 			stmt.close();
-			return true;
+			return monster;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 	}
 	/*

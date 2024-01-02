@@ -279,7 +279,7 @@ public class PropsProblem implements Problem<Props> {
 				account.monster.addHungerValue(-5);
 				account.monster.addThirstValue(-5);
 				account.monster.addMoodValue(+5);
-				account.monster.addThirstValue(-5);
+				account.monster.addHealthValue(-5);
 			}
 		}
 		

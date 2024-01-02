@@ -15,14 +15,11 @@ public class Gimer {
 	 * 名稱: 養育年分: 養育寵物相冊: 獎狀:
 	 */
 	private String[] message;
-	private RWFile rwFile=new RWFile();
 	private DatabaseOperations databaseOperations=new DatabaseOperations();
 	private static final long serialVersionUID = 1L;
 	JPanel jPanel;
 
 	public Gimer(JFrame frame,Account account) {
-		String fileContent = rwFile.readFromFile();
-        account.setUsername(fileContent);
         account=databaseOperations.queryData(account);
        String yearString=String.valueOf(account.getYear()) ;
 		message = new String[] { "名稱",account.getUsername(), "養育年份",yearString, "養育寵物相冊", "獎狀"  };//??username呢

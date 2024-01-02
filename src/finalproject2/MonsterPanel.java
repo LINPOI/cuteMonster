@@ -137,11 +137,24 @@ public class MonsterPanel extends JPanel implements  Observer{
 		g.dispose();
 		return resizedImage;
 	}
+//	@Override
+//	public void update(String[] strings) {
+//		// TODO Auto-generated method stub
+//		account.monster.setName(strings[0]);
+//		account.setUsername(strings[1]);
+//		File output =account.imegeurl();
+//		try {
+//			ImageIO.write(resizedImage, "PNG", output);
+//			System.out.println("輸出圖片" + output.getAbsolutePath());
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		 
+//	}
 	@Override
-	public void update(String[] strings) {
+	public void updataAccount(Account account) {
 		// TODO Auto-generated method stub
-		account.monster.setName(strings[0]);
-		account.setUsername(strings[1]);
 		File output =account.imegeurl();
 		try {
 			ImageIO.write(resizedImage, "PNG", output);
@@ -150,16 +163,5 @@ public class MonsterPanel extends JPanel implements  Observer{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-	}
-	@Override
-	public void updataInt(int[] ints) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void updataAccount(Account account) {
-		// TODO Auto-generated method stub
-		
 	}
 }

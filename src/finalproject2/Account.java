@@ -7,8 +7,7 @@ public class Account {//帳號 密碼 年份 怪獸id 怪獸
 	private String username="";
     private String password="";
     private int year=0;
-    private int monster_id=1;
-    private RWFile rwFile=new RWFile();
+    private DatabaseOperations databaseOperations=new DatabaseOperations();
     public Monster monster=new Monster(username);
     public String[] key() {
     	return new String[] {
@@ -19,7 +18,7 @@ public class Account {//帳號 密碼 年份 怪獸id 怪獸
         this.username = inf[0];
         this.password = inf[1];
         this.year=Integer.valueOf(inf[2]) ;
-        //System.out.println(username+password+year);
+
     }
   
     public void setUsername(String username) {
@@ -27,36 +26,27 @@ public class Account {//帳號 密碼 年份 怪獸id 怪獸
     }
     
     public String getUsername() {
-     	readAccount();
+     	
         return username;
     }
 
     public void setPassword( String password) {
     	this.password = password;
-    	saveUser();
+  
     }
     
     public String getPassword() {
-    	readAccount();
+  
         return password;
     }
     public void setYear( int year) {
     	this.year = year;
-    	saveUser();
+ 
     }
     
     public int getYear() {
-    	readAccount();
+ 
         return year;
-    }
-    public void setmonster_id(int monster_id) {
-    	this.monster_id = monster_id;
-    	saveUser();
-    }
-    
-    public int getmonster_id() {
-     	readAccount();
-        return monster_id;
     }
     
     public void setMonster( Monster monster) {
@@ -71,38 +61,26 @@ public class Account {//帳號 密碼 年份 怪獸id 怪獸
     /*
      * 儲存
      */
-    public void saveUser() {
-    	LinkedList<String> linkedList_user=new LinkedList<String>();
-    	linkedList_user.add(username);
-    	linkedList_user.add(password);
-    	linkedList_user.add(String.valueOf(year));
-    	linkedList_user.add(String.valueOf(monster_id));
-    	//
-    	rwFile.saveToFile_Account(linkedList_user, username);
-    }
+
     public void saveUser(Account account) {
-    	LinkedList<String> linkedList_user=new LinkedList<String>();
-    	linkedList_user.add(username);
-    	linkedList_user.add(password);
-    	linkedList_user.add(String.valueOf(year));
-    	linkedList_user.add(String.valueOf(monster_id));
-    	//
-    	rwFile.saveToFile_Account(linkedList_user, username);
-    	
+    	databaseOperations.updateData(account);   	
     }
-    public LinkedList<String> readMonster(){
-    	return  rwFile.read_Monster(monster.getName());
-    }
-    public void readAccount(){
-    	LinkedList<String> user=rwFile.read_Account(username);
-    	if(user.size()!=0) {
-    		username=user.get(0);
-        	password=user.get(1);
-        	year=Integer.valueOf(user.get(2));
-        	monster_id=Integer.valueOf(user.get(3));
-    	}
+    public Account readAccount(Account account){
+    	Account account2Account=new Account();
+    	account2Account= databaseOperations.queryData(account);
+    	account2Account.monster=readMonster(account2Account);
+    	System.out.println("怪獸"+account.monster.getName());
+    	return account2Account;
     }
     public File imegeurl() {
 		return new File("src/newpicture/"+ getUsername()+monster.getName()+"output.png");
+	}
+    public void saveMonsterData(Account account) {
+    	databaseOperations.updateMonsterData(account);
+	}
+
+	public Monster readMonster(Account account) {
+		monster=databaseOperations.queryMonsterInfo(account);
+		return monster;
 	}
 }

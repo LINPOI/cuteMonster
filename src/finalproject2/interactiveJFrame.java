@@ -364,6 +364,8 @@ public class InteractiveJFrame extends JPanel {
 		Chromosome<Props> allProps= getPropsAlgorithm.getlastChromosome();
 		if(allProps.getFitnessValue()<0) {
 			System.err.println("已死亡");
+			account.monster.setHealthValue(0);
+			subject.setAccount(account);
 		}else {
 			System.err.println(allProps.getChromosome()[0].getName());
 		}

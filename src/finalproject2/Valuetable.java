@@ -36,7 +36,7 @@ public class Valuetable extends JPanel{
 		this.setLayout(new BorderLayout());
 		// TODO Auto-generated constructor stub
 		listValue = new String[account.monster.getValueName().length+1];
-		for(int i=1;i<account.monster.getValueName().length;i++) {
+		for(int i=0;i<account.monster.getValueName().length;i++) {
 			listValue[i]=account.monster.getValueName(i)+"："+account.monster.getValue(i);
 		}
 		String wing="無";

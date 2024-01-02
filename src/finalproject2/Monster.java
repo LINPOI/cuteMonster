@@ -7,10 +7,12 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class Monster {
+	
 	private String username = "";
 	private String[] value_name = new String[] { // 字串數值
 			"年齡", "攻擊力", "生命力", "智力", "火系", "冰系", "毒系", "幻影系" };
 	private String[] slimestates_Name = new String[] { "飢餓度", "飢渴度", "心情指數", "健康度" };
+	private int ID=1;
 	private String name = "";
 	private int age = 0;
 	private int attack = 10;
@@ -21,13 +23,11 @@ public class Monster {
 	private int poison = 0;
 	private int illusion = 0;
 	private int[] value = new int[] { age, attack, hp, intelligence, fire, ice, poison, illusion };// 數值
-
 	private int hungerValue = 50;
 	private int thirstValue = 50;
 	private int moodValue = 50;
 	private int healthValue = 50;
 	private int[] slimestates = new int[] { hungerValue, thirstValue, moodValue, healthValue };// 數值
-	private RWFile rwFile = new RWFile();
 	private boolean wing = false;// 有無翅膀
 
 	public Monster(String username) {
@@ -36,10 +36,20 @@ public class Monster {
 	}
 
 	/*
+	 * ID
+	 */
+	public int getID() {
+		// System.out.println("getname getmonstername:"+name);
+		return ID;
+	}
+
+	public void setID(int id) {
+		this.ID = id;
+	}
+	/*
 	 * 名稱
 	 */
 	public String getName() {
-		readMonster();
 		// System.out.println("getname getmonstername:"+name);
 		return name;
 	}
@@ -212,7 +222,7 @@ public class Monster {
 	 * 數值訊息
 	 */
 	public String getInf(int i) {
-		String[] strings = new String[] { "隨時間成長", "可透過練武提升", "可透過練武提升", "可透過學習提升", "探索火山提升", "探索極地提升", "探索沼澤提升",
+		String[] strings = new String[] { "隨事件成長", "可透過練武提升", "可透過練武提升", "可透過學習提升", "探索火山提升", "探索極地提升", "探索沼澤提升",
 				"探索神殿提升", "透過飛行訓練" };
 		return strings[i];
 	}
@@ -223,7 +233,9 @@ public class Monster {
 	public int getHungerValue() {
 		return hungerValue;
 	}
-
+	public void setHungerValue(int hungerValue) {
+		this.hungerValue = hungerValue;
+	}
 	public void addHungerValue(int hungerValue) {
 		this.hungerValue += hungerValue;
 	}
@@ -232,7 +244,9 @@ public class Monster {
 	public int getThirstValue() {
 		return thirstValue;
 	}
-
+	public void setThirstValue(int thirstValue) {
+		this.thirstValue = thirstValue;
+	}
 	public void addThirstValue(int thirstValue) {
 		this.thirstValue += thirstValue;
 	}
@@ -241,7 +255,9 @@ public class Monster {
 	public int getMoodValue() {
 		return moodValue;
 	}
-
+	public void setMoodValue(int moodValue) {
+		this.moodValue = moodValue;
+	}
 	public void addMoodValue(int moodValue) {
 		this.moodValue += moodValue;
 	}
@@ -250,7 +266,9 @@ public class Monster {
 	public int getHealthValue() {
 		return healthValue;
 	}
-
+	public void setHealthValue(int healthValue) {
+		this.healthValue = healthValue;
+	}
 	public void addHealthValue(int healthValue) {
 		this.healthValue += healthValue;
 	}
@@ -274,35 +292,5 @@ public class Monster {
 	public int getStates(int i) {
 		return slimestates[i];
 	}
-	public void save() {
-		LinkedList<String> linkedList = new LinkedList<String>();
-		linkedList.add(username);
-		linkedList.add(name);
-		for (int i = 0; i < getValue().length; i++) {//8
-			linkedList.add(String.valueOf(getValue(i)));
-		}
-		for(int i=0; i <getStates().length;i++) {//4
-			linkedList.add(String.valueOf(getStates(i)));
-		}
-		linkedList.add(String.valueOf(wing));
-		rwFile.saveToFile_monster(linkedList, name);
-
-	}
-
-	public void readMonster() {
-		LinkedList<String> linkedList = rwFile.read_Monster(name);
-		if (linkedList.size() != 0) {
-		//	System.out.println(linkedList.size());
-			int i=1;
-			name = linkedList.get(i++);
-			for (int j = 0; j < getValue().length; j++) {
-				value[j] = Integer.parseInt(linkedList.get(i++));
-			}
-			for(int j = 0; j <getStates().length;j++) {
-				slimestates[j] = Integer.parseInt(linkedList.get(i++));
-			}
-			wing = Boolean.parseBoolean(linkedList.get(linkedList.size() - 1));
-		}
-
-	}
+	
 }

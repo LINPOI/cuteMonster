@@ -28,7 +28,7 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 	private JFrame jframe;
 	private int switchJPanel;
 
-	private RWFile rwFile = new RWFile();
+
 	private JLabel monstername;
 	protected int[][] grid;// 元件布局
 	protected ArrayList<JComponent> gUIComponents = new ArrayList<>();
@@ -56,8 +56,6 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 
 	public JPanel open() {
 		JPanel jPanel = new JPanel();
-		String fileContent = rwFile.readFromFile();
-		account.setUsername(fileContent);
 		account = databaseOperations.queryData(account);
 		imageSrc = new String[] { "src/PICTURE/gamerbutton.png", "src/PICTURE/slimebutton.png",
 				"src/PICTURE/interactive.png" };
@@ -184,24 +182,12 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 		jPanel2.add(gUIComponents.get(i), constraints);
 	}
 
-	@Override
-	public void update(String[] strings) {
-		// TODO Auto-generated method stub
-		account.monster.setName(strings[0]);
-		monstername.setText(account.monster.getName());
-		monstername.setName(rwFile.readFromFile());
-	}
-
-	@Override
-	public void updataInt(int[] ints) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void updataAccount(Account account) {
 		// TODO Auto-generated method stub
-		
+		this.account=account;
+		monstername.setText(account.monster.getName());
 	}
 
 }

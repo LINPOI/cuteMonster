@@ -11,12 +11,11 @@ import javax.swing.*;
 import java.awt.event.*;
 
 public class LogIn extends JPanel implements Commonly_GridBagConstraints {
-	private Subject subject;//新增觀察者
-	
+	private Subject subject;// 新增觀察者
+
 	protected CardLayout cardLayout;// 切換面板
 	protected JPanel cardPanel;// 面板
 
-	private RWFile rwFile=new RWFile();
 
 	protected JTextField textField = null;// 文字框
 	protected JPasswordField passwordField = null;// 密碼框
@@ -27,7 +26,7 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 	protected ActionListener[] actionListeners = null;
 	private ActionListener register = null;
 	private ActionListener logIn = null;
-	
+
 	protected String[] textStrings;// 顯示文字陣列
 	protected ArrayList<JComponent> gUIComponents = new ArrayList<>();
 
@@ -47,7 +46,6 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 	 */
 	List<Account> accountList = new ArrayList<>(); // 全部帳號
 	Account account = new Account(); // 帳號
-	Account currentAccount = new Account();// 新帳號
 	protected int[][] grid;// 元件布局
 	// 元件
 	JPanel jPanel = new JPanel();
@@ -58,21 +56,20 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public LogIn(CardLayout cardLayout, JPanel cardPanel,Subject subject ) {
-		databaseOperations.create_Account_Table();//新增使用者資料
+	public LogIn(CardLayout cardLayout, JPanel cardPanel, Subject subject) {
+		databaseOperations.create_Account_Table();// 新增使用者資料
 		this.cardLayout = cardLayout;
-		this.cardPanel = cardPanel;//切換panel
-		this.subject=subject;//觀察者
+		this.cardPanel = cardPanel;// 切換panel
+		this.subject = subject;// 觀察者
 		JPanel loginPanel = open();
 		this.setLayout(new BorderLayout());
-		this.add(new JLabel("              "
-				+ "                        "
-				+ "                        "),BorderLayout.EAST);
-		this.add(new JLabel("              "
-				+ "                        "
-				+ "                        "),BorderLayout.WEST);
-		this.add(loginPanel,BorderLayout.CENTER);
+		this.add(new JLabel("              " + "                        " + "                        "),
+				BorderLayout.EAST);
+		this.add(new JLabel("              " + "                        " + "                        "),
+				BorderLayout.WEST);
+		this.add(loginPanel, BorderLayout.CENTER);
 	}
+
 	public JPanel open() {
 		jPanel.setLayout(new GridBagLayout());
 		jPanel.setSize(new Dimension(width, height));
@@ -136,8 +133,7 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 
 	public int[][] getGrid() {
 		// TODO Auto-generated method stub
-		grid = new int[][] { 
-				{ 1, 2, 2, 1, 1, 0, BOTH, CENTER }, // TEXTFIELD
+		grid = new int[][] { { 1, 2, 2, 1, 1, 0, BOTH, CENTER }, // TEXTFIELD
 				{ 1, 5, 2, 1, 1, 0, BOTH, CENTER },
 
 				{ 1, 1, 2, 1, 1, 0, BOTH, CENTER }, // TEXT
@@ -147,7 +143,7 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 				{ 2, 7, 1, 1, 1, 0, BOTH, CENTER },
 
 				{ 1, 6, 2, 1, 1, 0, BOTH, CENTER }, // 空格
-				{ 1, 3, 2, 1, 1, 0, BOTH, CENTER }, 
+				{ 1, 3, 2, 1, 1, 0, BOTH, CENTER },
 
 		};
 		return grid;
@@ -180,11 +176,11 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 					Boolean good = databaseOperations.insert_Account_Data(account);
 					if (good) {
 						JOptionPane.showMessageDialog(jPanel, "註冊成功");
-						
+
 						register_username = Username;
 						register_password = password;
-						databaseOperations.create_Monster_Table(Username);
-						
+						databaseOperations.create_Monster_Table(account);
+
 					} else {
 						JOptionPane.showMessageDialog(jPanel, "錯誤");
 					}
@@ -237,42 +233,40 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 		}
 		if (read == 1) {
 			System.out.println("登入成功");
-			currentAccount = account;
-			rwFile.saveToFile(username);
-			if(!databaseOperations.monsterData(username)) {//第一次登入
+			if (databaseOperations.monsterData(account)==null) {// 第一次登入
 				cardLayout.show(cardPanel, "first");
-				String userInput= JOptionPane.showInputDialog(null, "請輸入怪物名字:");
-				account.monster.setName(userInput); 
+				String userInput = JOptionPane.showInputDialog(null, "請輸入怪物名字:");
+				account.monster.setName(userInput);
 				account.saveUser(account);
-				subject.setStrings(new String[] {account.monster.getName(),account.getUsername()}); // 設置新數值
-				databaseOperations.insert_Monster_Data(account);//?這裡成功了?
-				
-			}else {//第n次登入
+				subject.setAccount(account); // 設置新數值
+				databaseOperations.create_Monster_Table(account);
+				databaseOperations.insert_Monster_Data(account);// ?這裡成功了?
+
+			} else {// 第n次登入
 				cardLayout.show(cardPanel, "first");
-				databaseOperations.queryMonsterInfo(account);
-				subject.setStrings(new String[] {account.monster.getName(),account.getUsername()}); // 設置新數值
-				account= databaseOperations.queryData(account);
+				account= account.readAccount(account);
+				subject.setAccount(account); // 設置新數值
 			}
-			
-			
+
 		} else if (read == 2) {
 			JOptionPane.showMessageDialog(jPanel, "密碼錯誤");
-			currentAccount = new Account();
+	
 		} else if (read == 3) {
 			JOptionPane.showMessageDialog(jPanel, "未輸入");
 		} else {
-			if (account.getUsername().equals(register_username) && account.getPassword().equals(register_password)) {//直接登入
+			if (account.getUsername().equals(register_username) && account.getPassword().equals(register_password)) {// 直接登入
 				System.out.println("登入成功");
-				currentAccount = account;
+
 				cardLayout.show(cardPanel, "first");
-				String userInput= JOptionPane.showInputDialog(null, "請輸入怪物名字:");   
-				account.monster.setName(userInput); 
+				String userInput = JOptionPane.showInputDialog(null, "請輸入怪物名字:");
+				account.monster.setName(userInput);
 				account.saveUser(account);
-				subject.setStrings(new String[] {userInput,account.getUsername()}); // 設置新數值
-				databaseOperations.insert_Monster_Data(account);//?這裡成功了?
+				subject.setAccount(account); // 設置新數值
+				
+				databaseOperations.insert_Monster_Data(account);// 
 			} else {
 				JOptionPane.showMessageDialog(jPanel, "帳號不存在");
-				currentAccount = new Account();
+
 			}
 
 		}
@@ -310,7 +304,4 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 		jPanel.add(gUIComponents.get(i), constraints);
 	}
 
-	public Account getAccount() {
-		return currentAccount;
-	}
 }
