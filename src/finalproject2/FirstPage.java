@@ -187,6 +187,7 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 	public void updataAccount(Account account) {
 		// TODO Auto-generated method stub
 		this.account=account;
+		
 		monstername.setText(account.monster.getName());
 	}
 

@@ -44,7 +44,6 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 	/*
 	 * cardLayout.show(cardPanel, "...");
 	 */
-	List<Account> accountList = new ArrayList<>(); // 全部帳號
 	Account account = new Account(); // 帳號
 	protected int[][] grid;// 元件布局
 	// 元件
@@ -150,8 +149,6 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 	}
 
 	public void Action() {
-		accountList = databaseOperations.queryData();// 讀取資料
-
 		register = new ActionListener() {
 
 			@Override
@@ -227,17 +224,18 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 		String username = textField.getText().toLowerCase();
 		account.setUsername(username);
 		account.setPassword(password);
+		//System.out.println("username:"+username+" ，username:"+account.getUsername()+",password:"+password);
 		int read = 3;
 		if (!username.equals("") || !password.equals("")) {
 			read = Queryinf(account);
 		}
 		if (read == 1) {
 			System.out.println("登入成功");
-			if (databaseOperations.monsterData(account)==null) {// 第一次登入
+			if (databaseOperations.queryMonsterInfo(account)==null) {// 第一次登入
 				cardLayout.show(cardPanel, "first");
 				String userInput = JOptionPane.showInputDialog(null, "請輸入怪物名字:");
 				account.monster.setName(userInput);
-				account.saveUser(account);
+				account.saveAccount(account);
 				subject.setAccount(account); // 設置新數值
 				databaseOperations.create_Monster_Table(account);
 				databaseOperations.insert_Monster_Data(account);// ?這裡成功了?
@@ -245,6 +243,7 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 			} else {// 第n次登入
 				cardLayout.show(cardPanel, "first");
 				account= account.readAccount(account);
+				account.monster= databaseOperations.queryMonsterInfo(account);
 				subject.setAccount(account); // 設置新數值
 			}
 
@@ -264,7 +263,7 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 				}
 				account.monster.setName(userInput);
 				
-				account.saveUser(account);
+				account.saveAccount(account);
 				subject.setAccount(account); // 設置新數值
 				databaseOperations.insert_Monster_Data(account);// 新增怪獸資料
 			} else {
@@ -276,7 +275,7 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 	}
 
 	public int Queryinf(Account account_input) {// 0:沒找到 1:找到 2.密碼錯誤
-		for (Account account : accountList) {
+		Account account= databaseOperations.queryData(account_input);
 			String username = account.getUsername();
 			String password = account.getPassword();
 			if (username.equals(account_input.getUsername())) {
@@ -288,9 +287,6 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 				System.out.println("密碼錯誤");
 				return 2;
 			}
-			// System.out.println("帳號: " + username + ", 密碼: " + password + "，輸入帳號: " +
-			// account_input.getUsername() + ", 密碼: " + account_input.getPassword());
-		}
 		return 0;
 	}
 

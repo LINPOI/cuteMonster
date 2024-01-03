@@ -7,11 +7,12 @@ public class Account {//帳號 密碼 年份 怪獸id 怪獸
 	private String username="";
     private String password="";
     private int year=0;
+    private int selectMonster=1;
     private DatabaseOperations databaseOperations=new DatabaseOperations();
     public Monster monster=new Monster(username);
     public String[] key() {
     	return new String[] {
-    			"帳號","密碼","養育年份"
+    			"帳號","密碼","養育年份","selectMonster"
     	};
     }
     public void setInf(String[] inf) {
@@ -49,12 +50,12 @@ public class Account {//帳號 密碼 年份 怪獸id 怪獸
         return year;
     }
     
-    public void setMonster( Monster monster) {
-    	this.monster = monster;
+    public void setselectMonster( int selectMonster) {
+    	this.selectMonster = selectMonster;
     }
-    
-    public Monster getMonster() {
-        return monster;
+     
+    public int getselectMonster() {
+        return selectMonster;
     }
     
     
@@ -62,9 +63,12 @@ public class Account {//帳號 密碼 年份 怪獸id 怪獸
      * 儲存
      */
 
-    public void saveUser(Account account) {
+    public void saveAccount(Account account) {
     	databaseOperations.updateData(account);   	
     }
+    /*
+     * 讀取
+     */
     public Account readAccount(Account account){
     	Account account2Account=new Account();
     	account2Account= databaseOperations.queryData(account);

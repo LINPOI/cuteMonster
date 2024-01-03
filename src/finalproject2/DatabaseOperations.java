@@ -22,11 +22,12 @@ public class DatabaseOperations {
 	 */
 	public boolean insert_Account_Data(Account account) {
 		try {
-			String query = "INSERT INTO account (`帳號`, `密碼`,`養育年份`) VALUES (?, ?, ?)";
+			String query = "INSERT INTO account (`帳號`, `密碼`,`養育年份`,`選定怪獸`) VALUES (?, ?, ?,?)";
 			PreparedStatement pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, account.getUsername());
 			pstmt.setString(2, account.getPassword());
 			pstmt.setInt(3, account.getYear()); 
+			pstmt.setInt(4, account.getselectMonster()); 
 			pstmt.executeUpdate();
 			System.out.println("成功新增資料");
 			return true;
@@ -98,6 +99,7 @@ public class DatabaseOperations {
 					+ "`帳號` CHAR(50) NOT NULL DEFAULT '0' COLLATE 'latin1_swedish_ci', "
 					+ "`密碼` CHAR(50) NULL DEFAULT NULL COLLATE 'latin1_swedish_ci', "
 					+ "`養育年份` INT(11) NULL DEFAULT '0',"
+					+"`選定怪獸` INT(11) NULL DEFAULT '0',"
 					+ "PRIMARY KEY (`帳號`) USING BTREE"
 					+ ") ENGINE=InnoDB;";
 
@@ -186,16 +188,19 @@ public class DatabaseOperations {
 	 * 更新
 	 */
 
-	public void updateData(Account account) {
+	public boolean updateData(Account account) {
 		try {
-			String query = "UPDATE account SET  `養育年份` = ? WHERE `帳號` = ?";
+			String query = "UPDATE account SET  `養育年份` = ?, `選定怪獸`=? WHERE `帳號` = ?";
 			PreparedStatement pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, account.getYear());
-			pstmt.setString(2, account.getUsername());
+			pstmt.setInt(2, account.getselectMonster());
+			pstmt.setString(3, account.getUsername());
 			pstmt.executeUpdate();
 			System.out.println("成功更新資料");
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 
@@ -252,46 +257,11 @@ public class DatabaseOperations {
 		}
 
 	/*
-	 * 查詢
-	 */
-	@SuppressWarnings("null")
-	public List<Account> queryData() {
-
-		try {
-			String query = "SELECT * FROM account";
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-
-			// 處理查詢結果
-			while (rs.next()) {
-				Account account = new Account();
-				String[] inf = new String[account.key().length];
-				for (int i = 0; i < account.key().length; i++) {
-					inf[i] = rs.getString(account.key()[i]);
-				}
-				// 其他欄位...
-				account.setInf(inf);
-
-				// 印出資料或進行其他操作
-				// System.out.println("帳號: " + account.getUsername() + ", 密碼: " +
-				// account.getPassword());
-				accountList.add(account);
-			}
-			rs.close();
-			stmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return accountList;
-
-	}
-
-	/*
 	 * 查單一人物
 	 */
 	public Account queryData(Account account) {
 	    Account account2 = new Account();
-	    //System.out.println("進來的user:"+account.getUsername()+"的資料");
+	    System.out.println("進來的user:"+account.getUsername()+"的資料");
 	    try {
 	        String query = "SELECT * FROM account WHERE `帳號`=?";
 	        PreparedStatement pstmt = conn.prepareStatement(query);
@@ -300,25 +270,20 @@ public class DatabaseOperations {
 
 	        // 處理查詢結果
 	        while (rs.next()) {
-	            String[] inf = new String[account2.key().length];
-	            for (int i = 0; i < account2.key().length; i++) {
-	                inf[i] = rs.getString(account2.key()[i]);
-	            }
-	            // 假設有設置 Account 的方法來設置資訊
-	            account2.setInf(inf);
-
-	            //System.out.println("已讀取user:"+account.getUsername()+"的資料");
-	           
+	        	account2.setUsername(rs.getString("帳號"));
+	        	account2.setPassword(rs.getString("密碼"));
+	        	account2.setYear(rs.getInt("養育年份"));
+	        	account2.setselectMonster(rs.getInt("選定怪獸"));
 	        }
 	        rs.close();
 	        pstmt.close();
-//	        System.out.println("----------------------------------------\n"
-//                    + "帳號: " + account2.getUsername() + ", 密碼: " + account2.getPassword() + ", 養育年份:"
-//                    + account2.getYear());
+	        System.out.println(account.getUsername()+"/"+account.getPassword()+"/"+account.getYear()+"/"+account.getselectMonster());
+		    System.out.println(account2.getUsername()+"/"+account2.getPassword()+"/"+account2.getYear()+"/"+account2.getselectMonster());
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	        // 執行其他錯誤處理或者拋出自定義的例外
 	    }
+	    
 	    return account2;
 	}
 
@@ -333,7 +298,7 @@ public class DatabaseOperations {
 
 			// 構建查詢怪獸資訊的 SQL 命令
 			String queryMonsterSQL = "SELECT * FROM `" + accountinput.getUsername() + "的怪獸` WHERE 怪獸ID = "
-					+ accountinput.monster.getID();
+					+ accountinput.getselectMonster();
 
 			// 執行 SQL 命令以查詢怪獸資訊
 			ResultSet resultSet = stmt.executeQuery(queryMonsterSQL);
@@ -378,53 +343,6 @@ public class DatabaseOperations {
 		}
 	}
 
-	/*
-	 * 查詢怪獸資料表中的所有數據
-	 */
-	public Monster monsterData(Account accountinput) {
-		Monster monster=new Monster(accountinput.getUsername());
-		try {
-			// 創建 Statement 物件
-			Statement stmt = conn.createStatement();
-
-			// 構建查詢所有數據的 SQL 命令
-			String selectAllDataSQL = "SELECT * FROM `" + accountinput.getUsername() + "的怪獸`";
-
-			// 執行 SQL 命令以查詢所有數據
-			ResultSet resultSet = stmt.executeQuery(selectAllDataSQL);
-
-			if (!resultSet.next()) {
-				System.out.println("資料庫中沒有任何怪獸資料");
-				stmt.close();
-				return null;
-			}
-			// 處理查詢結果
-			do {
-				monster.setID(resultSet.getInt("怪獸ID"));
-				monster.setName(resultSet.getString("怪獸名稱"));
-				monster.addAge(resultSet.getInt("怪獸年齡"));
-				monster.addAttack(resultSet.getInt("攻擊力"));
-				monster.addHP( resultSet.getInt("生命力"));
-				monster.addIntelligence(resultSet.getInt("智力"));
-				monster.addFire(resultSet.getInt("火系"));
-				monster.addIce(resultSet.getInt("冰系"));
-				monster.addPoison(resultSet.getInt("毒系"));
-				monster.addIllusion(resultSet.getInt("幻影系"));
-				monster.setWing(resultSet.getBoolean("翅膀"));
-				monster.addHungerValue(resultSet.getInt("飢餓度")); 
-				monster.addThirstValue(resultSet.getInt("飢渴度")); 
-				monster.addMoodValue(resultSet.getInt("心情指數")); 
-				monster.addHealthValue(resultSet.getInt("健康度")); 
-			} while (resultSet.next());
-
-			// 關閉 Statement 物件
-			stmt.close();
-			return monster;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
 	/*
 	 * 怪獸相冊
 	 */

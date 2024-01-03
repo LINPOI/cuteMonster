@@ -28,11 +28,13 @@ public class MonsterPanel extends JPanel implements Observer {
 	private Subject subject;
 	private BufferedImage resizedImage;
 	private JLabel label = new JLabel();
-	private JButton newMonsterButton=new JButton();
-	private DatabaseOperations databaseOperations=new DatabaseOperations();
+	private JButton newMonsterButton = new JButton();
+	private DatabaseOperations databaseOperations = new DatabaseOperations();
+
 	public MonsterPanel(boolean havewing, int select[], Account account, Subject subject) {// 翅膀，史萊姆總類
 		open(havewing, select, account, subject);
 	}
+
 	public void open(boolean havewing, int select[], Account account, Subject subject) {// 翅膀，史萊姆總類
 		this.subject = subject;
 		subject.addObserver(this);
@@ -149,42 +151,59 @@ public class MonsterPanel extends JPanel implements Observer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		/*
+		 * 如果任一狀態<0死亡
+		 */
 		for (int i = 0; i < account.monster.getStates().length; i++) {
+			/*
+			 * 如果死亡
+			 */
 			if (account.monster.getStates(i) <= 0) {
-				databaseOperations.updateMonsterData(account);//更新怪物狀態:死亡
-				
+				databaseOperations.updateMonsterData(account);// 更新怪物狀態:死亡
+
 				remove(label);
 				JPanel newMonsterPanel = new JPanel();
 				newMonsterPanel.setLayout(null); // 使用 null 佈局
 				newMonsterButton = new JButton("重養一隻");
+				// 字型格式
+				newMonsterButton.setFont(FontFactory.commonFont(1, 60));
+				newMonsterButton.setBackground(new Color(216, 191, 216));
 				newMonsterButton.setBounds(200, 100, 300, 100); // 設置按鈕位置和大小
 				newMonsterButton.addActionListener(new ActionListener() {
-					
+
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
 						String userInput = JOptionPane.showInputDialog(null, "請輸入怪物名字:");
-						while(userInput==null) {
+						while (userInput == null) {
 							userInput = JOptionPane.showInputDialog(null, "怪獸名稱不可為空:");
 						}
-						account.monster=new Monster(account.getUsername());
+						/*
+						 * 新怪獸
+						 */
+						account.monster = new Monster(account.getUsername());
 						account.monster.setName(userInput);
-						account.saveUser(account);
+						account.setselectMonster(account.getselectMonster()+1);
+						System.err.println("account.getselectMonster()"+account.getselectMonster());
+						account.saveAccount(account);
 						subject.setAccount(account); // 設置新數值
 						databaseOperations.insert_Monster_Data(account);//
-						
+
 						remove(newMonsterPanel);
 					}
-					
+
 				});
-				
+
 				newMonsterPanel.add(newMonsterButton);
 				newMonsterPanel.setOpaque(false); // 透明背景
 				add(newMonsterPanel);
 				revalidate();
 				repaint();
 				break;
-			}else {
+			} else {
+				/*
+				 * 重新復活了的話
+				 */
 				remove(newMonsterButton);
 				ImageIcon icon = new ImageIcon(resizedImage);
 				label.setIcon(icon);

@@ -29,7 +29,7 @@ public class Monster {
 	private int healthValue = 50;
 	private int[] slimestates = new int[] { hungerValue, thirstValue, moodValue, healthValue };// 數值
 	private boolean wing = false;// 有無翅膀
-
+	
 	public Monster(String username) {
 		this.username = username;
 		// TODO Auto-generated constructor stub
