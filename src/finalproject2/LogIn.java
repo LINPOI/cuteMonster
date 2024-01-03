@@ -259,11 +259,14 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 
 				cardLayout.show(cardPanel, "first");
 				String userInput = JOptionPane.showInputDialog(null, "請輸入怪物名字:");
+				while(userInput==null) {
+					userInput = JOptionPane.showInputDialog(null, "怪獸名稱不可為空:");
+				}
 				account.monster.setName(userInput);
+				
 				account.saveUser(account);
 				subject.setAccount(account); // 設置新數值
-				
-				databaseOperations.insert_Monster_Data(account);// 
+				databaseOperations.insert_Monster_Data(account);// 新增怪獸資料
 			} else {
 				JOptionPane.showMessageDialog(jPanel, "帳號不存在");
 

@@ -205,7 +205,7 @@ public class DatabaseOperations {
 	public boolean updateMonsterData(Account account) {
 		 try {
 		        String query = "UPDATE `lin的怪獸` SET " +
-		        		"`怪獸名稱` = ? "+
+		        		"`怪獸名稱` = ? ,"+
 		                "`怪獸年齡` = ?, " +
 		                "`攻擊力` = ?, " +
 		                "`生命力` = ?, " +
@@ -218,7 +218,7 @@ public class DatabaseOperations {
 		                "`飢餓度` = ?, " +
 		                "`飢渴度` = ?, " +
 		                "`心情指數` = ?, " +
-		                "`健康度` = ? ," +
+		                "`健康度` = ? " +
 		                "WHERE `怪獸ID` = ? AND `玩家` = ? ";
 
 		        PreparedStatement pstmt = conn.prepareStatement(query);

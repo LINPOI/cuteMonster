@@ -73,7 +73,7 @@ public class Account {//帳號 密碼 年份 怪獸id 怪獸
     	return account2Account;
     }
     public File imegeurl() {
-		return new File("src/newpicture/"+ getUsername()+monster.getName()+"output.png");
+		return new File("src/newpicture/"+ getUsername()+monster.getName()+monster.getID()+"output.png");
 	}
     public void saveMonsterData(Account account) {
     	databaseOperations.updateMonsterData(account);

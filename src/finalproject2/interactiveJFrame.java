@@ -359,6 +359,9 @@ public class InteractiveJFrame extends JPanel {
 		}
 	}
 	public void start() {
+		/*
+		 * 使用演算法並拿到演算法的進行處理
+		 */
 		GenetticAlgorithm<Props> getPropsAlgorithm=new GenetticAlgorithm<Props>(account, location, difficulty);
 		JDialog dialog = new JDialog(jFrame, "獲得道具", true); // 建立模態的 JDialog
 		Chromosome<Props> allProps= getPropsAlgorithm.getlastChromosome();
@@ -376,6 +379,7 @@ public class InteractiveJFrame extends JPanel {
 
         closeButton.addActionListener(e -> {
             dialog.setVisible(false); // 關閉訊息框
+            jFrame.setVisible(false); // 關閉frame
             dialog.dispose(); // 釋放資源
             jFrame.dispose();
         });
