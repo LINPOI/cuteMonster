@@ -269,7 +269,7 @@ public class PropsProblem implements Problem<Props> {
 	}
 
 	@Override
-	public double alive() {
+	public double alive_value() {
 		// TODO Auto-generated method stub
 		return totalScore;
 	}

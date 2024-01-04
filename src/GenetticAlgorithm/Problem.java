@@ -12,6 +12,6 @@ public interface Problem<T>{
 	public void calculateFitness(Chromosome<T>[] chrs) ;//設定適應值
 	public String output(Chromosome<T>[]chromosomes);
 	public String check(Chromosome<T> chr);
-	public double alive();
+	public double alive_value();
 	public Account getAccount() ;
 }

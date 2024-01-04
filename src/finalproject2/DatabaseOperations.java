@@ -86,6 +86,24 @@ public class DatabaseOperations {
 	        e.printStackTrace();
 	    }
 	}
+	
+	/*
+	 * 新增道具資料
+	 */
+	public boolean insert_Props_Data(Account account) {
+		try {
+			String query = "INSERT INTO `"+account.getUsername()+"的道具` (`玩家`, `道具ID`) VALUES (?, ?)";
+			PreparedStatement pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, account.getUsername());
+			pstmt.setInt(2, account.getProps()); 
+			pstmt.executeUpdate();
+			System.out.println("成功新增道具資料");
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 	/*
 	 * 新增使用者資料表
 	 */
@@ -141,6 +159,30 @@ public class DatabaseOperations {
 			e.printStackTrace();
 		}
 	}
+	
+	/*
+	 * 新增道具欄資料表
+	 */
+	public void create_Props_Table(Account account) {
+		try {
+			// 創建 Statement 物件
+			Statement stmt = conn.createStatement();
+
+			// SQL 命令 - 建立寵物資料表
+			String createTableSQL = "CREATE TABLE  IF NOT EXISTS `" + account.getUsername() + "的道具` ("
+					+ "`玩家` CHAR(50) NOT NULL DEFAULT '0' COLLATE 'latin1_swedish_ci', "
+					+ "	`道具ID` INT(11) NULL DEFAULT NULL," 
+					+ "FOREIGN KEY (`玩家`) REFERENCES `account`(`帳號`) ON DELETE CASCADE ON UPDATE CASCADE"
+					+ ") ENGINE=InnoDB COLLATE 'latin1_swedish_ci';";
+
+			// 執行 SQL 命令以建立資料表
+			stmt.executeUpdate(createTableSQL);
+			System.out.println("成功新增資料表`" + account.getUsername() + "的道具`");
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	/*
 	 * 新增相冊資料表
 	 * 玩家名稱
@@ -180,6 +222,20 @@ public class DatabaseOperations {
 			pstmt.setString(1, account.getUsername());
 			pstmt.executeUpdate();
 			System.out.println("成功刪除資料");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	/*
+	 * 刪除道具
+	 */
+	public void delete_Proprs_Data(Account account) {
+		try {
+			String query = "DELETE FROM `"+account.getUsername()+"的道具`WHERE `道具ID`=?";
+			PreparedStatement pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, account.getProps());
+			pstmt.executeUpdate();
+			System.out.println("成功刪除資料");//------這樣會全刪
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -343,6 +399,30 @@ public class DatabaseOperations {
 		}
 	}
 
+	/*
+	 * 查道具欄
+	 */
+	public Account queryPropsData(Account account) {
+	    Account account2 = new Account();
+	    System.out.println("進來的user:" + account.getUsername() + "的資料");
+	    try {
+	        String query = "SELECT `道具ID` FROM `" + account.getUsername() + "的道具`";
+	        PreparedStatement pstmt = conn.prepareStatement(query);
+	        ResultSet rs = pstmt.executeQuery();
+
+	        // 處理查詢結果
+	        while (rs.next()) {
+	            account2.addProps(rs.getInt("道具ID"));
+	        }
+
+	        rs.close();
+	        pstmt.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return account2;
+	}
 	/*
 	 * 怪獸相冊
 	 */

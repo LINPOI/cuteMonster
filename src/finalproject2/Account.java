@@ -1,7 +1,11 @@
 package finalproject2;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedList;
+
+import Props.Props;
+import Props.PropsList;
 
 public class Account {//帳號 密碼 年份 怪獸id 怪獸
 	private String username="";
@@ -9,6 +13,11 @@ public class Account {//帳號 密碼 年份 怪獸id 怪獸
     private int year=0;
     private int selectMonster=1;
     private DatabaseOperations databaseOperations=new DatabaseOperations();
+    private ArrayList<Props> propslist=new ArrayList<Props>(); 
+    /*
+     *準備做儲藏庫
+     */
+    
     public Monster monster=new Monster(username);
     public String[] key() {
     	return new String[] {
@@ -67,7 +76,8 @@ public class Account {//帳號 密碼 年份 怪獸id 怪獸
      */
 
     public void saveAccount(Account account) {
-    	databaseOperations.updateData(account);   	
+    	databaseOperations.updateData(account);
+    	saveMonsterData(account);
     }
     /*
      * 讀取
@@ -79,6 +89,10 @@ public class Account {//帳號 密碼 年份 怪獸id 怪獸
     	System.out.println("怪獸"+account.monster.getName());
     	return account2Account;
     }
+    public void saveProps(Account account) {
+    	databaseOperations.insert_Props_Data(account);
+    }
+    
     public File imegeurl() {
 		return new File("src/newpicture/"+ getUsername()+monster.getName()+monster.getID()+"output.png");
 	}
@@ -89,5 +103,12 @@ public class Account {//帳號 密碼 年份 怪獸id 怪獸
 	public Monster readMonster(Account account) {
 		monster=databaseOperations.queryMonsterInfo(account);
 		return monster;
+	}
+	public void addProps(int id) {
+		PropsList propsList=new PropsList();
+		propslist.add(propsList.get(id));
+	}
+	public int getProps() {
+		return propslist.get(propslist.size()-1).getID();
 	}
 }

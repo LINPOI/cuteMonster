@@ -7,6 +7,10 @@ import javax.sound.midi.VoiceStatus;
 import finalproject2.Account;
 
 public class PropsList extends ArrayList<Props>{
+	/**
+	 * 道具庫
+	 */
+	private static final long serialVersionUID = 1L;
 	private Account account;
 
 	public PropsList() {
@@ -210,5 +214,6 @@ public class PropsList extends ArrayList<Props>{
 	public static void main(String[] args) {
 		PropsList propsList = new PropsList(new Account());
 		propsList.showPropsList();
+		
 	}
 }

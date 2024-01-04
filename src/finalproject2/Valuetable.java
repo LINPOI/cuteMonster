@@ -89,6 +89,7 @@ public class Valuetable extends JPanel implements Observer {
 	@Override
 	public void updataAccount(Account account) {
 		// TODO Auto-generated method stub
+		account.saveAccount(account);
 		//System.out.println("year"+account.getYear());
 		listValue.clear(); // 清除目前所有元素
 		for (int i = 0; i < account.monster.getValueName().length; i++) {

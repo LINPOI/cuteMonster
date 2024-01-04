@@ -35,7 +35,7 @@ public class GenetticAlgorithm<T> {
 		int numberOfGeneration = 1;
 		int i = 1;
 		while (numberOfGeneration <= generationSize) {
-			if (problem.alive() < 0) {
+			if (problem.alive_value() < 0) {
 				chromosomes[0].setFitnessValue(-1.0);
 				break;
 			}
@@ -199,6 +199,9 @@ public class GenetticAlgorithm<T> {
 	public  Chromosome<T> getlastChromosome(){
 		
 		return chromosomes[0];
+	}
+	public double getScore() {
+		return problem.alive_value();
 	}
 	public static void main(String[] args) {
 		GenetticAlgorithm<Props> gAlgorithm = new GenetticAlgorithm<Props>(new Account(), 1, 1);

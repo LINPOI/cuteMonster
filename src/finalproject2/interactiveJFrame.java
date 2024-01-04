@@ -16,10 +16,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.StringTokenizer;
 
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -28,6 +32,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -35,10 +40,11 @@ import javax.swing.event.ListSelectionListener;
 import GenetticAlgorithm.Chromosome;
 import GenetticAlgorithm.GenetticAlgorithm;
 import Props.Props;
+import Props.PropsList;
 
 public class InteractiveJFrame extends JPanel {
 	/**
-	 * 
+	 * 此頁負責LOGIN->互動部分操作
 	 */
 	private static final long serialVersionUID = 1L;
 	/*
@@ -69,17 +75,17 @@ public class InteractiveJFrame extends JPanel {
 	private int location;
 	private int difficulty;
 
-	//觀察者
+	// 觀察者
 	private Subject subject;
 	/*
 	 * 
 	 * 
 	 */
 
-	public InteractiveJFrame(Account account,Subject subject) {
+	public InteractiveJFrame(Account account, Subject subject) {
 		this.setLayout(new BorderLayout());
-		this.subject=subject;//觀察者
-		
+		this.subject = subject;// 觀察者
+
 		this.account = account;
 		jFrame.setLayout(new BorderLayout());
 		jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 按下關閉時的動作(關閉全部)
@@ -314,24 +320,24 @@ public class InteractiveJFrame extends JPanel {
 		// 按鈕大小
 		jButton.setPreferredSize(new Dimension(200, 100));
 		jButton.addActionListener(e -> {
-			
+
 			// TODO Auto-generated method stub
 			if (nowPanel == selectDifficultyJPanel) {
-				//System.out.println("點擊返回"+selectDifficultyJPanel);
-				nowPanel=pastPanel;
+				// System.out.println("點擊返回"+selectDifficultyJPanel);
+				nowPanel = pastPanel;
 				cardLayout.show(cardPanel, pastPanel);
 
 			} else if (nowPanel == InteractiveJPanel) {
-				//System.out.println("點擊返回"+InteractiveJPanel);
-				nowPanel=pastPanel;
+				// System.out.println("點擊返回"+InteractiveJPanel);
+				nowPanel = pastPanel;
 				jFrame.dispose();
 			} else {
-				//System.out.println("點擊返回"+nowPanel);
-				nowPanel=InteractiveJPanel;
+				// System.out.println("點擊返回"+nowPanel);
+				nowPanel = InteractiveJPanel;
 				cardLayout.show(cardPanel, InteractiveJPanel);
-				
+
 			}
-			
+
 		});
 		// 去除聚焦
 		jButton.setFocusPainted(false);
@@ -358,49 +364,112 @@ public class InteractiveJFrame extends JPanel {
 			return renderer;
 		}
 	}
+
 	public void start() {
 		/*
 		 * 使用演算法並拿到演算法的進行處理
 		 */
-		GenetticAlgorithm<Props> getPropsAlgorithm=new GenetticAlgorithm<Props>(account, location, difficulty);
+		GenetticAlgorithm<Props> getPropsAlgorithm = new GenetticAlgorithm<Props>(account, location, difficulty);
 		JDialog dialog = new JDialog(jFrame, "獲得道具", true); // 建立模態的 JDialog
-		Chromosome<Props> allProps= getPropsAlgorithm.getlastChromosome();
-		if(allProps.getFitnessValue()<0) {
+		Chromosome<Props> allProps = getPropsAlgorithm.getlastChromosome();
+		boolean Alive = allProps.getFitnessValue()>0?true:false;
+		Props props=allProps.getChromosome()[0];//得到的道具
+		double score=getPropsAlgorithm.getScore();
+		if (!Alive) {
 			System.err.println("已死亡");
 			account.monster.setHealthValue(0);
-			
+
 			subject.setAccount(account);
-		}else {
+		} else {
 			/*
 			 * 如果戰勝
 			 */
-			if(location!=6)account.addYear(1);
-			account.monster.addHungerValue(-5);
-			System.err.println(allProps.getChromosome()[0].getName());
-			System.out.println("getHungerValue"+account.monster.getHungerValue());
-			System.out.println("year"+account.getYear());
+			if (location != 6)
+				account.addYear(1);
+			account.monster.addHungerValue(-3);
+			account.monster.addThirstValue(-3);
+			account.monster.addMoodValue(3);
+			System.err.println(props.getName());
+			System.out.println("getHungerValue" + account.monster.getHungerValue());
+			// System.out.println("year" + account.getYear());
 			subject.setAccount(account);
 		}
-		//allProps.getChromosome()[x]
-		
-        JLabel label = new JLabel(getPropsAlgorithm.getString(), SwingConstants.CENTER);
-        JButton closeButton = new JButton("關閉");
+		// allProps.getChromosome()[x]
 
-        closeButton.addActionListener(e -> {
-            dialog.setVisible(false); // 關閉訊息框
-            jFrame.setVisible(false); // 關閉frame
-            dialog.dispose(); // 釋放資源
-            jFrame.dispose();
-        });
-        dialog.setLayout(new BorderLayout());
-  
-        dialog.add(label,BorderLayout.CENTER);
-        dialog.add(closeButton,BorderLayout.SOUTH);
-       
-        dialog.setSize(200, 150);
-        dialog.setLocationRelativeTo(jFrame); // 讓訊息框置中於 parent frame
-        dialog.setVisible(true); // 顯示訊息框
- 
+		JLabel label = new JLabel(getPropsAlgorithm.getString(), SwingConstants.CENTER);
+		JButton closeButton = new JButton("關閉");
+
+		closeButton.addActionListener(e -> {
+			dialog.setVisible(false); // 關閉訊息框
+			dialog.dispose(); // 釋放資源
+			if (!Alive) {
+				jFrame.setVisible(false); // 關閉frame
+				jFrame.dispose();
+			} else if (new Random().nextBoolean()) {// 50%
+				extraReward(score);
+			} else {
+				jFrame.setVisible(false); // 關閉frame
+				jFrame.dispose();
+			}
+
+		});
+		dialog.setLayout(new BorderLayout());
+
+		dialog.add(label, BorderLayout.CENTER);
+		dialog.add(closeButton, BorderLayout.SOUTH);
+
+		dialog.setSize(200, 150);
+		dialog.setLocationRelativeTo(jFrame); // 讓訊息框置中於 parent frame
+		dialog.setVisible(true); // 顯示訊息框
+
+	}
+
+	private void extraReward(double value) {
+		JDialog dialog = new JDialog(jFrame, "獲得額外道具", true); // 建立模態的 JDialog
+		dialog.setLayout(new BorderLayout());
+		
+		PropsList propsList = new PropsList();// 道具清單
+		
+		// DefaultListModel 是 JList 的標準資料模型
+		DefaultListModel<String> propsNewList = new DefaultListModel<String>();// 建立可獲得的道具清單
+		/*
+		 * 看道具庫該給那些東西
+		 */
+		for (int i = 0; i < propsList.size(); i++) {
+			double Propsvalue = propsList.get(i).getValue();
+			System.out.println(value);
+			System.out.println(Propsvalue);
+			if (value >= Propsvalue) {// 留下價值比獲得積分小的
+				propsNewList.addElement(propsList.get(i).getName());
+			} else {
+				break;
+			}
+		}
+		
+		JList<String> jList = new JList<String>(propsNewList);
+		
+		JScrollPane scrollPane = new JScrollPane(jList); // 將 JList 放入 JScrollPane
+		
+		
+		
+		JButton closeButton = new JButton("選擇");
+
+		closeButton.addActionListener(e -> {
+			dialog.setVisible(false); // 關閉訊息框
+			dialog.dispose(); // 釋放資源
+			int selectedValue = jList.getSelectedIndex();
+			System.out.println(selectedValue);
+			propsList.get(selectedValue);
+				jFrame.setVisible(false); // 關閉frame
+				jFrame.dispose();
+		});
+		
+		
+		dialog.add(scrollPane, BorderLayout.CENTER);// 將 JScrollPane 添加到 JDialog
+		dialog.add(closeButton, BorderLayout.SOUTH); 
+		dialog.setSize(200, 150);//設置大小
+		dialog.setLocationRelativeTo(jFrame); // 讓訊息框置中於 parent frame
+	    dialog.setVisible(true); // 顯示 JDialog
 	}
 }
 //計畫三個panel切換，panel.setOpaque(false); // 透明背景
