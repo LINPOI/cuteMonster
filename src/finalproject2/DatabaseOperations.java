@@ -277,8 +277,8 @@ public class DatabaseOperations {
 	        }
 	        rs.close();
 	        pstmt.close();
-	        System.out.println(account.getUsername()+"/"+account.getPassword()+"/"+account.getYear()+"/"+account.getselectMonster());
-		    System.out.println(account2.getUsername()+"/"+account2.getPassword()+"/"+account2.getYear()+"/"+account2.getselectMonster());
+//	        System.out.println(account.getUsername()+"/"+account.getPassword()+"/"+account.getYear()+"/"+account.getselectMonster());
+//		    System.out.println(account2.getUsername()+"/"+account2.getPassword()+"/"+account2.getYear()+"/"+account2.getselectMonster());
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	        // 執行其他錯誤處理或者拋出自定義的例外

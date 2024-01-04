@@ -368,9 +368,18 @@ public class InteractiveJFrame extends JPanel {
 		if(allProps.getFitnessValue()<0) {
 			System.err.println("已死亡");
 			account.monster.setHealthValue(0);
+			
 			subject.setAccount(account);
 		}else {
+			/*
+			 * 如果戰勝
+			 */
+			if(location!=6)account.addYear(1);
+			account.monster.addHungerValue(-5);
 			System.err.println(allProps.getChromosome()[0].getName());
+			System.out.println("getHungerValue"+account.monster.getHungerValue());
+			System.out.println("year"+account.getYear());
+			subject.setAccount(account);
 		}
 		//allProps.getChromosome()[x]
 		

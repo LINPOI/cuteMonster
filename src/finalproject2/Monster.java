@@ -22,12 +22,11 @@ public class Monster {
 	private int ice = 0;
 	private int poison = 0;
 	private int illusion = 0;
-	private int[] value = new int[] { age, attack, hp, intelligence, fire, ice, poison, illusion };// 數值
+	//private int[] value = new int[] { age, attack, hp, intelligence, fire, ice, poison, illusion };// 數值
 	private int hungerValue = 50;
 	private int thirstValue = 50;
 	private int moodValue = 50;
 	private int healthValue = 50;
-	private int[] slimestates = new int[] { hungerValue, thirstValue, moodValue, healthValue };// 數值
 	private boolean wing = false;// 有無翅膀
 	
 	public Monster(String username) {
@@ -66,6 +65,7 @@ public class Monster {
 	}
 
 	public void addAge(int age) {
+		this.age+=age;
 	}
 
 	/*
@@ -181,16 +181,7 @@ public class Monster {
 	/*
 	 * 數值
 	 */
-	public void setValue(LinkedList<String> linkedList) {
-		if (linkedList.size() != 0) {
-			name = linkedList.get(1);
-			for (int i = 2; i < linkedList.size() - 1; i++) {
-				value[i - 2] = Integer.parseInt(linkedList.get(i));
-				// System.out.println(value[i-2]);
-			}
-			wing = Boolean.parseBoolean(linkedList.get(10));
-		}
-	}
+	
 
 	public void addValue(int[] ints) {
 		attack += ints[0];
@@ -211,10 +202,12 @@ public class Monster {
 		illusion += intt;
 	}
 	public int[] getValue() {
+		int[] value=new int[] { age, attack, hp, intelligence, fire, ice, poison, illusion };// 數值
 		return value;
 	}
 
 	public int getValue(int i) {
+		int[] value=new int[] { age, attack, hp, intelligence, fire, ice, poison, illusion };// 數值
 		return value[i];
 	}
 
@@ -282,14 +275,18 @@ public class Monster {
 	}
 
 	public void setSlimeState(int[] value) {
-		slimestates = value;
+		hungerValue = value[0];
+		thirstValue= value[1];
+		moodValue= value[2];
+		healthValue= value[3];
 	}
 
 	public int[] getStates() {
-		return slimestates;
+		return new int[] { hungerValue, thirstValue, moodValue, healthValue };// 數值
 	}
 
 	public int getStates(int i) {
+		int[] slimestates=new int[] { hungerValue, thirstValue, moodValue, healthValue};
 		return slimestates[i];
 	}
 	

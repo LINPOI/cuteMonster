@@ -44,7 +44,10 @@ public class Account {//帳號 密碼 年份 怪獸id 怪獸
     	this.year = year;
  
     }
-    
+    public void addYear( int year) {
+    	this.year += year;
+    	monster.addAge(year);
+    }
     public int getYear() {
  
         return year;

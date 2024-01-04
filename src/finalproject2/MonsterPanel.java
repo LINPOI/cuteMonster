@@ -93,7 +93,7 @@ public class MonsterPanel extends JPanel implements Observer {
 			JLabel jLabelNORTH = new JLabel(" ");
 			jLabelNORTH.setPreferredSize(new Dimension(100, 200)); // 擠壓空間
 			this.add(jLabelNORTH, BorderLayout.NORTH);
-			this.add(new JLabel("                                                                "), BorderLayout.EAST);// 擠壓空間
+			this.add(new JLabel("                                      "), BorderLayout.EAST);// 擠壓空間
 			this.add(label, BorderLayout.CENTER);
 			this.setOpaque(false); // 透明背景
 			label.addMouseListener(new MouseAdapter() {
