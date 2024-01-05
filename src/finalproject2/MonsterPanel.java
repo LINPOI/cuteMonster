@@ -2,6 +2,8 @@ package finalproject2;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.text.AbstractDocument.BranchElement;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.BreakIterator;
 
 public class MonsterPanel extends JPanel implements Observer {
 	/**
@@ -139,9 +142,10 @@ public class MonsterPanel extends JPanel implements Observer {
 		g.dispose();
 		return resizedImage;
 	}
-
+	private boolean restart=false;
 	@Override
 	public void updataAccount(Account account) {
+		restart=!restart;//處理重複出現按鈕bug
 		// TODO Auto-generated method stub
 		File output = account.imegeurl();
 		try {
@@ -158,6 +162,16 @@ public class MonsterPanel extends JPanel implements Observer {
 			/*
 			 * 如果死亡
 			 */
+			if(restart) {
+				remove(newMonsterButton);
+				ImageIcon icon = new ImageIcon(resizedImage);
+				label.setIcon(icon);
+				add(label);
+				revalidate();
+				repaint();
+				break;
+			}
+			System.out.print(account.monster.getStates(i)+"\t");
 			if (account.monster.getStates(i) <= 0) {
 				databaseOperations.updateMonsterData(account);// 更新怪物狀態:死亡
 
@@ -208,6 +222,9 @@ public class MonsterPanel extends JPanel implements Observer {
 				ImageIcon icon = new ImageIcon(resizedImage);
 				label.setIcon(icon);
 				add(label);
+				revalidate();
+				repaint();
+				break;
 			}
 		}
 

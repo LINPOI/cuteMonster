@@ -54,7 +54,7 @@ public class InteractiveJFrame extends JPanel {
 	private CardLayout cardLayout;
 	private String nowPanel;
 	private String pastPanel;
-	private JFrame jFrame = new JFrame();
+	private JFrame jFrame = new JFrame("探索");
 	public static final String InteractiveJPanel = "InteractiveJPanel";
 	public static final String trainpaJPanel = "trainpaJPanel";
 	public static final String exploreJPanel = "exploreJPanel";
@@ -346,24 +346,7 @@ public class InteractiveJFrame extends JPanel {
 		return jPanel;
 	}
 
-	static class MyListCellRenderer extends DefaultListCellRenderer {
-		/**
-		 * 列表字體
-		 */
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
-				boolean cellHasFocus) {
-			Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			if (renderer instanceof JLabel) {
-				JLabel label = (JLabel) renderer;
-				// Modify font size here (change "14" to your desired size)
-				label.setFont(new Font(label.getFont().getName(), Font.PLAIN, 30));
-			}
-			return renderer;
-		}
-	}
+	
 
 	public void start() {
 		/*
@@ -374,11 +357,11 @@ public class InteractiveJFrame extends JPanel {
 		Chromosome<Props> allProps = getPropsAlgorithm.getlastChromosome();
 		boolean Alive = allProps.getFitnessValue()>0?true:false;
 		Props props=allProps.getChromosome()[0];//得到的道具
+		String propsName=Alive?props.getName():"已死亡";
 		double score=getPropsAlgorithm.getScore();
 		if (!Alive) {
 			System.err.println("已死亡");
 			account.monster.setHealthValue(0);
-
 			subject.setAccount(account);
 		} else {
 			/*
@@ -386,17 +369,18 @@ public class InteractiveJFrame extends JPanel {
 			 */
 			if (location != 6)
 				account.addYear(1);
+			account.addMoney(difficulty);
 			account.monster.addHungerValue(-3);
 			account.monster.addThirstValue(-3);
 			account.monster.addMoodValue(3);
-			System.err.println(props.getName());
+			System.err.println(propsName);
 			System.out.println("getHungerValue" + account.monster.getHungerValue());
 			// System.out.println("year" + account.getYear());
 			account.addProps(account, props.getID());
 		}
 		// allProps.getChromosome()[x]
 		
-		JLabel label = new JLabel(props.getName(), SwingConstants.CENTER);
+		JLabel label = new JLabel(propsName, SwingConstants.CENTER);
 		JButton closeButton = new JButton("關閉");
 
 		closeButton.addActionListener(e -> {
@@ -460,8 +444,8 @@ public class InteractiveJFrame extends JPanel {
 			int selectedValue = jList.getSelectedIndex();
 			selectedValue= selectedValue<0?0:selectedValue;
 			account.addProps(account, selectedValue);//新增道具
-			account.checkProps_name();
-			System.out.println(selectedValue);
+			//account.checkProps_name();
+			//System.out.println(selectedValue);
 			propsList.get(selectedValue);
 				jFrame.setVisible(false); // 關閉frame
 				jFrame.dispose();

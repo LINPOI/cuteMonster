@@ -14,6 +14,7 @@ public class Account {// 帳號 密碼 年份 怪獸id 怪獸
 	private String password = "";
 	private int year = 0;
 	private int selectMonster = 1;
+	private int money=0;
 	private DatabaseOperations databaseOperations = new DatabaseOperations();
 	private ArrayList<Props> propslist = new ArrayList<Props>();
 	/*
@@ -66,7 +67,7 @@ public class Account {// 帳號 密碼 年份 怪獸id 怪獸
 
 		return year;
 	}
-
+	
 	public void setselectMonster(int selectMonster) {
 		this.selectMonster = selectMonster;
 	}
@@ -75,6 +76,14 @@ public class Account {// 帳號 密碼 年份 怪獸id 怪獸
 		return selectMonster;
 	}
 
+	public void addMoney(int money) {
+		this.money += money;
+
+	}
+
+	public int getMoney() {
+		return money;
+	}
 	/*
 	 * 儲存
 	 */
@@ -88,11 +97,12 @@ public class Account {// 帳號 密碼 年份 怪獸id 怪獸
 	 * 讀取
 	 */
 	public Account readAccount(Account account) {
-		Account account2Account = new Account();
-		account2Account = databaseOperations.queryData(account);
-		account2Account.monster = readMonster(account2Account);
+		Account account2 = new Account();
+		account2 = databaseOperations.queryData(account);
+		account2.monster = readMonster(account2);
+		account2.propslist=readProps(account2);
 		System.out.println("怪獸" + account.monster.getName());
-		return account2Account;
+		return account2;
 	}
 
 	public void saveProps(Account account) {
@@ -117,7 +127,10 @@ public class Account {// 帳號 密碼 年份 怪獸id 怪獸
 		propslist.add(propsList.get(id));
 		databaseOperations.insert_Props_Data(account);
 	}
-
+	public ArrayList<Props> readProps(Account account) {
+		 return databaseOperations.queryPropsData(account);
+	}
+	
 	public int getProps_id() {
 		return propslist.get(propslist.size() - 1).getID();
 	}
@@ -131,6 +144,14 @@ public class Account {// 帳號 密碼 年份 怪獸id 怪獸
 	}
 	public String getProps_name(int i) {
 		return propslist.get(i).getName();
+	}
+	
+	public ArrayList<String> getProps_name() {
+		ArrayList<String> arraylist=new ArrayList<String>();
+		for(Props props:propslist) {
+			arraylist.add(props.getName());
+		}
+		return arraylist;
 	}
 	
 	public ArrayList<Props> getProps_ArrayList() {

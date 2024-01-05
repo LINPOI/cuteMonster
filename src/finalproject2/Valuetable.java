@@ -74,7 +74,7 @@ public class Valuetable extends JPanel implements Observer {
 					if (index != -1) { // 確認是否有選取項目
 						//System.out.println("所選擇的是: " + listValue[index]); // 輸出所選項目的內容
 						label.setText(account.monster.getValueName(index) + ":" + account.monster.getInf(index));
-
+						
 					}
 				}
 			}

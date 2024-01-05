@@ -25,12 +25,13 @@ public class DatabaseOperations {
 	 */
 	public boolean insert_Account_Data(Account account) {
 		try {
-			String query = "INSERT INTO account (`帳號`, `密碼`,`養育年份`,`選定怪獸`) VALUES (?, ?, ?,?)";
+			String query = "INSERT INTO account (`帳號`, `密碼`,`養育年份`,`選定怪獸`,`錢`) VALUES (?, ?, ?, ?, ?)";
 			PreparedStatement pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, account.getUsername());
 			pstmt.setString(2, account.getPassword());
 			pstmt.setInt(3, account.getYear()); 
 			pstmt.setInt(4, account.getselectMonster()); 
+			pstmt.setInt(5, account.getselectMonster());
 			pstmt.executeUpdate();
 			System.out.println("成功新增資料");
 			return true;
@@ -121,6 +122,7 @@ public class DatabaseOperations {
 					+ "`密碼` CHAR(50) NULL DEFAULT NULL COLLATE 'latin1_swedish_ci', "
 					+ "`養育年份` INT(11) NULL DEFAULT '0',"
 					+"`選定怪獸` INT(11) NULL DEFAULT '0',"
+					+"`錢`INT(11) NULL DEFAULT '0',"
 					+ "PRIMARY KEY (`帳號`) USING BTREE"
 					+ ") ENGINE=InnoDB;";
 
@@ -252,16 +254,17 @@ public class DatabaseOperations {
 	}
 
 	/*
-	 * 更新
+	 * 更新人物
 	 */
 
 	public boolean updateData(Account account) {
 		try {
-			String query = "UPDATE account SET  `養育年份` = ?, `選定怪獸`=? WHERE `帳號` = ?";
+			String query = "UPDATE account SET  `養育年份` = ?, `選定怪獸`=?,`錢`=? WHERE `帳號` = ?";
 			PreparedStatement pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, account.getYear());
 			pstmt.setInt(2, account.getselectMonster());
-			pstmt.setString(3, account.getUsername());
+			pstmt.setInt(3, account.getMoney());
+			pstmt.setString(4, account.getUsername());
 			pstmt.executeUpdate();
 			System.out.println("成功更新資料");
 			return true;
@@ -341,6 +344,7 @@ public class DatabaseOperations {
 	        	account2.setPassword(rs.getString("密碼"));
 	        	account2.setYear(rs.getInt("養育年份"));
 	        	account2.setselectMonster(rs.getInt("選定怪獸"));
+	        	account2.addMoney(rs.getInt("錢"));
 	        }
 	        rs.close();
 	        pstmt.close();
@@ -419,8 +423,8 @@ public class DatabaseOperations {
 	/*
 	 * 查道具欄
 	 */
-	public LinkedList<Props> queryPropsData(Account account) {
-	    LinkedList<Props> linkedList=new LinkedList<Props>();
+	public ArrayList<Props> queryPropsData(Account account) {
+	    ArrayList<Props> arrayList=new ArrayList<Props>();
 	    System.out.println("進來道具欄的user:" + account.getUsername() + "的資料");
 	    try {
 	        String query = "SELECT `道具ID` FROM `" + account.getUsername() + "的道具`ORDER BY `道具ID` ASC";
@@ -429,7 +433,7 @@ public class DatabaseOperations {
 
 	        // 處理查詢結果
 	        while (rs.next()) {
-	        	linkedList.add(new PropsList().get(rs.getInt("道具ID")));
+	        	arrayList.add(new PropsList().get(rs.getInt("道具ID")));
 	        }
 
 	        rs.close();
@@ -438,7 +442,7 @@ public class DatabaseOperations {
 	        e.printStackTrace();
 	    }
 	    
-	    return linkedList;
+	    return arrayList;
 	}
 	/*
 	 * 怪獸相冊

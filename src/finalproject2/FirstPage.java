@@ -55,6 +55,7 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 	}
 
 	public JPanel open() {
+		//TimeControl timeControl=new TimeControl(account,subject);
 		JPanel jPanel = new JPanel();
 		account = databaseOperations.queryData(account);
 		imageSrc = new String[] { "src/PICTURE/gamerbutton.png", "src/PICTURE/slimebutton.png",
@@ -155,7 +156,8 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				System.out.println("點擊史萊姆");
-//餵食沐浴
+				//餵食沐浴
+				SlimeLife slimeLife=new SlimeLife(account,subject);
 			};
 		};
 		interactive = new ActionListener() {
