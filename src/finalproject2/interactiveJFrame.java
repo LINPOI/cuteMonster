@@ -392,11 +392,11 @@ public class InteractiveJFrame extends JPanel {
 			System.err.println(props.getName());
 			System.out.println("getHungerValue" + account.monster.getHungerValue());
 			// System.out.println("year" + account.getYear());
-			subject.setAccount(account);
+			account.addProps(account, props.getID());
 		}
 		// allProps.getChromosome()[x]
-
-		JLabel label = new JLabel(getPropsAlgorithm.getString(), SwingConstants.CENTER);
+		
+		JLabel label = new JLabel(props.getName(), SwingConstants.CENTER);
 		JButton closeButton = new JButton("關閉");
 
 		closeButton.addActionListener(e -> {
@@ -411,7 +411,7 @@ public class InteractiveJFrame extends JPanel {
 				jFrame.setVisible(false); // 關閉frame
 				jFrame.dispose();
 			}
-
+			subject.setAccount(account);
 		});
 		dialog.setLayout(new BorderLayout());
 
@@ -458,6 +458,9 @@ public class InteractiveJFrame extends JPanel {
 			dialog.setVisible(false); // 關閉訊息框
 			dialog.dispose(); // 釋放資源
 			int selectedValue = jList.getSelectedIndex();
+			selectedValue= selectedValue<0?0:selectedValue;
+			account.addProps(account, selectedValue);//新增道具
+			account.checkProps_name();
 			System.out.println(selectedValue);
 			propsList.get(selectedValue);
 				jFrame.setVisible(false); // 關閉frame

@@ -3,6 +3,9 @@ package finalproject2;
 import java.sql.*;
 import java.util.*;
 
+import Props.Props;
+import Props.PropsList;
+
 public class DatabaseOperations {
 	List<Account> accountList = new ArrayList<>();
 	String userName = "";
@@ -95,7 +98,7 @@ public class DatabaseOperations {
 			String query = "INSERT INTO `"+account.getUsername()+"的道具` (`玩家`, `道具ID`) VALUES (?, ?)";
 			PreparedStatement pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, account.getUsername());
-			pstmt.setInt(2, account.getProps()); 
+			pstmt.setInt(2, account.getProps_id()); 
 			pstmt.executeUpdate();
 			System.out.println("成功新增道具資料");
 			return true;
@@ -153,8 +156,9 @@ public class DatabaseOperations {
 
 			// 執行 SQL 命令以建立資料表
 			stmt.executeUpdate(createTableSQL);
-			System.out.println("成功新增資料表");
+			System.out.println("成功新增怪獸資料表");
 			stmt.close();
+			create_Props_Table(account);//順便新增道具欄
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -171,6 +175,7 @@ public class DatabaseOperations {
 			// SQL 命令 - 建立寵物資料表
 			String createTableSQL = "CREATE TABLE  IF NOT EXISTS `" + account.getUsername() + "的道具` ("
 					+ "`玩家` CHAR(50) NOT NULL DEFAULT '0' COLLATE 'latin1_swedish_ci', "
+					+ "`編號` INT AUTO_INCREMENT PRIMARY KEY, "
 					+ "	`道具ID` INT(11) NULL DEFAULT NULL," 
 					+ "FOREIGN KEY (`玩家`) REFERENCES `account`(`帳號`) ON DELETE CASCADE ON UPDATE CASCADE"
 					+ ") ENGINE=InnoDB COLLATE 'latin1_swedish_ci';";
@@ -229,17 +234,23 @@ public class DatabaseOperations {
 	/*
 	 * 刪除道具
 	 */
-	public void delete_Proprs_Data(Account account) {
-		try {
-			String query = "DELETE FROM `"+account.getUsername()+"的道具`WHERE `道具ID`=?";
-			PreparedStatement pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1, account.getProps());
-			pstmt.executeUpdate();
-			System.out.println("成功刪除資料");//------這樣會全刪
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public boolean deleteFirstWithSmallerNumber(Account account) {
+	    try {
+	        String query = "DELETE FROM `" + account.getUsername() + "的道具` WHERE `道具ID` = ? AND `編號` = (SELECT MIN(`編號`) FROM `" + account.getUsername() + "的道具` WHERE `道具ID` = ?)";
+	        PreparedStatement pstmt = conn.prepareStatement(query);
+	        pstmt.setInt(1, account.getProps_id());
+	        pstmt.setInt(2, account.getProps_id());
+
+	        int rowsAffected = pstmt.executeUpdate();
+	        pstmt.close();
+
+	        return rowsAffected > 0;
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return false;
+	    }
 	}
+
 	/*
 	 * 更新
 	 */
@@ -265,7 +276,7 @@ public class DatabaseOperations {
 	 */
 	public boolean updateMonsterData(Account account) {
 		 try {
-		        String query = "UPDATE `lin的怪獸` SET " +
+		        String query = "UPDATE `"+account.getUsername()+"的怪獸` SET " +
 		        		"`怪獸名稱` = ? ,"+
 		                "`怪獸年齡` = ?, " +
 		                "`攻擊力` = ?, " +
@@ -358,43 +369,49 @@ public class DatabaseOperations {
 
 			// 執行 SQL 命令以查詢怪獸資訊
 			ResultSet resultSet = stmt.executeQuery(queryMonsterSQL);
-
-			// 如果查詢結果不為空，則列印怪獸資訊
-			while (resultSet.next()) {
-				int id = resultSet.getInt("怪獸ID");
-				String name = resultSet.getString("怪獸名稱");
-				int age = resultSet.getInt("怪獸年齡");
-				int attack = resultSet.getInt("攻擊力");
-				int hp = resultSet.getInt("生命力");
-				int intelligence = resultSet.getInt("智力");
-				int fire = resultSet.getInt("火系");
-				int ice = resultSet.getInt("冰系");
-				int poison = resultSet.getInt("毒系");
-				int phantom = resultSet.getInt("幻影系");
-				Boolean wing = resultSet.getBoolean("翅膀");
-				monster.setHungerValue(resultSet.getInt("飢餓度")); 
-				monster.setThirstValue(resultSet.getInt("飢渴度")); 
-				monster.setMoodValue(resultSet.getInt("心情指數")); 
-				monster.setHealthValue(resultSet.getInt("健康度")); 
-				
-				System.out.println("資料庫讀單一怪獸:怪獸名稱: " + name);
-				monster.setID(id);
-				monster.setName(name);
-				monster.addAge(age);
-				monster.addAttack(attack);
-				monster.addHP(hp);
-				monster.addIntelligence(intelligence);
-				monster.addFire(fire);
-				monster.addIce(ice);
-				monster.addPoison(poison);
-				monster.addIllusion(phantom);
-				monster.setWing(wing);
+			if(!resultSet.next()) {
+				return null;
+			}{
+				// 如果查詢結果不為空，則列印怪獸資訊
+				 do{
+					int id = resultSet.getInt("怪獸ID");
+					String name = resultSet.getString("怪獸名稱");
+					int age = resultSet.getInt("怪獸年齡");
+					int attack = resultSet.getInt("攻擊力");
+					int hp = resultSet.getInt("生命力");
+					int intelligence = resultSet.getInt("智力");
+					int fire = resultSet.getInt("火系");
+					int ice = resultSet.getInt("冰系");
+					int poison = resultSet.getInt("毒系");
+					int phantom = resultSet.getInt("幻影系");
+					Boolean wing = resultSet.getBoolean("翅膀");
+					monster.setHungerValue(resultSet.getInt("飢餓度")); 
+					monster.setThirstValue(resultSet.getInt("飢渴度")); 
+					monster.setMoodValue(resultSet.getInt("心情指數")); 
+					monster.setHealthValue(resultSet.getInt("健康度")); 
+					
+					System.out.println("資料庫讀單一怪獸:怪獸名稱: " + name);
+					monster.setID(id);
+					monster.setName(name);
+					monster.addAge(age);
+					monster.addAttack(attack);
+					monster.addHP(hp);
+					monster.addIntelligence(intelligence);
+					monster.addFire(fire);
+					monster.addIce(ice);
+					monster.addPoison(poison);
+					monster.addIllusion(phantom);
+					monster.setWing(wing);
+				}while (resultSet.next());
 			}
-
+			
+			
 			stmt.close();
 			return monster;
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("怪獸資料還沒有值");
 			return null;
 		}
 	}
@@ -402,17 +419,17 @@ public class DatabaseOperations {
 	/*
 	 * 查道具欄
 	 */
-	public Account queryPropsData(Account account) {
-	    Account account2 = new Account();
-	    System.out.println("進來的user:" + account.getUsername() + "的資料");
+	public LinkedList<Props> queryPropsData(Account account) {
+	    LinkedList<Props> linkedList=new LinkedList<Props>();
+	    System.out.println("進來道具欄的user:" + account.getUsername() + "的資料");
 	    try {
-	        String query = "SELECT `道具ID` FROM `" + account.getUsername() + "的道具`";
+	        String query = "SELECT `道具ID` FROM `" + account.getUsername() + "的道具`ORDER BY `道具ID` ASC";
 	        PreparedStatement pstmt = conn.prepareStatement(query);
 	        ResultSet rs = pstmt.executeQuery();
 
 	        // 處理查詢結果
 	        while (rs.next()) {
-	            account2.addProps(rs.getInt("道具ID"));
+	        	linkedList.add(new PropsList().get(rs.getInt("道具ID")));
 	        }
 
 	        rs.close();
@@ -421,7 +438,7 @@ public class DatabaseOperations {
 	        e.printStackTrace();
 	    }
 	    
-	    return account2;
+	    return linkedList;
 	}
 	/*
 	 * 怪獸相冊

@@ -27,6 +27,7 @@ public class Props {
 		this.name = name;
 		this.level = level;
 		this.value = CalculateValue(id,level, location, value);
+		this.effect=effect;
 	}
 
 	public Props(int id, String name, int level, double value, ItemEffect effect) {// 特殊道具
@@ -34,6 +35,7 @@ public class Props {
 		this.name = name;
 		this.level = level;
 		this.value = CalculateValue(id,level, location, value);
+		this.effect=effect;
 	}
 
 	public Props(int id, String name, int level, int location, ItemEffect effect) {// 特殊道具
@@ -42,6 +44,7 @@ public class Props {
 		this.level = level;
 		this.value = CalculateValue(id,level, location, value);
 		this.location = location;
+		this.effect=effect;
 	}
 
 	public Props(int id, String name, int level, int location, double value, ItemEffect effect) {// 特殊道具
@@ -50,6 +53,7 @@ public class Props {
 		this.level = level;
 		this.value = CalculateValue(id,level, location, value);
 		this.location = location;
+		this.effect=effect;
 	}
 
 	/*

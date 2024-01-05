@@ -232,19 +232,20 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 		if (read == 1) {
 			System.out.println("登入成功");
 			if (databaseOperations.queryMonsterInfo(account)==null) {// 第一次登入
+				System.out.println("________________________這裡有用到過?");
 				cardLayout.show(cardPanel, "first");
 				String userInput = JOptionPane.showInputDialog(null, "請輸入怪物名字:");
 				account.monster.setName(userInput);
 				account.saveAccount(account);
 				subject.setAccount(account); // 設置新數值
 				databaseOperations.create_Monster_Table(account);
-				databaseOperations.insert_Monster_Data(account);// ?這裡成功了?
-
+				databaseOperations.insert_Monster_Data(account);// 新增怪獸資料
 			} else {// 第n次登入
 				cardLayout.show(cardPanel, "first");
 				account= account.readAccount(account);
 				account.monster= databaseOperations.queryMonsterInfo(account);
 				subject.setAccount(account); // 設置新數值
+				System.out.println("第n次登入");
 			}
 
 		} else if (read == 2) {
@@ -266,6 +267,7 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 				account.saveAccount(account);
 				subject.setAccount(account); // 設置新數值
 				databaseOperations.insert_Monster_Data(account);// 新增怪獸資料
+				System.out.println("第1次登入");
 			} else {
 				JOptionPane.showMessageDialog(jPanel, "帳號不存在");
 
