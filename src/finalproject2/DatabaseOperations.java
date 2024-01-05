@@ -31,7 +31,7 @@ public class DatabaseOperations {
 			pstmt.setString(2, account.getPassword());
 			pstmt.setInt(3, account.getYear()); 
 			pstmt.setInt(4, account.getselectMonster()); 
-			pstmt.setInt(5, account.getselectMonster());
+			pstmt.setDouble(5, account.getMoney());
 			pstmt.executeUpdate();
 			System.out.println("成功新增資料");
 			return true;
@@ -122,7 +122,7 @@ public class DatabaseOperations {
 					+ "`密碼` CHAR(50) NULL DEFAULT NULL COLLATE 'latin1_swedish_ci', "
 					+ "`養育年份` INT(11) NULL DEFAULT '0',"
 					+"`選定怪獸` INT(11) NULL DEFAULT '0',"
-					+"`錢`INT(11) NULL DEFAULT '0',"
+					+"`錢`DOUBLE NULL DEFAULT '0',"
 					+ "PRIMARY KEY (`帳號`) USING BTREE"
 					+ ") ENGINE=InnoDB;";
 
@@ -236,12 +236,12 @@ public class DatabaseOperations {
 	/*
 	 * 刪除道具
 	 */
-	public boolean deleteFirstWithSmallerNumber(Account account) {
+	public boolean delete_Props(Account account,int i) {
 	    try {
 	        String query = "DELETE FROM `" + account.getUsername() + "的道具` WHERE `道具ID` = ? AND `編號` = (SELECT MIN(`編號`) FROM `" + account.getUsername() + "的道具` WHERE `道具ID` = ?)";
 	        PreparedStatement pstmt = conn.prepareStatement(query);
-	        pstmt.setInt(1, account.getProps_id());
-	        pstmt.setInt(2, account.getProps_id());
+	        pstmt.setInt(1, account.getProps_id(i));
+	        pstmt.setInt(2, account.getProps_id(i));
 
 	        int rowsAffected = pstmt.executeUpdate();
 	        pstmt.close();
@@ -263,7 +263,7 @@ public class DatabaseOperations {
 			PreparedStatement pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, account.getYear());
 			pstmt.setInt(2, account.getselectMonster());
-			pstmt.setInt(3, account.getMoney());
+			pstmt.setDouble(3, account.getMoney());
 			pstmt.setString(4, account.getUsername());
 			pstmt.executeUpdate();
 			System.out.println("成功更新資料");
@@ -344,7 +344,7 @@ public class DatabaseOperations {
 	        	account2.setPassword(rs.getString("密碼"));
 	        	account2.setYear(rs.getInt("養育年份"));
 	        	account2.setselectMonster(rs.getInt("選定怪獸"));
-	        	account2.addMoney(rs.getInt("錢"));
+	        	account2.addMoney(rs.getDouble("錢"));
 	        }
 	        rs.close();
 	        pstmt.close();

@@ -232,9 +232,11 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 		if (read == 1) {
 			System.out.println("登入成功");
 			if (databaseOperations.queryMonsterInfo(account)==null) {// 第一次登入
-				System.out.println("________________________這裡有用到過?");
 				cardLayout.show(cardPanel, "first");
 				String userInput = JOptionPane.showInputDialog(null, "請輸入怪物名字:");
+				while(userInput==null) {
+					userInput = JOptionPane.showInputDialog(null, "怪獸名稱不可為空:");
+				}
 				account.monster.setName(userInput);
 				account.saveAccount(account);
 				subject.setAccount(account); // 設置新數值

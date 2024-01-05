@@ -14,7 +14,7 @@ public class Account {// 帳號 密碼 年份 怪獸id 怪獸
 	private String password = "";
 	private int year = 0;
 	private int selectMonster = 1;
-	private int money=0;
+	private double money=0.0;
 	private DatabaseOperations databaseOperations = new DatabaseOperations();
 	private ArrayList<Props> propslist = new ArrayList<Props>();
 	/*
@@ -76,12 +76,12 @@ public class Account {// 帳號 密碼 年份 怪獸id 怪獸
 		return selectMonster;
 	}
 
-	public void addMoney(int money) {
+	public void addMoney(double money) {
 		this.money += money;
 
 	}
 
-	public int getMoney() {
+	public double getMoney() {
 		return money;
 	}
 	/*
@@ -157,13 +157,14 @@ public class Account {// 帳號 密碼 年份 怪獸id 怪獸
 	public ArrayList<Props> getProps_ArrayList() {
 		return propslist;
 	}
-	public void useProps(Account account, int selectPropsId) {
+	public void useProps(Account account, int selectPropsId,int value) {
 		/*
 		 * 使用的時候取得要使用的道具及刪除該道具
 		 */
 		PropsList propsList = new PropsList(account);
 		for (int i = 0; i < propslist.size(); i++) {
 			if (propslist.get(i).getID() == selectPropsId) {
+				databaseOperations.delete_Props(account, value);//毒資料庫值山資料
 				propslist.remove(i);//刪除道具
 				propsList.get(selectPropsId).use();//使用道具
 				saveAccount(account);//儲存新數值

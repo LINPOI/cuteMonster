@@ -174,7 +174,7 @@ public class MonsterPanel extends JPanel implements Observer {
 			System.out.print(account.monster.getStates(i)+"\t");
 			if (account.monster.getStates(i) <= 0) {
 				databaseOperations.updateMonsterData(account);// 更新怪物狀態:死亡
-
+				 JOptionPane.showMessageDialog(null, "狀態為零已死亡", "死亡", JOptionPane.INFORMATION_MESSAGE);
 				remove(label);
 				JPanel newMonsterPanel = new JPanel();
 				newMonsterPanel.setLayout(null); // 使用 null 佈局

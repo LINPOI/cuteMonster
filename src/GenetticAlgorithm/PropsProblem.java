@@ -19,8 +19,9 @@ import finalproject2.Monster;
 public class PropsProblem implements Problem<Props> {
 	private Random random = null;
 	private ArrayList<Props> propsLists = new PropsList();
-	private Account account;// 刷新帳號
-	private Account oldaccount;// 不更新帳號
+	private int hp=0;
+	private int attack=0;
+	private Account account;// 不更新帳號
 	private int location;// 場地
 	private double immunity;// 屬性抗性
 	private int difficulty = 0;// 關卡難度
@@ -30,8 +31,9 @@ public class PropsProblem implements Problem<Props> {
 	private double totalValue;
 	public PropsProblem(Random random, Account account, int location, int difficulty) {
 		this.random = random;
+		this.hp = account.monster.getHP();
+		this.attack=account.monster.getAttack();
 		this.account = account;
-		this.oldaccount = account;
 		this.location = location;
 		this.difficulty = difficulty;
 		immunity = account.monster.getIntelligence() * 0.05;
@@ -51,7 +53,7 @@ public class PropsProblem implements Problem<Props> {
 		} else {
 			System.out.println("where are here");
 		}
-		account.monster.addAttack((int) immunity);
+		attack+=(int) immunity;
 		totalScore = monsterFight();
 	}
 
@@ -202,15 +204,15 @@ public class PropsProblem implements Problem<Props> {
 		 */
 		// System.out.println("進入");
 		double totalScore = 0;
-		int output_slime = account.monster.getAttack() * account.monster.getHP();
+		int output_slime = attack * hp;
 		int output_enemy = (int) (enemy.getHP() * enemy.getAttack());
 		if (output_slime >= output_enemy) {
 			// System.out.println("殺敵");
-			account.monster.addHP((int) (5 - enemy.getAttack()));// 每打死一個敵人回復5點血量
+			hp+=(int) (5 - enemy.getAttack());// 每打死一個敵人回復5點血量
 			// 判斷有沒有超出原始怪獸數值(生命最大值)
-			if (account.monster.getHP() > oldaccount.monster.getHP())
-				account.monster.setHP(oldaccount.monster.getHP());
-			if (account.monster.getHP() <= 0) {
+			if (hp > account.monster.getHP())
+				hp=account.monster.getHP();
+			if (hp <= 0) {
 				// 沒命出局
 				totalScore = -1.0;
 				System.out.println("你死了");
@@ -273,16 +275,16 @@ public class PropsProblem implements Problem<Props> {
 		// TODO Auto-generated method stub
 		return totalScore;
 	}
-	public Account getAccount() {
-		for(int i=0;i< account.monster.getStates().length;i++) {
-			if(account.monster.getStates(i)>0) {
-				account.monster.addHungerValue(-5);
-				account.monster.addThirstValue(-5);
-				account.monster.addMoodValue(+5);
-				account.monster.addHealthValue(-5);
-			}
-		}
-		
-		return account;
-	}
+//	public Account getAccount() {
+//		for(int i=0;i< account.monster.getStates().length;i++) {
+//			if(account.monster.getStates(i)>0) {
+//				account.monster.addHungerValue(-5);
+//				account.monster.addThirstValue(-5);
+//				account.monster.addMoodValue(+5);
+//				account.monster.addHealthValue(-5);
+//			}
+//		}
+//		
+//		return account;
+//	}
 }

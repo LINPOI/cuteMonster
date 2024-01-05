@@ -13,5 +13,5 @@ public interface Problem<T>{
 	public String output(Chromosome<T>[]chromosomes);
 	public String check(Chromosome<T> chr);
 	public double alive_value();
-	public Account getAccount() ;
+//	public Account getAccount() ;
 }

@@ -16,7 +16,7 @@ public class Monster {
 	private String name = "";
 	private int age = 0;
 	private int attack = 10;
-	private int hp = 20;
+	private int hp = 40;
 	private int intelligence = 5;
 	private int fire = 0;
 	private int ice = 0;

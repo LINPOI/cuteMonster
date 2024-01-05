@@ -346,8 +346,6 @@ public class InteractiveJFrame extends JPanel {
 		return jPanel;
 	}
 
-	
-
 	public void start() {
 		/*
 		 * 使用演算法並拿到演算法的進行處理
@@ -355,10 +353,10 @@ public class InteractiveJFrame extends JPanel {
 		GenetticAlgorithm<Props> getPropsAlgorithm = new GenetticAlgorithm<Props>(account, location, difficulty);
 		JDialog dialog = new JDialog(jFrame, "獲得道具", true); // 建立模態的 JDialog
 		Chromosome<Props> allProps = getPropsAlgorithm.getlastChromosome();
-		boolean Alive = allProps.getFitnessValue()>0?true:false;
-		Props props=allProps.getChromosome()[0];//得到的道具
-		String propsName=Alive?props.getName():"已死亡";
-		double score=getPropsAlgorithm.getScore();
+		boolean Alive = allProps.getFitnessValue() > 0 ? true : false;
+		Props props = allProps.getChromosome()[0];// 得到的道具
+		String propsName = Alive ? props.getName() : "已死亡";
+		double score = getPropsAlgorithm.getScore();
 		if (!Alive) {
 			System.err.println("已死亡");
 			account.monster.setHealthValue(0);
@@ -369,7 +367,7 @@ public class InteractiveJFrame extends JPanel {
 			 */
 			if (location != 6)
 				account.addYear(1);
-			account.addMoney(difficulty);
+			account.addMoney(difficulty/2);
 			account.monster.addHungerValue(-3);
 			account.monster.addThirstValue(-3);
 			account.monster.addMoodValue(3);
@@ -379,7 +377,7 @@ public class InteractiveJFrame extends JPanel {
 			account.addProps(account, props.getID());
 		}
 		// allProps.getChromosome()[x]
-		
+
 		JLabel label = new JLabel(propsName, SwingConstants.CENTER);
 		JButton closeButton = new JButton("關閉");
 
@@ -411,9 +409,9 @@ public class InteractiveJFrame extends JPanel {
 	private void extraReward(double value) {
 		JDialog dialog = new JDialog(jFrame, "獲得額外道具", true); // 建立模態的 JDialog
 		dialog.setLayout(new BorderLayout());
-		
+
 		PropsList propsList = new PropsList();// 道具清單
-		
+
 		// DefaultListModel 是 JList 的標準資料模型
 		DefaultListModel<String> propsNewList = new DefaultListModel<String>();// 建立可獲得的道具清單
 		/*
@@ -429,34 +427,32 @@ public class InteractiveJFrame extends JPanel {
 				break;
 			}
 		}
-		
+
 		JList<String> jList = new JList<String>(propsNewList);
-		
+
 		JScrollPane scrollPane = new JScrollPane(jList); // 將 JList 放入 JScrollPane
-		
-		
-		
+
 		JButton closeButton = new JButton("選擇");
 
 		closeButton.addActionListener(e -> {
+
+			int selectedValue = jList.getSelectedIndex();
+			selectedValue = selectedValue < 0 ? 0 : selectedValue;
+			account.addProps(account, selectedValue);// 新增道具
+			// account.checkProps_name();
+			// System.out.println(selectedValue);
+			propsList.get(selectedValue);
 			dialog.setVisible(false); // 關閉訊息框
 			dialog.dispose(); // 釋放資源
-			int selectedValue = jList.getSelectedIndex();
-			selectedValue= selectedValue<0?0:selectedValue;
-			account.addProps(account, selectedValue);//新增道具
-			//account.checkProps_name();
-			//System.out.println(selectedValue);
-			propsList.get(selectedValue);
-				jFrame.setVisible(false); // 關閉frame
-				jFrame.dispose();
+			jFrame.setVisible(false); // 關閉frame
+			jFrame.dispose();
 		});
-		
-		
+
 		dialog.add(scrollPane, BorderLayout.CENTER);// 將 JScrollPane 添加到 JDialog
-		dialog.add(closeButton, BorderLayout.SOUTH); 
-		dialog.setSize(200, 150);//設置大小
+		dialog.add(closeButton, BorderLayout.SOUTH);
+		dialog.setSize(200, 150);// 設置大小
 		dialog.setLocationRelativeTo(jFrame); // 讓訊息框置中於 parent frame
-	    dialog.setVisible(true); // 顯示 JDialog
+		dialog.setVisible(true); // 顯示 JDialog
 	}
 }
 //計畫三個panel切換，panel.setOpaque(false); // 透明背景

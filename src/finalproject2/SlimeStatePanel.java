@@ -89,6 +89,11 @@ public class SlimeStatePanel extends JPanel implements Observer {
 		this.account = account;
 		for (int i = 0; i < account.monster.getStates_name().length; i++) {
 			jProgressBars[i].setValue(account.monster.getStates(i)); // 設定目前的值
+			if (switch_progressBar_string[i]) {
+				jProgressBars[i].setString(account.monster.getStates(i) + "%");
+			} else {
+				jProgressBars[i].setString(account.monster.getStates_name(i));
+			}
 			//System.out.println(account.monster.getStates_name(i)+account.monster.getStates(i));
 		}
 		this.revalidate();
