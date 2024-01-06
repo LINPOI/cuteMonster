@@ -189,7 +189,7 @@ public class PropsList extends ArrayList<Props>{
 
 		level = 6;// 6階道具
 		this.add(new Props(id++, "poi的祝福+100全部數值", level, () -> {
-			account.monster.addValue(100);
+			account.monster.addAllValue(100);
 		}));
 		this.add(new Props(id++, "朗基努斯之槍 (當前攻擊力x3)", level, () -> {
 			account.monster.addAttack(account.monster.getAttack()*2);

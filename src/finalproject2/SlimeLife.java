@@ -47,7 +47,7 @@ public class SlimeLife extends JPanel {
 	private JList<String> jList2;
 	private DefaultListModel<String> propsNewList= new DefaultListModel<String>();// 建立可獲得的道具清單
 	private DefaultListModel<String> propsNewList2= new DefaultListModel<String>();// 建立可獲得的道具清單
-	private LinkedList<Integer> propsID=new LinkedList<Integer>();
+	private ArrayList<Integer> propsID=new ArrayList<Integer>();
 	private int select=-1;
 	
 	public SlimeLife(Account account, Subject subject) {
@@ -78,6 +78,7 @@ public class SlimeLife extends JPanel {
 	}
 
 	public void center1() {
+		propsID.clear();
 		for (Props props : account.getProps_ArrayList()) {
 			propsNewList.addElement(props.getName());
 			propsID.add(props.getID());
@@ -103,6 +104,7 @@ public class SlimeLife extends JPanel {
 				        if (dialogResult == JOptionPane.YES_OPTION) {
 				        	propsNewList.clear(); // 清除目前所有元素
 							if(!account.getProps_ArrayList().isEmpty()) {
+								propsID.clear();
 								for (Props props : account.getProps_ArrayList()) {
 									propsNewList.addElement(props.getName());
 									propsID.add(props.getID());
@@ -153,6 +155,7 @@ public class SlimeLife extends JPanel {
 			System.out.println("已使用ID:"+select);
 			propsNewList.clear(); // 清除目前所有元素
 			if(!account.getProps_ArrayList().isEmpty()) {
+				propsID.clear();
 				for (Props props : account.getProps_ArrayList()) {
 					propsNewList.addElement(props.getName());
 					propsID.add(props.getID());

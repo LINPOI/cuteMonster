@@ -20,7 +20,7 @@ public class Monster {
 	private int intelligence = 5;
 	private int fire = 0;
 	private int ice = 0;
-	private int poison = 0;
+	private int poison = 0;//毒
 	private int illusion = 0;
 	//private int[] value = new int[] { age, attack, hp, intelligence, fire, ice, poison, illusion };// 數值
 	private int hungerValue = 50;
@@ -192,7 +192,7 @@ public class Monster {
 		poison += ints[5];
 		illusion += ints[6];
 	}
-	public void addValue(int intt) {
+	public void addAllValue(int intt) {
 		attack += intt;
 		hp += intt;
 		intelligence += intt;
@@ -210,7 +210,7 @@ public class Monster {
 		int[] value=new int[] { age, attack, hp, intelligence, fire, ice, poison, illusion };// 數值
 		return value[i];
 	}
-
+	
 	/*
 	 * 數值訊息
 	 */

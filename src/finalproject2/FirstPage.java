@@ -95,7 +95,8 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 		 * 遊戲大廳的各個panel
 		 */
 //        jPanel.add(new JLabel("eeee"),BorderLayout.EAST);
-		jPanel.add(new MonsterPanel(false, new int[] { 0, 0 }, account, subject), BorderLayout.CENTER);
+		//第一個是有沒有翅膀，再來是常規作業
+		jPanel.add(new MonsterPanel(account.monster.getWing(), account, subject), BorderLayout.CENTER);
 		jPanel.add(new SlimeStatePanel(account,subject),BorderLayout.EAST);
 		jPanel.add(new Valuetable(account,subject), BorderLayout.WEST);
 		jPanel.add(jPanel2, BorderLayout.SOUTH);

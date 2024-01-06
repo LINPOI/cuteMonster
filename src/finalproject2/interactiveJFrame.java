@@ -10,6 +10,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 
 import java.awt.Image;
+import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.StringTokenizer;
+import java.util.stream.IntStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
@@ -59,6 +61,7 @@ public class InteractiveJFrame extends JPanel {
 	public static final String trainpaJPanel = "trainpaJPanel";
 	public static final String exploreJPanel = "exploreJPanel";
 	public static final String selectDifficultyJPanel = "selectDifficultyJPanel";
+	
 	// private JPanel jPanel;
 	private String[] buttonName = new String[] { "訓練", "探索", "簡單", "普通", "困難" };
 	private Color[] colors = new Color[] { new Color(135, 206, 250), new Color(0, 255, 128) };
@@ -282,7 +285,7 @@ public class InteractiveJFrame extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					// TODO Auto-generated method stub
 					difficulty = i - 1;
-					System.out.println("難度:" + difficulty);
+//					System.out.println("難度:" + difficulty);
 					start();
 				}
 			});
@@ -357,7 +360,9 @@ public class InteractiveJFrame extends JPanel {
 		Props props = allProps.getChromosome()[0];// 得到的道具
 		String propsName = Alive ? props.getName() : "已死亡";
 		double score = getPropsAlgorithm.getScore();
+		Double money=difficulty*1.0/2;
 		if (!Alive) {
+			money=0.0;
 			System.err.println("已死亡");
 			account.monster.setHealthValue(0);
 			subject.setAccount(account);
@@ -367,13 +372,25 @@ public class InteractiveJFrame extends JPanel {
 			 */
 			if (location != 6)
 				account.addYear(1);
-			Double money=difficulty*1.0/2;
+			if (location == Props.polar) {
+				account.monster.addIce(difficulty*2);
+			} else if (location == Props.volcano) {
+				account.monster.addFire(difficulty*2);
+			} else if (location == Props.swamp) {
+				account.monster.addPoison(difficulty*2);
+			} else if (location == Props.temple) {
+				account.monster.addIllusion(difficulty*2);
+			} else if (location == Props.wind_farm) {
+				
+			} else if (location == Props.Training_Course) {
+				
+			}
 			account.addMoney(money);
-			account.monster.addHungerValue(-3);
-			account.monster.addThirstValue(-3);
+			account.monster.addHungerValue(-account.monster.getAge());
+			account.monster.addThirstValue(-account.monster.getAge());
 			account.monster.addMoodValue(3);
-			System.err.println(propsName);
-			System.out.println("getHungerValue" + account.monster.getHungerValue());
+//			System.err.println(propsName);
+//			System.out.println("getHungerValue" + account.monster.getHungerValue());
 			// System.out.println("year" + account.getYear());
 			account.addProps(account, props.getID());
 		}
@@ -399,6 +416,7 @@ public class InteractiveJFrame extends JPanel {
 		dialog.setLayout(new BorderLayout());
 
 		dialog.add(label, BorderLayout.CENTER);
+		dialog.add(new JLabel("獲得金幣:"+money,SwingConstants.CENTER),BorderLayout.NORTH );
 		dialog.add(closeButton, BorderLayout.SOUTH);
 
 		dialog.setSize(200, 150);

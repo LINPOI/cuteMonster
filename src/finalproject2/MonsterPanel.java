@@ -20,54 +20,83 @@ public class MonsterPanel extends JPanel implements Observer {
 	 */
 	private static final long serialVersionUID = 1L;
 	private String srcString = "src/PICTURE/";
-	private String[][] slime;
-	private String[] blueSlimesStrings;
-	private String[] redSlimesStrings;
-	private String[] greenSlimesStrings;
-	private String[] purpleSlimesStrings;
+	
+	
 	private int width = 350;
 	private int height = 350;
+	
+	private Boolean wing=false;
 	private Account account = new Account();
 	private Subject subject;
+	
+	
 	private BufferedImage resizedImage;
 	private JLabel label = new JLabel();
 	private JButton newMonsterButton = new JButton();
 	private DatabaseOperations databaseOperations = new DatabaseOperations();
 
-	public MonsterPanel(boolean havewing, int select[], Account account, Subject subject) {// 翅膀，史萊姆總類
-		open(havewing, select, account, subject);
-	}
-
-	public void open(boolean havewing, int select[], Account account, Subject subject) {// 翅膀，史萊姆總類
+	private int[] select=new int[4];
+	private String[] blueSlimesStrings= new String[] { // 藍史萊姆、暈藍史萊姆、冰史萊姆、暈冰史萊姆
+			srcString + "blueslime2.png", srcString + "atblue.png", srcString + "iceslime2.png",
+			srcString + "aticeslime2.png", };
+	private String[] redSlimesStrings = new String[] { // 紅史萊姆、暈紅史萊姆、火史萊姆、暈火史萊姆
+			srcString + "redslime.png", srcString + "atred.png", srcString + "fireslime2.png",
+			srcString + "atfireslime2.png", };
+	private String[] greenSlimesStrings = new String[] { // 綠史萊姆、暈綠史萊姆、毒史萊姆、暈毒史萊姆
+			srcString + "green.png", srcString + "atgreen.png", srcString + "poisonslime.png",
+			srcString + "atpoisonslime.png", };
+	private String[] purpleSlimesStrings = new String[] { // 紫史萊姆、暈紫史萊姆、紫1史萊姆、暈紫1史萊姆、紫2史萊姆、暈紫2史萊姆
+			srcString + "purpleslime2.png", srcString + "atpurple.png", srcString + "purple1" + ".png",
+			srcString + "atpurple1.png", srcString + "purple2" + ".png", srcString + "atpurple2.png", };
+	private String[][] slime = new String[][] { blueSlimesStrings, redSlimesStrings, greenSlimesStrings, purpleSlimesStrings };
+	
+	private boolean restart = false;
+	public MonsterPanel(boolean wing, Account account, Subject subject) {// 翅膀，史萊姆總類
 		this.subject = subject;
 		subject.addObserver(this);
+		this.account=account;
+		this.wing=wing;
+		open( );
+		
+	}
+
+	public void open( ) {
+		remove(newMonsterButton);
+		
 		/*
 		 * \ 0 藍史萊姆01水冰23 1 紅史萊姆0123 2 綠史萊姆0123 3 紫史萊姆012345
 		 */
-		blueSlimesStrings = new String[] { // 藍史萊姆、暈藍史萊姆、冰史萊姆、暈冰史萊姆
-				srcString + "blueslime2.png", srcString + "atblue.png", srcString + "iceslime2.png",
-				srcString + "aticeslime2.png", };
-		redSlimesStrings = new String[] { // 紅史萊姆、暈紅史萊姆、火史萊姆、暈火史萊姆
-				srcString + "redslime.png", srcString + "atred.png", srcString + "fireslime2.png",
-				srcString + "atfireslime2.png", };
-		greenSlimesStrings = new String[] { // 綠史萊姆、暈綠史萊姆、毒史萊姆、暈毒史萊姆
-				srcString + "green.png", srcString + "atgreen.png", srcString + "poisonslime.png",
-				srcString + "atpoisonslime.png", };
-		purpleSlimesStrings = new String[] { // 紫史萊姆、暈紫史萊姆、紫1史萊姆、暈紫1史萊姆、紫2史萊姆、暈紫2史萊姆
-				srcString + "purpleslime2.png", srcString + "atpurple.png", srcString + "purple1" + ".png",
-				srcString + "atpurple1.png", srcString + "purple2" + ".png", srcString + "atpurple2.png", };
-		slime = new String[][] { blueSlimesStrings, redSlimesStrings, greenSlimesStrings, purpleSlimesStrings };
+		
 
 		this.setLayout(new BorderLayout());
 		/*
 		 * 寬高
 		 */
+		int ice = account.monster.getIce();
+		int fire = account.monster.getFire();
+		int poison = account.monster.getPoison();
+		int illusion = account.monster.getIllusion();
+		int[] attribute = new int[] { ice, fire, poison, illusion };
+		int max = Math.max(Math.max(Math.max(ice, fire), poison), illusion);
+		for (int i = 0; i < attribute.length; i++) {
+			if (max == attribute[i]) {
+				select[0] = i;
+				break;
+			}
+		}
+		if (max > 60&& max==illusion && account.monster.getAge() > 30) {
+			select[1]=4;
+		}else if (max > 30 && account.monster.getAge() > 10){
+			select[1]=2;
+		}else {
+			select[1]=0;
+		}
 		try {
 			BufferedImage wing = ImageIO.read(new File("src/PICTURE/wing.png"));
 			BufferedImage Slime = ImageIO.read(new File(slime[select[0]][select[1]]));
 			BufferedImage combined = null;
 			Graphics2D g = null;
-			if (havewing) {
+			if (this.wing) {
 				if (wing.getWidth() != Slime.getWidth() || wing.getHeight() != Slime.getHeight()) {
 					Slime = resizeImage(Slime, wing.getWidth(), wing.getHeight());
 				}
@@ -90,14 +119,22 @@ public class MonsterPanel extends JPanel implements Observer {
 			resizedImage = resizeImage(combined, width, height);
 
 			ImageIcon icon = new ImageIcon(resizedImage);
-			label = new JLabel(icon);
+			label.setIcon(icon);
+			
+			this.add(label, BorderLayout.CENTER);
 			JPanel northJPanel = new JPanel();
 			northJPanel.setSize(new Dimension(800, 400));
 			JLabel jLabelNORTH = new JLabel(" ");
 			jLabelNORTH.setPreferredSize(new Dimension(100, 200)); // 擠壓空間
 			this.add(jLabelNORTH, BorderLayout.NORTH);
-			this.add(new JLabel("                                      "), BorderLayout.EAST);// 擠壓空間
-			this.add(label, BorderLayout.CENTER);
+			this.add(new JLabel("                                                  "), BorderLayout.WEST);// 擠壓空間
+			revalidate();
+			repaint();
+			
+			
+			
+			
+			
 			this.setOpaque(false); // 透明背景
 			label.addMouseListener(new MouseAdapter() {
 				@Override
@@ -132,7 +169,7 @@ public class MonsterPanel extends JPanel implements Observer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		
 	}
 
 	private BufferedImage resizeImage(BufferedImage originalImage, int width, int height) {
@@ -142,15 +179,18 @@ public class MonsterPanel extends JPanel implements Observer {
 		g.dispose();
 		return resizedImage;
 	}
-	private boolean restart=false;
+
+	
+
 	@Override
 	public void updataAccount(Account account) {
-		
+		this.account=account;
+		boolean goodstate=true;
 		// TODO Auto-generated method stub
 		File output = account.imegeurl();
 		try {
 			ImageIO.write(resizedImage, "PNG", output);
-			//System.out.println("輸出圖片" + output.getAbsolutePath());
+			// System.out.println("輸出圖片" + output.getAbsolutePath());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -158,25 +198,22 @@ public class MonsterPanel extends JPanel implements Observer {
 		/*
 		 * 如果任一狀態<0死亡
 		 */
-		for (int i = 0; i < account.monster.getStates().length;i++) {
+		for (int i = 0; i < account.monster.getStates().length; i++) {
+			
 			/*
 			 * 如果死亡
 			 */
-			System.out.print("狀態"+ account.monster.getStates(i)+"\t"+restart);
-			if(restart) {
-				remove(newMonsterButton);
-				ImageIcon icon = new ImageIcon(resizedImage);
-				label.setIcon(icon);
-				add(label);
-				revalidate();
-				repaint();
+			//System.out.print("狀態" + account.monster.getStates(i) + "\t" + restart);
+			if (restart) {
+				open();
 				break;
 			}
-			//System.out.print("狀態"+ account.monster.getStates(i)+"\t");
+			// System.out.print("狀態"+ account.monster.getStates(i)+"\t");
 			if (account.monster.getStates(i) <= 0) {
-				restart=!restart;//處理重複出現按鈕bug
+				goodstate=false;
+				restart = !restart;// 處理重複出現按鈕bug
 				databaseOperations.updateMonsterData(account);// 更新怪物狀態:死亡
-				 JOptionPane.showMessageDialog(null, "狀態為零已死亡", "死亡", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "狀態為零已死亡", "死亡", JOptionPane.INFORMATION_MESSAGE);
 				remove(label);
 				JPanel newMonsterPanel = new JPanel();
 				newMonsterPanel.setLayout(null); // 使用 null 佈局
@@ -184,13 +221,13 @@ public class MonsterPanel extends JPanel implements Observer {
 				// 字型格式
 				newMonsterButton.setFont(FontFactory.commonFont(1, 60));
 				newMonsterButton.setBackground(new Color(216, 191, 216));
-				newMonsterButton.setBounds(200, 100, 300, 100); // 設置按鈕位置和大小
+				newMonsterButton.setBounds(50, 100, 300, 100); // 設置按鈕位置和大小
 				newMonsterButton.addActionListener(new ActionListener() {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
-						
+						restart = !restart;// 處理重複出現按鈕bug
 						String userInput = JOptionPane.showInputDialog(null, "請輸入怪物名字:");
 						while (userInput == null) {
 							userInput = JOptionPane.showInputDialog(null, "怪獸名稱不可為空:");
@@ -200,8 +237,8 @@ public class MonsterPanel extends JPanel implements Observer {
 						 */
 						account.monster = new Monster(account.getUsername());
 						account.monster.setName(userInput);
-						account.setselectMonster(account.getselectMonster()+1);
-						System.err.println("account.getselectMonster()"+account.getselectMonster());
+						account.setselectMonster(account.getselectMonster() + 1);
+						System.err.println("account.getselectMonster()" + account.getselectMonster());
 						account.saveAccount(account);
 						subject.setAccount(account); // 設置新數值
 						databaseOperations.insert_Monster_Data(account);//
@@ -217,19 +254,10 @@ public class MonsterPanel extends JPanel implements Observer {
 				revalidate();
 				repaint();
 				break;
-			} else {
-				/*
-				 * 重新復活了的話
-				 */
-				remove(newMonsterButton);
-				ImageIcon icon = new ImageIcon(resizedImage);
-				label.setIcon(icon);
-				add(label);
-				revalidate();
-				repaint();
-				continue;
 			}
 		}
-
+		if(goodstate) {
+			open();
+		}
 	}
 }
