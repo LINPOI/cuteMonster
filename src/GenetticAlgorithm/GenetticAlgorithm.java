@@ -74,8 +74,8 @@ public class GenetticAlgorithm<T> {
 //					+chromosomes[0].getFitnessValue());
 			numberOfGeneration++;
 		}
-		System.out.println("第" + generationSize + "次迭代，最佳解為:[" + problem.output(chromosomes) + "]\t"
-				+chromosomes[0].getFitnessValue());
+//		System.out.println("第" + generationSize + "次迭代，最佳解為:[" + problem.output(chromosomes) + "]\t"
+//				+chromosomes[0].getFitnessValue());
 	}
 
 	// 編碼

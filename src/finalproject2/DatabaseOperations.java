@@ -33,11 +33,13 @@ public class DatabaseOperations {
 			pstmt.setInt(4, account.getselectMonster()); 
 			pstmt.setDouble(5, account.getMoney());
 			pstmt.executeUpdate();
-			System.out.println("成功新增資料");
+			
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("新增資料失敗");
 			return false;
+			
 		}
 	}
 	/*
@@ -60,7 +62,7 @@ public class DatabaseOperations {
 				pstmt.setInt(i+12, account.monster.getStates(i));
 			}
 			pstmt.executeUpdate();
-			System.out.println("成功新增怪獸資料");
+			//System.out.println("成功新增怪獸資料");
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -84,10 +86,11 @@ public class DatabaseOperations {
 
 	        // 執行 SQL 命令以新增資料
 	        pstmt.executeUpdate();
-	        System.out.println("成功新增資料到相冊資料表");
+	        
 	        pstmt.close();
 	    } catch (SQLException e) {
 	        e.printStackTrace();
+	        System.out.println("新增資料到相冊資料表失敗");
 	    }
 	}
 	
@@ -101,10 +104,11 @@ public class DatabaseOperations {
 			pstmt.setString(1, account.getUsername());
 			pstmt.setInt(2, account.getProps_id()); 
 			pstmt.executeUpdate();
-			System.out.println("成功新增道具資料");
+			
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("新增道具資料失敗");
 			return false;
 		}
 	}
@@ -128,10 +132,11 @@ public class DatabaseOperations {
 
 			// 執行 SQL 命令以建立資料表
 			stmt.executeUpdate(createTableSQL);
-			System.out.println("成功新增資料表");
+			
 			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("新增資料表失敗");
 		}
 	}
 	/*
@@ -158,11 +163,12 @@ public class DatabaseOperations {
 
 			// 執行 SQL 命令以建立資料表
 			stmt.executeUpdate(createTableSQL);
-			System.out.println("成功新增怪獸資料表");
+			
 			stmt.close();
 			create_Props_Table(account);//順便新增道具欄
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("新增怪獸資料表失敗");
 		}
 	}
 	
@@ -184,10 +190,11 @@ public class DatabaseOperations {
 
 			// 執行 SQL 命令以建立資料表
 			stmt.executeUpdate(createTableSQL);
-			System.out.println("成功新增資料表`" + account.getUsername() + "的道具`");
+			
 			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("新增資料表`" + account.getUsername() + "的道具`失敗");
 		}
 	}
 	/*
@@ -213,10 +220,11 @@ public class DatabaseOperations {
 
 			// 執行 SQL 命令以建立資料表
 			stmt.executeUpdate(createTableSQL);
-			System.out.println("成功新增資料表");
+			
 			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("新增資料表失敗");
 		}
 	}
 	/*
@@ -228,9 +236,10 @@ public class DatabaseOperations {
 			PreparedStatement pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, account.getUsername());
 			pstmt.executeUpdate();
-			System.out.println("成功刪除資料");
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("刪除資料失敗");
 		}
 	}
 	/*
@@ -266,10 +275,11 @@ public class DatabaseOperations {
 			pstmt.setDouble(3, account.getMoney());
 			pstmt.setString(4, account.getUsername());
 			pstmt.executeUpdate();
-			System.out.println("成功更新資料");
+			
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("更新資料失敗");
 			return false;
 		}
 	}
@@ -313,7 +323,7 @@ public class DatabaseOperations {
 		        int updatedRows = pstmt.executeUpdate();
 
 		        if (updatedRows > 0) {
-		            System.out.println("成功更新怪獸資料");
+		            
 		            return true;
 		        } else {
 		            System.out.println("未找到匹配的怪獸資料");
@@ -331,7 +341,7 @@ public class DatabaseOperations {
 	 */
 	public Account queryData(Account account) {
 	    Account account2 = new Account();
-	    System.out.println("進來的user:"+account.getUsername()+"的資料");
+	   // System.out.println("進來的user:"+account.getUsername()+"的資料");
 	    try {
 	        String query = "SELECT * FROM account WHERE `帳號`=?";
 	        PreparedStatement pstmt = conn.prepareStatement(query);
@@ -394,7 +404,7 @@ public class DatabaseOperations {
 					monster.setMoodValue(resultSet.getInt("心情指數")); 
 					monster.setHealthValue(resultSet.getInt("健康度")); 
 					
-					System.out.println("資料庫讀單一怪獸:怪獸名稱: " + name);
+				//	System.out.println("資料庫讀單一怪獸:怪獸名稱: " + name);
 					monster.setID(id);
 					monster.setName(name);
 					monster.addAge(age);
@@ -425,7 +435,7 @@ public class DatabaseOperations {
 	 */
 	public ArrayList<Props> queryPropsData(Account account) {
 	    ArrayList<Props> arrayList=new ArrayList<Props>();
-	    System.out.println("進來道具欄的user:" + account.getUsername() + "的資料");
+//	    System.out.println("進來道具欄的user:" + account.getUsername() + "的資料");
 	    try {
 	        String query = "SELECT `道具ID` FROM `" + account.getUsername() + "的道具`ORDER BY `道具ID` ASC";
 	        PreparedStatement pstmt = conn.prepareStatement(query);

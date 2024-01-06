@@ -145,12 +145,12 @@ public class MonsterPanel extends JPanel implements Observer {
 	private boolean restart=false;
 	@Override
 	public void updataAccount(Account account) {
-		restart=!restart;//處理重複出現按鈕bug
+		
 		// TODO Auto-generated method stub
 		File output = account.imegeurl();
 		try {
 			ImageIO.write(resizedImage, "PNG", output);
-			System.out.println("輸出圖片" + output.getAbsolutePath());
+			//System.out.println("輸出圖片" + output.getAbsolutePath());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -158,10 +158,11 @@ public class MonsterPanel extends JPanel implements Observer {
 		/*
 		 * 如果任一狀態<0死亡
 		 */
-		for (int i = 0; i < account.monster.getStates().length; i++) {
+		for (int i = 0; i < account.monster.getStates().length;i++) {
 			/*
 			 * 如果死亡
 			 */
+			System.out.print("狀態"+ account.monster.getStates(i)+"\t"+restart);
 			if(restart) {
 				remove(newMonsterButton);
 				ImageIcon icon = new ImageIcon(resizedImage);
@@ -171,8 +172,9 @@ public class MonsterPanel extends JPanel implements Observer {
 				repaint();
 				break;
 			}
-			System.out.print(account.monster.getStates(i)+"\t");
+			//System.out.print("狀態"+ account.monster.getStates(i)+"\t");
 			if (account.monster.getStates(i) <= 0) {
+				restart=!restart;//處理重複出現按鈕bug
 				databaseOperations.updateMonsterData(account);// 更新怪物狀態:死亡
 				 JOptionPane.showMessageDialog(null, "狀態為零已死亡", "死亡", JOptionPane.INFORMATION_MESSAGE);
 				remove(label);
@@ -188,6 +190,7 @@ public class MonsterPanel extends JPanel implements Observer {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
+						
 						String userInput = JOptionPane.showInputDialog(null, "請輸入怪物名字:");
 						while (userInput == null) {
 							userInput = JOptionPane.showInputDialog(null, "怪獸名稱不可為空:");
@@ -224,7 +227,7 @@ public class MonsterPanel extends JPanel implements Observer {
 				add(label);
 				revalidate();
 				repaint();
-				break;
+				continue;
 			}
 		}
 

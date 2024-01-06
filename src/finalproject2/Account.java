@@ -77,12 +77,12 @@ public class Account {// 帳號 密碼 年份 怪獸id 怪獸
 	}
 
 	public void addMoney(double money) {
-		this.money += money;
+		this.money += money*1.0;
 
 	}
 
 	public double getMoney() {
-		return money;
+		return money*1.0;
 	}
 	/*
 	 * 儲存

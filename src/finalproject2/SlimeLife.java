@@ -5,6 +5,8 @@ import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -146,7 +148,7 @@ public class SlimeLife extends JPanel {
 				select= propsID.get(getNumber);
 				account.useProps(account,select,getNumber);
 				subject.setAccount(account);
-				account.checkProps_name();
+				//account.checkProps_name();
 			}
 			System.out.println("已使用ID:"+select);
 			propsNewList.clear(); // 清除目前所有元素
@@ -165,7 +167,7 @@ public class SlimeLife extends JPanel {
 	public void center2() {
 		PropsList propsList=new PropsList();
 		for(Props props:propsList) {
-			propsNewList2.addElement(props.getName()+"   價位:"+props.getValue());
+			propsNewList2.addElement(props.getName()+"   價位： "+props.getValue());
 		}
 		jList2=new JList<String>(propsNewList2);
 		JScrollPane scrollPane = new JScrollPane(jList2);
@@ -173,22 +175,65 @@ public class SlimeLife extends JPanel {
 		jList2.setCellRenderer(new MyListCellRenderer());
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
+		
+		
+		
 		jPanel2.add(scrollPane,BorderLayout.CENTER);
+		
 	}
 	public void south2() {
 		JPanel jPanel3=new JPanel();
 		jPanel3.setLayout(new BorderLayout());
 		jPanel3.setPreferredSize(new Dimension(100, 100)); // 設置大小
+		jPanel3.setOpaque(false);
 		JButton buyButton=new JButton("購買");
 		JButton cancel=new JButton("取消"); 
-		buyButton.setBackground(Color.BLUE);
-		buyButton.setForeground(Color.white);
+		
+		buyButton.addActionListener(buyButtonListener());
+		cancel.addActionListener(canceListener());
+		//背景
+		buyButton.setBackground(new Color(	127, 255, 212	));
+		cancel.setBackground(new Color(	204, 255, 0	));
+		
+		// 去除聚焦
+		buyButton.setFocusPainted(false);
+		cancel.setFocusPainted(false);
+		
+		//設定字體
+	
 		buyButton.setFont(FontFactory.commonFont(1,40));
-		cancel.setBackground(Color.GREEN);
 		cancel.setFont(FontFactory.commonFont(1,40));
 		
+		//顯示錢
+		JLabel jLabel=new JLabel("擁有的錢："+account.getMoney());
+		jLabel.setFont(FontFactory.commonFont(1, 30));
+		
+		jPanel3.add(jLabel,BorderLayout.NORTH);
 		jPanel3.add(buyButton,BorderLayout.CENTER);
 		jPanel3.add(cancel,BorderLayout.EAST);
 		jPanel2.add(jPanel3,BorderLayout.SOUTH);
+	}
+	public ActionListener buyButtonListener() {
+		ActionListener actionListener=new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		};
+		return actionListener; 
+	}
+	public ActionListener canceListener() {
+		ActionListener actionListener=new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				jFrame.setVisible(false);
+				jFrame.dispose();
+			}
+		};
+		return actionListener; 
 	}
 }

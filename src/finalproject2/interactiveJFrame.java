@@ -367,7 +367,8 @@ public class InteractiveJFrame extends JPanel {
 			 */
 			if (location != 6)
 				account.addYear(1);
-			account.addMoney(difficulty/2);
+			Double money=difficulty*1.0/2;
+			account.addMoney(money);
 			account.monster.addHungerValue(-3);
 			account.monster.addThirstValue(-3);
 			account.monster.addMoodValue(3);
@@ -419,8 +420,8 @@ public class InteractiveJFrame extends JPanel {
 		 */
 		for (int i = 0; i < propsList.size(); i++) {
 			double Propsvalue = propsList.get(i).getValue();
-			System.out.println(value);
-			System.out.println(Propsvalue);
+//			System.out.println(value);
+//			System.out.println(Propsvalue);
 			if (value >= Propsvalue) {// 留下價值比獲得積分小的
 				propsNewList.addElement(propsList.get(i).getName());
 			} else {
