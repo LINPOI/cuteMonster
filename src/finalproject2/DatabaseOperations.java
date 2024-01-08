@@ -112,6 +112,25 @@ public class DatabaseOperations {
 			return false;
 		}
 	}
+	
+	/*
+	 * 新增獎狀
+	 */
+	public boolean insert_Achievement_Data(Account account, String string) {
+		try {
+			String query = "INSERT INTO `"+account.getUsername()+"的獎狀`(`獎狀`) VALUES (?)";
+			PreparedStatement pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, string);
+			pstmt.executeUpdate();
+			
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("新增資料失敗");
+			return false;
+			
+		}
+	}
 	/*
 	 * 新增使用者資料表
 	 */
@@ -165,7 +184,8 @@ public class DatabaseOperations {
 			stmt.executeUpdate(createTableSQL);
 			
 			stmt.close();
-			create_Props_Table(account);//順便新增道具欄
+			create_Props_Table(account);//順便新增道具欄\
+			create_Achievement_Table(account);//順便獎狀
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("新增怪獸資料表失敗");
@@ -228,6 +248,29 @@ public class DatabaseOperations {
 		}
 	}
 	/*
+	 * 新增獎狀資料表
+	 */
+	public void create_Achievement_Table(Account account) {
+		try {
+			// 創建 Statement 物件
+			Statement stmt = conn.createStatement();
+
+			// SQL 命令 - 建立寵物資料表
+			String createTableSQL = "CREATE TABLE IF NOT EXISTS `"+account.getUsername()+"的獎狀` ("
+					+ "id INT AUTO_INCREMENT PRIMARY KEY, "
+		            + "獎狀 VARCHAR(255)"
+		            + ") ENGINE=InnoDB;";
+
+			// 執行 SQL 命令以建立資料表
+			stmt.executeUpdate(createTableSQL);
+			
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("新增資料表失敗");
+		}
+	}
+	/*
 	 * 刪除
 	 */
 	public void deleteData(Account account) {
@@ -261,7 +304,6 @@ public class DatabaseOperations {
 	        return false;
 	    }
 	}
-
 	/*
 	 * 更新人物
 	 */
@@ -429,6 +471,66 @@ public class DatabaseOperations {
 			return null;
 		}
 	}
+	/*
+	 * 查詢怪獸資料表中的資料
+	 */
+	public ArrayList<Monster> query_All_Monster_Info(Account account) {
+		ArrayList<Monster> monsters=new ArrayList<Monster>();
+		Monster monster=new Monster(account.getUsername());
+		try {
+			// 創建 Statement 物件
+			Statement stmt = conn.createStatement();
+
+			// 構建查詢怪獸資訊的 SQL 命令
+			String queryMonsterSQL = "SELECT * FROM `" + account.getUsername() + "的怪獸`";
+
+			// 執行 SQL 命令以查詢怪獸資訊
+			ResultSet resultSet = stmt.executeQuery(queryMonsterSQL);
+			if(!resultSet.next()) {
+				return null;
+			}{
+				// 如果查詢結果不為空，則列印怪獸資訊
+				 do{
+					int id = resultSet.getInt("怪獸ID");
+					String name = resultSet.getString("怪獸名稱");
+					int age = resultSet.getInt("怪獸年齡");
+					int attack = resultSet.getInt("攻擊力");
+					int hp = resultSet.getInt("生命力");
+					int intelligence = resultSet.getInt("智力");
+					int fire = resultSet.getInt("火系");
+					int ice = resultSet.getInt("冰系");
+					int poison = resultSet.getInt("毒系");
+					int phantom = resultSet.getInt("幻影系");
+					Boolean wing = resultSet.getBoolean("翅膀");
+					monster.setHungerValue(resultSet.getInt("飢餓度")); 
+					monster.setThirstValue(resultSet.getInt("飢渴度")); 
+					monster.setMoodValue(resultSet.getInt("心情指數")); 
+					monster.setHealthValue(resultSet.getInt("健康度")); 
+					monster.setID(id);
+					monster.setName(name);
+					monster.addAge(age);
+					monster.addAttack(attack);
+					monster.addHP(hp);
+					monster.addIntelligence(intelligence);
+					monster.addFire(fire);
+					monster.addIce(ice);
+					monster.addPoison(poison);
+					monster.addIllusion(phantom);
+					monster.setWing(wing);
+					monsters.add(monster);
+				}while (resultSet.next());
+			}
+			
+			
+			stmt.close();
+			return monsters;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("怪獸資料還沒有值");
+			return null;
+		}
+	}
 
 	/*
 	 * 查道具欄
@@ -450,6 +552,55 @@ public class DatabaseOperations {
 	        pstmt.close();
 	    } catch (SQLException e) {
 	        e.printStackTrace();
+	    }
+	    
+	    return arrayList;
+	}
+	/*
+	 * 查單一獎狀
+	 */
+	public String query_Achievement_Data(Account account, String string) {
+	    String string2="";
+	   // System.out.println("進來的user:"+account.getUsername()+"的資料");
+	    try {
+	        String query = "SELECT * FROM`"+account.getUsername()+"的獎狀`WHERE `獎狀`=?";
+	        PreparedStatement pstmt = conn.prepareStatement(query);
+	        pstmt.setString(1, string);
+	        ResultSet rs = pstmt.executeQuery();
+
+	        // 處理查詢結果
+	        while (rs.next()) {
+	        	string2= rs.getString("獎狀");
+	        }
+	        rs.close();
+	        pstmt.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        // 執行其他錯誤處理或者拋出自定義的例外
+	    }
+	    
+	    return string2;
+	}
+	/*
+	 * 查全部獎狀
+	 */
+	public ArrayList<String> query_Achievement_ALL_Data(Account account) {
+	    ArrayList<String> arrayList=new ArrayList<String>();
+	   // System.out.println("進來的user:"+account.getUsername()+"的資料");
+	    try {
+	        String query = "SELECT * FROM`"+account.getUsername()+"的獎狀`";
+	        PreparedStatement pstmt = conn.prepareStatement(query);
+	        ResultSet rs = pstmt.executeQuery(); 
+	        // 處理查詢結果
+	        while (rs.next()) {
+	        	arrayList.add(rs.getString("獎狀"));
+	        	System.out.println(rs.getString("獎狀"));
+	        }
+	        rs.close();
+	        pstmt.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        // 執行其他錯誤處理或者拋出自定義的例外
 	    }
 	    
 	    return arrayList;

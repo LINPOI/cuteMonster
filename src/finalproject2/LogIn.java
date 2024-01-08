@@ -177,7 +177,8 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 						register_username = Username;
 						register_password = password;
 						databaseOperations.create_Monster_Table(account);
-
+						databaseOperations.create_photoAlbum_Table(account);
+						
 					} else {
 						JOptionPane.showMessageDialog(jPanel, "錯誤");
 					}
@@ -242,6 +243,7 @@ public class LogIn extends JPanel implements Commonly_GridBagConstraints {
 				subject.setAccount(account); // 設置新數值
 				databaseOperations.create_Monster_Table(account);
 				databaseOperations.insert_Monster_Data(account);// 新增怪獸資料
+				new Achievement().showAchievement(account, Achievement.FirstMonster);
 			} else {// 第n次登入
 				cardLayout.show(cardPanel, "first");
 				account= account.readAccount(account);

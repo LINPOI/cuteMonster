@@ -1,6 +1,7 @@
 package finalproject2;
 
 import java.io.File;
+import java.lang.invoke.StringConcatFactory;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -112,7 +113,12 @@ public class Account {// 帳號 密碼 年份 怪獸id 怪獸
 	public File imegeurl() {
 		return new File("src/newpicture/" + getUsername() + monster.getName() + monster.getID() + "output.png");
 	}
-
+	public File imegeurl(Monster monster) {
+		return new File("src/newpicture/" + getUsername() + monster.getName() + monster.getID() + "output.png");
+	}
+	public String imegeurl_String(Monster monster) {
+		return "src/newpicture/" + getUsername() + monster.getName() + monster.getID() + "output.png";
+	}
 	public void saveMonsterData(Account account) {
 		databaseOperations.updateMonsterData(account);
 	}
@@ -164,12 +170,18 @@ public class Account {// 帳號 密碼 年份 怪獸id 怪獸
 		PropsList propsList = new PropsList(account);
 		for (int i = 0; i < propslist.size(); i++) {
 			if (propslist.get(i).getID() == selectPropsId) {
-				databaseOperations.delete_Props(account, value);//毒資料庫值山資料
-				propslist.remove(i);//刪除道具
+				databaseOperations.delete_Props(account, value);//讀資料庫值刪資料
+				
 				propsList.get(selectPropsId).use();//使用道具
+				if(propsList.get(selectPropsId).getID()==43)new Achievement().showAchievement(account, Achievement.PropsWing);//使用了翅膀
+				if(propsList.get(selectPropsId).getID()>39)new Achievement().showAchievement(account, Achievement.GODProps);//獲得神器級別道具
+				if(propsList.get(selectPropsId).getID()!=51)propslist.remove(i);//刪除道具，除了神仙藥水
 				saveAccount(account);//儲存新數值
 				break;
 			}
 		}
+	}
+	public ArrayList<Monster> getMonstersData(Account account){
+		return databaseOperations.query_All_Monster_Info(account);
 	}
 }

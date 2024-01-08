@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import javax.sound.midi.VoiceStatus;
 
-import finalproject2.Account;
+import finalproject2.*;
 
 public class PropsList extends ArrayList<Props>{
 	/**
@@ -52,7 +52,7 @@ public class PropsList extends ArrayList<Props>{
 			account.monster.addHealthValue(value1*5);
 		}));
 		this.add(new Props(id++, "小刀+" + value1 * 3 + "攻擊力", level, 2.0, () -> {
-			account.monster.addAttack(account.monster.getAttack() + value1*3);
+			account.monster.addAttack( value1 * 3);
 		}));
 		this.add(new Props(id++, "小甲+" + value1 * 4 + "生命力", level, 2.0, () -> {
 			account.monster.addHP(account.monster.getHP() + value1 * 4);

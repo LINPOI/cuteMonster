@@ -11,6 +11,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -45,7 +48,6 @@ public class SlimeLife extends JPanel implements Commonly_GridBagConstraints {
 	private JFrame jFrame = new JFrame("史萊姆的窩");
 	private JPanel jPanel1 = new JPanel();
 	private JPanel jPanel2 = new JPanel();
-	private JDialog dialog = new JDialog();
 	private JLabel haveMoneyJLabel = new JLabel();
 	private JLabel[] dialogJLabels;
 	private MyButton[] dialogButtons;
@@ -61,6 +63,7 @@ public class SlimeLife extends JPanel implements Commonly_GridBagConstraints {
 	/*
 	 * dialog的變數
 	 */
+	private JDialog dialog = new JDialog();
 	private int userWantPropsNumber = 1;
 	private String[] labelStrings;
 	private String[] buttonStrings;
@@ -70,10 +73,15 @@ public class SlimeLife extends JPanel implements Commonly_GridBagConstraints {
 	/*
 	 * 
 	 */
-	public SlimeLife(Account account, Subject subject) {
+	private boolean notOpen=true;
+	/*
+	 * 
+	 */	
+
+	public void open(Account account, Subject subject) {
 		this.account = account;
 		this.subject = subject;
-		// TODO Auto-generated constructor stub
+		notOpen=false;//已開啟
 		jFrame.setLayout(new BorderLayout());
 		jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 按下關閉時的動作(關閉全部)
 		Image slimebutton1x1_Image = slimebutton1x1.getImage(); // 取得圖片
@@ -94,6 +102,13 @@ public class SlimeLife extends JPanel implements Commonly_GridBagConstraints {
 		// this.add(new JLabel("asds"),BorderLayout.NORTH);
 		jFrame.add(this);
 		jFrame.setLocationRelativeTo(null);// 置中顯示
+		jFrame.addWindowListener(new WindowAdapter() {
+			public void windowClosed(WindowEvent e) {
+					notOpen=true;
+            }
+			
+		
+		});
 		jFrame.setVisible(true); // 顯示
 	}
 
@@ -120,7 +135,7 @@ public class SlimeLife extends JPanel implements Commonly_GridBagConstraints {
 					select = propsID.get(getNumber);
 					account.useProps(account, select, getNumber);
 					subject.setAccount(account);
-					//account.checkProps_name();
+					// account.checkProps_name();
 					int dialogResult = JOptionPane.showConfirmDialog(jFrame, "要使用" + jList.getSelectedValue() + "嗎?",
 							"確認", JOptionPane.YES_NO_OPTION);
 
@@ -136,11 +151,9 @@ public class SlimeLife extends JPanel implements Commonly_GridBagConstraints {
 
 						jList.revalidate();
 						jList.repaint();
-						
 
 					} else {
 
-						
 					}
 				}
 			}
@@ -168,7 +181,7 @@ public class SlimeLife extends JPanel implements Commonly_GridBagConstraints {
 		jButton.addActionListener(e -> {
 
 			int getNumber = jList.getSelectedIndex();
-			//account.checkProps_name();
+			// account.checkProps_name();
 			// System.out.println("已選擇:"+getNumber);
 			if (getNumber != -1) {
 				select = propsID.get(getNumber);
@@ -438,12 +451,12 @@ public class SlimeLife extends JPanel implements Commonly_GridBagConstraints {
 					 * 更新jlist內容
 					 */
 					propsNewList.clear(); // 清除目前所有元素
-					if (!account.getProps_ArrayList().isEmpty()) {// 如果不為空
+					if (!account.getProps_ArrayList().isEmpty()) {
 						propsID.clear();
 						for (Props props : account.getProps_ArrayList()) {
-								propsNewList.addElement(props.getName());
-								propsID.add(props.getID());
-							
+							propsNewList.addElement(props.getName());
+							propsID.add(props.getID());
+
 						} // 得到id，請與name同步
 					}
 					/*
@@ -472,5 +485,9 @@ public class SlimeLife extends JPanel implements Commonly_GridBagConstraints {
 				dialog.dispose();
 			}
 		};
+	}
+	public boolean notOpen() {
+		System.out.println(notOpen);
+		return  notOpen;
 	}
 }

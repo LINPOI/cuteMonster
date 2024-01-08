@@ -8,10 +8,7 @@ import java.util.LinkedList;
 import java.util.Random;
 
 import Props.Props;
-import finalproject2.Account;
-/*
- * 
- */
+import finalproject2.*;
 
 public class GenetticAlgorithm<T> {
 	private Chromosome<T>[] chromosomes = null;// 有x個染色體(chromosome)

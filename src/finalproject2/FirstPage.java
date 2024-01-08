@@ -42,6 +42,16 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 	//
 	JPanel jPanel2;
 
+	/*
+	 * 
+	 * 
+	 */
+	Gimer gimer = new Gimer(jframe, account);//點擊互動
+	SlimeLife slimeLife=new SlimeLife();//點擊史萊姆
+	InteractiveJFrame interactiveJFrame = new InteractiveJFrame();//點擊互動
+	/*
+	 * 
+	 */
 	public FirstPage(CardLayout cardLayout, JPanel cardPanel, Subject subject, JFrame jFrame) {
 		this.cardLayout = cardLayout;
 		this.cardPanel = cardPanel;
@@ -55,7 +65,7 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 	}
 
 	public JPanel open() {
-		//TimeControl timeControl=new TimeControl(account,subject);
+		
 		JPanel jPanel = new JPanel();
 		account = databaseOperations.queryData(account);
 		imageSrc = new String[] { "src/PICTURE/gamerbutton.png", "src/PICTURE/slimebutton.png",
@@ -144,30 +154,44 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 	}
 
 	public void Action() {
-
+		//玩家按鈕動作
 		gamer = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("點擊玩家");
-				Gimer gimer = new Gimer(jframe, account);
+				gimer = new Gimer(jframe, account);
+					gimer.open();
 			};
 		};
+		//史萊姆按鈕動作
 		slime = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				System.out.println("點擊史萊姆");
-				//餵食沐浴
-				SlimeLife slimeLife=new SlimeLife(account,subject);
+				//裝備
+				
+				if(slimeLife.notOpen()) {
+					slimeLife=new SlimeLife();
+					slimeLife.open(account,subject);
+				}
+				
 			};
 		};
+		//互動
 		interactive = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				System.out.println("點擊互動");
-//出去
-				InteractiveJFrame interactiveJFrame = new InteractiveJFrame(account,subject);
+				
+
+				//確認不重複被開啟
+				if(interactiveJFrame.notOpen()) {
+					interactiveJFrame=new InteractiveJFrame();
+					interactiveJFrame.open(account,subject);
+				}
+				
 			};
 		};
 	}

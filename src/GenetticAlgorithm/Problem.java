@@ -1,7 +1,7 @@
 package GenetticAlgorithm;
 
 import Props.Props;
-import finalproject2.Account;
+import finalproject2.*;
 
 /*
  * 添加需解決

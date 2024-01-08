@@ -81,6 +81,13 @@ public class MonsterPanel extends JPanel implements Observer {
 		for (int i = 0; i < attribute.length; i++) {
 			if (max == attribute[i]) {
 				select[0] = i;
+				if(i==1) {
+					new Achievement().showAchievement(account, Achievement.redMonster);
+				}else if(i==2) {
+					new Achievement().showAchievement(account,   Achievement.greenMonser);
+				}else if(i==3) {
+					new Achievement().showAchievement(account, Achievement.purpleMonser);
+				}
 				break;
 			}
 		}
@@ -88,6 +95,15 @@ public class MonsterPanel extends JPanel implements Observer {
 			select[1]=4;
 		}else if (max > 30 && account.monster.getAge() > 10){
 			select[1]=2;
+			if(select[0]==0) {
+				new Achievement().showAchievement(account, Achievement.IceMonster);
+			}else if(select[0]==1) {
+				new Achievement().showAchievement(account, Achievement.FireMonster);
+			}else if(select[0]==2) {
+				new Achievement().showAchievement(account, Achievement.PoisonMonster);
+			}else if(select[0]==3) {
+				new Achievement().showAchievement(account, Achievement.PhantomMonster);
+			}
 		}else {
 			select[1]=0;
 		}
@@ -240,6 +256,7 @@ public class MonsterPanel extends JPanel implements Observer {
 						account.setselectMonster(account.getselectMonster() + 1);
 						System.err.println("account.getselectMonster()" + account.getselectMonster());
 						account.saveAccount(account);
+						if(account.getselectMonster()==10)new Achievement().showAchievement(account, Achievement.TenMonster);
 						subject.setAccount(account); // 設置新數值
 						databaseOperations.insert_Monster_Data(account);//
 
@@ -259,5 +276,7 @@ public class MonsterPanel extends JPanel implements Observer {
 		if(goodstate) {
 			open();
 		}
+		
 	}
+	
 }

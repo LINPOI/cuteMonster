@@ -13,6 +13,8 @@ import java.awt.Image;
 import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -61,7 +63,7 @@ public class InteractiveJFrame extends JPanel {
 	public static final String trainpaJPanel = "trainpaJPanel";
 	public static final String exploreJPanel = "exploreJPanel";
 	public static final String selectDifficultyJPanel = "selectDifficultyJPanel";
-	
+
 	// private JPanel jPanel;
 	private String[] buttonName = new String[] { "訓練", "探索", "簡單", "普通", "困難" };
 	private Color[] colors = new Color[] { new Color(135, 206, 250), new Color(0, 255, 128) };
@@ -84,12 +86,17 @@ public class InteractiveJFrame extends JPanel {
 	 * 
 	 * 
 	 */
+	private boolean notOpen = true;
 
-	public InteractiveJFrame(Account account, Subject subject) {
-		this.setLayout(new BorderLayout());
+	/*
+	 * 
+	 */
+
+	public void open(Account account, Subject subject) {
 		this.subject = subject;// 觀察者
-
 		this.account = account;
+		notOpen=false;
+		this.setLayout(new BorderLayout());
 		jFrame.setLayout(new BorderLayout());
 		jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 按下關閉時的動作(關閉全部)
 		Image slimebutton1x1_Image = slimebutton1x1.getImage(); // 取得圖片
@@ -109,7 +116,7 @@ public class InteractiveJFrame extends JPanel {
 		JLabel jLabelNORTH = new JLabel(" ");
 		jLabelNORTH.setPreferredSize(new Dimension(200, 280)); // 擠壓空間
 		this.add(jLabelNORTH, BorderLayout.NORTH);
-		JPanel open = open();
+		JPanel open = jPanelOpen();
 		JPanel trainpaJPanel = trainpaJPanel();
 		JPanel exploreJPanel = exploreJPanel();
 		JPanel selectDifficultyJPanel = selectDifficultyJPanel();
@@ -122,6 +129,11 @@ public class InteractiveJFrame extends JPanel {
 		this.add(jButton_return(), BorderLayout.SOUTH);
 		jFrame.add(this);
 		jFrame.setLocationRelativeTo(null);// 置中顯示
+		jFrame.addWindowListener(new WindowAdapter() {
+			public void windowClosed(WindowEvent e) {
+					notOpen=true;
+            }
+		});
 		jFrame.setVisible(true); // 顯示
 	}
 
@@ -137,7 +149,7 @@ public class InteractiveJFrame extends JPanel {
 	/*
 	 * 開啟panel
 	 */
-	private JPanel open() {
+	private JPanel jPanelOpen() {
 		nowPanel = InteractiveJPanel;
 		JPanel jpanel = new JPanel();
 
@@ -360,9 +372,9 @@ public class InteractiveJFrame extends JPanel {
 		Props props = allProps.getChromosome()[0];// 得到的道具
 		String propsName = Alive ? props.getName() : "已死亡";
 		double score = getPropsAlgorithm.getScore();
-		Double money=difficulty*1.0/2;
+		Double money = difficulty * 1.0 / 2;
 		if (!Alive) {
-			money=0.0;
+			money = 0.0;
 			System.err.println("已死亡");
 			account.monster.setHealthValue(0);
 			subject.setAccount(account);
@@ -373,17 +385,17 @@ public class InteractiveJFrame extends JPanel {
 			if (location != 6)
 				account.addYear(1);
 			if (location == Props.polar) {
-				account.monster.addIce(difficulty*2);
+				account.monster.addIce(difficulty * 2);
 			} else if (location == Props.volcano) {
-				account.monster.addFire(difficulty*2);
+				account.monster.addFire(difficulty * 2);
 			} else if (location == Props.swamp) {
-				account.monster.addPoison(difficulty*2);
+				account.monster.addPoison(difficulty * 2);
 			} else if (location == Props.temple) {
-				account.monster.addIllusion(difficulty*2);
+				account.monster.addIllusion(difficulty * 2);
 			} else if (location == Props.wind_farm) {
-				
+
 			} else if (location == Props.Training_Course) {
-				
+
 			}
 			account.addMoney(money);
 			account.monster.addHungerValue(-account.monster.getAge());
@@ -416,7 +428,7 @@ public class InteractiveJFrame extends JPanel {
 		dialog.setLayout(new BorderLayout());
 
 		dialog.add(label, BorderLayout.CENTER);
-		dialog.add(new JLabel("獲得金幣:"+money,SwingConstants.CENTER),BorderLayout.NORTH );
+		dialog.add(new JLabel("獲得金幣:" + money, SwingConstants.CENTER), BorderLayout.NORTH);
 		dialog.add(closeButton, BorderLayout.SOUTH);
 
 		dialog.setSize(200, 150);
@@ -426,22 +438,25 @@ public class InteractiveJFrame extends JPanel {
 	}
 
 	private void extraReward(double value) {
-		JDialog dialog = new JDialog(jFrame, "獲得額外道具", true); // 建立模態的 JDialog
+		JDialog dialog = new JDialog(jFrame, "選擇一個額外道具", true); // 建立模態的 JDialog
 		dialog.setLayout(new BorderLayout());
 
 		PropsList propsList = new PropsList();// 道具清單
 
 		// DefaultListModel 是 JList 的標準資料模型
 		DefaultListModel<String> propsNewList = new DefaultListModel<String>();// 建立可獲得的道具清單
+		ArrayList<Props> newPropsList=new ArrayList<Props>();
 		/*
 		 * 看道具庫該給那些東西
 		 */
-		for (int i = 0; i < propsList.size(); i++) {
-			double Propsvalue = propsList.get(i).getValue();
-//			System.out.println(value);
-//			System.out.println(Propsvalue);
-			if (value >= Propsvalue) {// 留下價值比獲得積分小的
-				propsNewList.addElement(propsList.get(i).getName());
+		for (Props props :propsList) {
+			double Propsvalue = props.getValue();
+			if (value >= Propsvalue ) {// 留下價值比獲得積分小的
+				if(props.getLocation()==0|| props.getLocation()==location) {//判斷是不是該地方會掉落的武器
+					propsNewList.addElement(props.getName());
+					newPropsList.add(props);
+				}
+				
 			} else {
 				break;
 			}
@@ -457,7 +472,7 @@ public class InteractiveJFrame extends JPanel {
 
 			int selectedValue = jList.getSelectedIndex();
 			selectedValue = selectedValue < 0 ? 0 : selectedValue;
-			account.addProps(account, selectedValue);// 新增道具
+			account.addProps(account, newPropsList.get(selectedValue).getID());// 新增道具
 			// account.checkProps_name();
 			// System.out.println(selectedValue);
 			propsList.get(selectedValue);
@@ -472,6 +487,10 @@ public class InteractiveJFrame extends JPanel {
 		dialog.setSize(200, 150);// 設置大小
 		dialog.setLocationRelativeTo(jFrame); // 讓訊息框置中於 parent frame
 		dialog.setVisible(true); // 顯示 JDialog
+	}
+	public boolean notOpen() {
+		System.out.println(notOpen);
+		return  notOpen;
 	}
 }
 //計畫三個panel切換，panel.setOpaque(false); // 透明背景

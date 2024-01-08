@@ -8,9 +8,9 @@ import java.util.Random;
 
 import Props.Props;
 import Props.PropsList;
-import finalproject2.Account;
-import finalproject2.Enemy;
-import finalproject2.Monster;
+
+
+import finalproject2.*;
 
 /*
  * 設定最優解=玩家積分該獲得的獎勵應該是好的，不該是全部都一等
