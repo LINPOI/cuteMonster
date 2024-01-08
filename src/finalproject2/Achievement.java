@@ -8,8 +8,8 @@ public class Achievement {
 	public static final String FirstMonster = "My First Monster";//
 	public static final String TenMonster = "The 10th monster has been raised";
 	public static final String redMonster = "Find red slime";//
-	public static final String greenMonser = "Find is green slime";//
-	public static final String purpleMonser = "Find is purple slime";//
+	public static final String greenMonser = "Find green slime";//
+	public static final String purpleMonser = "Find purple slime";//
 	public static final String FireMonster = "Find Fire Slime!!";//
 	public static final String IceMonster = "Find Ice slime!!";//
 	public static final String PoisonMonster = "Find Poison Slime!!";//
