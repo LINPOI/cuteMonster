@@ -16,7 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 
-import javafx.scene.input.MouseDragEvent;
 
 public class SlimeStatePanel extends JPanel implements Observer {
 	private Subject subject;

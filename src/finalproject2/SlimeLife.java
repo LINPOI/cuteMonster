@@ -34,7 +34,6 @@ import javax.swing.event.ListSelectionListener;
 
 import Props.Props;
 import Props.PropsList;
-import javafx.scene.shape.HLineTo;
 
 public class SlimeLife extends JPanel implements Commonly_GridBagConstraints {
 
