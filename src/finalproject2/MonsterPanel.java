@@ -56,13 +56,13 @@ public class MonsterPanel extends JPanel implements Observer {
 		subject.addObserver(this);
 		this.account=account;
 		this.wing=wing;
-		open( );
+		open(wing);
 		
 	}
 
-	public void open( ) {
+	public void open(boolean Wing) {
 		remove(newMonsterButton);
-		
+		this.wing=Wing;
 		/*
 		 * \ 0 藍史萊姆01水冰23 1 紅史萊姆0123 2 綠史萊姆0123 3 紫史萊姆012345
 		 */
@@ -221,7 +221,7 @@ public class MonsterPanel extends JPanel implements Observer {
 			 */
 			//System.out.print("狀態" + account.monster.getStates(i) + "\t" + restart);
 			if (restart) {
-				open();
+				open(account.monster.getWing());
 				break;
 			}
 			// System.out.print("狀態"+ account.monster.getStates(i)+"\t");
@@ -274,7 +274,7 @@ public class MonsterPanel extends JPanel implements Observer {
 			}
 		}
 		if(goodstate) {
-			open();
+			open(account.monster.getWing());
 		}
 		
 	}

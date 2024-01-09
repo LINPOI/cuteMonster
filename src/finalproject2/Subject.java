@@ -5,8 +5,7 @@ import java.util.List;
 
 //被觀察者類
 class Subject {
-//	private String[] strings;
-//	private int[] ints;
+
 	private Account account;
 	private List<Observer> observers = new ArrayList<>();
 
@@ -14,21 +13,7 @@ class Subject {
 		observers.add(observer);
 	}
 
-//	public void setStrings( String[]  strings) {
-//		this.strings = strings;
-//		notifyObservers(); // 設定新值後通知所有觀察者
-//	}
-//	public String[] getStrings() {
-//		return strings;
-//	}
-//	
-//	public void setStates( int[]  ints) {
-//		this.ints = ints;
-//		notifyObservers(); // 設定新值後通知所有觀察者
-//	}
-//	public int[] getStates() {
-//		return ints;
-//	}
+
 	public void setAccount( Account account) {
 		this.account = account;
 		notifyObservers(); // 設定新值後通知所有觀察者
@@ -38,8 +23,6 @@ class Subject {
 	}
 	private void notifyObservers() {
 		for (Observer observer : observers) {
-//			observer.update(strings); // 更新所有觀察者
-//			observer.updataInt(ints);
 			observer.updataAccount(account);
 		}
 	}

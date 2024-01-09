@@ -289,5 +289,10 @@ public class Monster {
 		int[] slimestates=new int[] { hungerValue, thirstValue, moodValue, healthValue};
 		return slimestates[i];
 	}
-	
+	public boolean dead() {
+		if(getHealthValue()<=0||getHungerValue()<=0||getThirstValue()<=0||getMoodValue()<=0) {
+			return true;
+		}
+		return false;
+	}
 }

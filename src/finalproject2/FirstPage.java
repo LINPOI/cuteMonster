@@ -170,13 +170,15 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 				// TODO Auto-generated method stub
 				System.out.println("點擊史萊姆");
 				//裝備
-				
-				if(slimeLife.notOpen()) {
-					slimeLife=new SlimeLife();
-					slimeLife.open(account,subject);
-				}else {
-					slimeLife.toFront();
+				if(!account.monster.dead()) {
+					if(slimeLife.notOpen()) {
+						slimeLife=new SlimeLife();
+						slimeLife.open(account,subject);
+					}else {
+						slimeLife.toFront();
+					}
 				}
+				
 				
 			};
 		};
@@ -187,14 +189,17 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 				// TODO Auto-generated method stub
 				System.out.println("點擊互動");
 				
-
-				//確認不重複被開啟
-				if(interactiveJFrame.notOpen()) {
-					interactiveJFrame=new InteractiveJFrame();
-					interactiveJFrame.open(account,subject);
-				}else {
-					interactiveJFrame.toFront();
+				//如果死了就不讓按
+				if(!account.monster.dead()) {
+					//確認不重複被開啟
+					if(interactiveJFrame.notOpen()) {
+						interactiveJFrame=new InteractiveJFrame();
+						interactiveJFrame.open(account,subject);
+					}else {
+						interactiveJFrame.toFront();
+					}
 				}
+				
 				
 			};
 		};
