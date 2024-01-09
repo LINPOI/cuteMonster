@@ -173,7 +173,8 @@ public class PropsList extends ArrayList<Props>{
 
 		this.add(new Props(id++, "翅膀+30智力", level, Props.wind_farm, () -> {
 			account.monster.addIntelligence(30);
-		}));
+			account.monster.setWing(true);
+			}));
 		this.add(new Props(id++, "黑閃(當前攻擊力x2)", level, Props.temple, () -> {
 			account.monster.addAttack(account.monster.getAttack());
 		}));
