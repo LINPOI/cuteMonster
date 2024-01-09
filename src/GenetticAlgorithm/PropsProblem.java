@@ -208,7 +208,9 @@ public class PropsProblem implements Problem<Props> {
 		double totalScore = 0;
 		int output_slime = attack * hp;
 		int output_enemy = (int) (enemy.getHP() * enemy.getAttack());
-		if (output_slime >= output_enemy) {
+		if(output_slime>1000000) {
+			return totalScore;
+		}else if (output_slime >= output_enemy) {
 			// System.out.println("殺敵");
 			hp += (int) (5 - enemy.getAttack());// 每打死一個敵人回復5點血量
 			// 判斷有沒有超出原始怪獸數值(生命最大值)
