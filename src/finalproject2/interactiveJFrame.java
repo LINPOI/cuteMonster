@@ -492,5 +492,8 @@ public class InteractiveJFrame extends JPanel {
 		System.out.println(notOpen);
 		return  notOpen;
 	}
+	public void toFront() {
+		jFrame.toFront();
+	}
 }
 //計畫三個panel切換，panel.setOpaque(false); // 透明背景

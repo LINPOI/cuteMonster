@@ -174,6 +174,8 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 				if(slimeLife.notOpen()) {
 					slimeLife=new SlimeLife();
 					slimeLife.open(account,subject);
+				}else {
+					slimeLife.toFront();
 				}
 				
 			};
@@ -190,6 +192,8 @@ public class FirstPage extends JPanel implements Commonly_GridBagConstraints, Ob
 				if(interactiveJFrame.notOpen()) {
 					interactiveJFrame=new InteractiveJFrame();
 					interactiveJFrame.open(account,subject);
+				}else {
+					interactiveJFrame.toFront();
 				}
 				
 			};

@@ -490,4 +490,7 @@ public class SlimeLife extends JPanel implements Commonly_GridBagConstraints {
 		System.out.println(notOpen);
 		return  notOpen;
 	}
+	public void toFront() {
+		jFrame.toFront();
+	}
 }
